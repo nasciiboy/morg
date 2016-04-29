@@ -44,7 +44,7 @@ llenas de molonidad.
     la razon es *roff*, *groff* o alguna de sus variantes, si has
     intentado crear una pagina man, o incluso has sido tan intrepido
     como para documentar tus cosas en man, habras decistido al poco
-    tiempo, no hay nada mas feo he inteligibles que una pagina de
+    tiempo, no hay nada mas feo he inteligible que una pagina de
     manual en groff. Por ello GNU lanzo info que sin duda es mas util
     que man, ademas TexInfo es menos feo que groff.
 
@@ -79,10 +79,10 @@ llenas de molonidad.
     codigo fuente de una pagina web estandar con el deseo de
     apreder... Caos, muerte y destruccion, que ente retorcido permite
     tanta aberracion, todo esta mezclado en una sola linea, etiquetas
-    incomprensibles que nos obligan a pensar si es un formato
-    criptografico. Si algun dia tengo una sociedad secreta o un gropo
-    radical, nuestras comunicaciones estaran dentro del codigo de una
-    pagina web.
+    incomprensibles que nos obligan a pensar que estamos ante un
+    formato criptografico. Si algun dia tengo una sociedad secreta o
+    un grupo radical, nuestras comunicaciones estaran dentro del
+    codigo de una pagina web.
 
 * Y ahora que?
 
@@ -127,7 +127,7 @@ llenas de molonidad.
       el titular, el numero de '*' indica el nivel del titular, en html
       seria =h1=, =h2=, ...
 
-      #+BEGIN_EXAMPL
+      #+BEGIN_EXAMPLE
         * nivel Uno
 
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
@@ -175,7 +175,7 @@ llenas de molonidad.
      #+END_EXAMPLE
 
      donde un una '@' al mismo nivel de indentacion del inicio del
-     nobre del encabezado seguido por un espacio en blanco establece
+     nombre del encabezado seguido por un espacio en blanco establece
      un subencabezado
 
 *** Listas
@@ -342,7 +342,7 @@ llenas de molonidad.
     en html seria
 
     #+BEGIN_EXAMPLE
-      <strike><i><s><b>underlineItalicStrikeBold</b></s></i></stike>
+      <u><i><strike><b>underlineItalicStrikeBold</b></strike></i></u>
     #+END_EXAMPLE
 
 
@@ -362,13 +362,13 @@ llenas de molonidad.
      #+END_EXAMPLE
 
      una '@' al inicio de linea seguida pon uno o mas espacios
-     comentaa la linea en cuestion
+     comenta la linea en cuestion
 
 **** mas alla del ASCII
 
      preferiblemente se utilizara un sistema de codificacion acorde a
      los tiempos modernos como UTF-8 o CESU-8, para dejar en el pasado
-     temas complicados como los acentos e insertar el caracter tal
+     temas complicados como los acentos o insertar el caracter tal
      cual. desgraciadamente buscar, copiar y pegar es una labor
      degastante en esos casos:
 
@@ -473,7 +473,7 @@ llenas de molonidad.
      #+END_EXAMPLE
 
      el contenido se indenta con dos espacios par evitar abiguedades,
-     por ejemplo al documentar el propia formato
+     por ejemplo al documentar el propio formato
 
      #+BEGIN_EXAMPLE
        @example
@@ -485,7 +485,9 @@ llenas de molonidad.
      #+END_EXAMPLE
 
      la indentacion anula la interpretacion del bloque interno y evita
-     que el bloque finalice con el primer =@end example=
+     que el bloque finalice con el primer =@end example=, sin embargo
+     eso no significa que en algunos bloques, un bloque interno no
+     pueda ser interpretado
 
      los bloques propuestos
 
@@ -500,8 +502,7 @@ llenas de molonidad.
      #+END_EXAMPLE
 
      adicionamente puede configurarse cada bloque mediante banderas y
-     palabras clave
-     por ejemplo un un bloque =src=
+     palabras clave, por ejemplo un un bloque =src=
 
      #+BEGIN_EXAMPLE
        @src lenguaje -n 0 -i l
@@ -591,7 +592,7 @@ llenas de molonidad.
    *GNU Emacs* o alguna otra /cosa/
 
    ayudas al escribir serian: si coloco un '<' seguido de un(os)
-   caracter(es), + un TAB se coloca un "@aeuio{}" si estomos dentro de
+   caracter(es), + un TAB se coloca un "@aeuio{}" si estamos dentro de
    una linea, si nos encotramos en una linea vacia (con identacion o
    no) nos crea un bloque... y otras cosas basados en *org-mode*
 
