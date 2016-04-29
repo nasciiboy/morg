@@ -1,0 +1,625 @@
+#+TITLE: Morg (Manual org (org-mode))
+#+AUTHOR: nasciiboy
+#+LANGUAGE: es
+#+STARTUP: showall
+
+Tener libros en papel esta chulo, aunque poco practico e ineficiente
+es, al comparase con otos medios de documentacion y referencia, por
+ello surgieron las paginas =man=, los derivados de Tex, html y la
+wikipedia. Sin embargo seguimos forjando informacion pensando en el
+papel, buena cosa siempre es plantearse si estamos haciendo lo mejor
+de la mejor manera o habria que modificar algunos aspectos.
+
+Como toda creacion humana la informatica ha respondido a las
+necesidades de los presentes deacuerdo a los conocimientos y
+habilidades disponibles, acaso al inicio alguien se planteo la
+necesidad de un sistema de codificacion de informacion para cumplir
+con todas posibles mas alla del conjunto de caracteres USAmericano,
+claro que no, los humanos no somos tan inteligentes, y avansamos a
+base de apaños, resolviendo unas pocas dificultades de vez en vez,
+cosa que mirando en retrospectiva es evidente. Si diseñasemos con los
+conocimientos aprendidos hasta la fecha sin duda tendriamos cosas
+llenas de molonidad.
+
+* Como debe ser un sistema de documentacion ideal
+
+  - *Inmediato*
+
+    Debe estar disponible en todo momento y de manera inmediata. Las
+    paginas man, fueron un gran acierto de nuestros
+    ancestros. Manuales electronicos para cualquier necesidad que
+    surja mientras utilizamos nuestro sistema, que mas podemos pedir.
+
+  - *Estructurado*
+
+    Lo mas importante es el contenido, no como se vea, quien necesita
+    animaciones neon, anuncios publicitarios, botones "sociales",
+    typografias con sombras, colores que afectan la vista y el buen
+    gusto, cuando lo unico necesario es la puta informacion.
+
+  - *Sencillo*
+
+    Si la wikipedia existe no es por algun genio del marketing vende
+    motos, o por un loco programador hasta arriba de flow, no, no, no,
+    la razon es *roff*, *groff* o alguna de sus variantes, si has
+    intentado crear una pagina man, o incluso has sido tan intrepido
+    como para documentar tus cosas en man, habras decistido al poco
+    tiempo, no hay nada mas feo he inteligibles que una pagina de
+    manual en groff. Por ello GNU lanzo info que sin duda es mas util
+    que man, ademas TexInfo es menos feo que groff.
+
+    Entoces por que no utilizamos info para escribir la wikipedia
+
+    - Hay que leer un manual (en ingles) de muchas paginas para
+      utilizarlo como es debido
+
+    - Esta lleno de marcas y cosas misticas (pensadas para imprimir
+      libros)
+
+    - Una ves finalizado el documento hay que "compilar" para exportar
+      a otros formato mas manejables, es decir pasar del fuente
+      =.texi= a info, html, pdf, ...
+
+  - *Practico*
+
+    El formato pdf se utiliza mucho, ha de ser bueno, si no por que
+    habria tantos libros escaneados?
+
+    Si no puedes realizar una busqueda de culquier palabra dentro del
+    documento *nunca* puede ser bueno, si la forma de acceder al
+    fuente para modificar algun error no esta a tu alcance *no* puede
+    ser bueno, si has de recorrerlo por paginas es *malvado*
+
+  - *Modificable* (por humanos)
+
+    En algun punto en el paso de /lammer/ a /mago del teclado/ se
+    comienza a toquetear algo de html (por "curiosidad"), se lee algun
+    tutorial del tema, se aprende el sitema de etiquetas, anidadas en
+    etiquetas, sobre etiquetas. Hasta que inocentemente se revisa el
+    codigo fuente de una pagina web estandar con el deseo de
+    apreder... Caos, muerte y destruccion, que ente retorcido permite
+    tanta aberracion, todo esta mezclado en una sola linea, etiquetas
+    incomprensibles que nos obligan a pensar si es un formato
+    criptografico. Si algun dia tengo una sociedad secreta o un gropo
+    radical, nuestras comunicaciones estaran dentro del codigo de una
+    pagina web.
+
+* Y ahora que?
+
+  Podriamos esperar que rayos cosmicos generen las correctas
+  conexiones dentro de la mente de un hacker, se aisle de la sociedad
+  por tiempo indefinido y nos comparta su creacion. +apple+ lo
+  inclulla en algun dispositivo, la prensa informe que han vuelto a
+  revolucionar el mercado, mientras +microsoft+, adopta el formato con
+  unas pequeñas e incompatibles modificaciones, que con el paso del
+  tiempo ramificaran en incontables dialectos, hasta que alguien
+  estriba nuevamente sobre esto y el ciclo vuelva a iniciar.
+
+  o podriamos ponernos deacuerdo, agruparnos, vomitar todo lo
+  aprendido y con los restos hacer un formato coherente, robusto y
+  duradero por los siguientes 40 años.
+
+* Propuesa
+** Reducir las etiquetas/marcas a lo fundamental
+
+   html es tan feo que la wikipedia utiliza mediawiki como formato;
+   github da soporte a markdown, org, texto plano...
+
+   Por alguna razon desconocida los sistemas de marcado ligero son
+   comodos, sin embargo si algun error se les ha de atribuir (que
+   probablemente sea la razon por la que alla tantos) es no valerse
+   por si mismos, al mas minimo inconveniente se recurre a trozos de
+   codigo html o latex. El formato que creemos ha de ser tan agradable
+   a la vista que incluso no requiera ninguna herramienta para su uso,
+   los mas intrepidos se jactaran de valerse solo con =less=, =more= o
+   =cat=.
+
+*** Estructura e indentacion
+
+    un buen sistema de documentacion priorisa la estructura. Un
+    documento estructurado necesita estos elementos
+
+    - encabezados/secciones (headline)
+
+      una marca un nivel.
+
+      un titular inicia con el signo '*' seguido por (un) espacio(s) y
+      el titular, el numero de '*' indica el nivel del titular, en html
+      seria =h1=, =h2=, ...
+
+      #+BEGIN_EXAMPL
+        * nivel Uno
+
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+          eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut
+          enim ad minim veniam.
+
+        ** nivel dos
+
+           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+           eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut
+           enim ad minim veniam.
+
+        *** nivel tres
+
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+            eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut
+            enim ad minim veniam.
+
+
+          nivel uno superior, Lorem ipsum dolor sit amet, consectetur
+          adipiscing elit, sed eiusmod tempor incidunt ut labore et
+          dolore magna aliqua. Ut enim ad minim veniam.
+      #+END_EXAMPLE
+
+      El contenido de cada encabezado inicia dejando una linea de
+      espacio en blanco y ha de indentarse con un numero de espacios
+      igual al numero de '*', mas un espacio. La identacion permite
+      regresar a un nivel superior, es decir pasar del encabezado dos
+      al uno disminuyendo la indentacion en uno.
+
+      Para mantener una estetica agradable los titulares extensos
+      pueden colocarse de la forma
+
+     #+BEGIN_EXAMPLE
+       * encabezado muy muy muy muy muy muy muy
+         muy muy muy extenso
+     #+END_EXAMPLE
+
+     Algunos textos agregan un subtitulo en lugar de crear una
+     subseccion para esto pobria ofreserse algo como:
+
+     #+BEGIN_EXAMPLE
+       * encabezado
+         @ subencabezado
+     #+END_EXAMPLE
+
+     donde un una '@' al mismo nivel de indentacion del inicio del
+     nobre del encabezado seguido por un espacio en blanco establece
+     un subencabezado
+
+*** Listas
+
+    #+BEGIN_EXAMPLE
+      - lista desordenada
+      + lista desordenada
+      1. lista ordenada numericamente
+      1) lista ordenada numericamente
+      a. lista ordenada alfabeticamente
+      a) lista ordenada alfabeticamente
+    #+END_EXAMPLE
+
+    El contenido de una lista (como todo lo demas) debe indentarse
+    segun la seccion de la que forme parte (con respecto a la seccion
+    y asi misma)
+
+    #+BEGIN_EXAMPLE
+      * nivel uno
+
+        1. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+           eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut
+           enim ad minim veniam.
+
+           a) Lorem ipsum dolor sit amet.
+
+              - Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+        2. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+           eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut
+           enim ad minim veniam.
+    #+END_EXAMPLE
+
+**** y si tengo una novela
+
+     #+BEGIN_EXAMPLE
+       > "Dialogo, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+         eiusmod tempor incidunt ut labore et dolore magna
+         aliqua. Ut enim ad minim veniam."
+     #+END_EXAMPLE
+
+     los dialogos tienen la mismas normas que una lista.
+
+*** definiciones
+
+    #+BEGIN_EXAMPLE
+      - definicion :: Lorem ipsum dolor sit amet, consectetur
+        adipiscing elit, sed eiusmod tempor incidunt ut labore et
+        dolore magna aliqua. Ut enim ad minim veniam.
+
+      - definicion -: Lorem ipsum dolor sit amet, consectetur
+          adipiscing elit, sed eiusmod tempor incidunt ut labore et
+          dolore magna aliqua.
+
+      - definicion :- Lorem ipsum dolor sit amet, consectetur
+                      adipiscing elit, sed eiusmod tempor incidunt ut
+                      labore et dolore magna aliqua.
+    #+END_EXAMPLE
+
+
+    inician con '-' o '+', seguido del titulo de la definicion, a
+    continuacion se coloca un "indicador" de alineacion/formato como
+    "::" (justificado) "-:" (con indentacion a la izquierda) o ":-"
+    (alineado a la derecha).
+
+    pueden concatenerse varias definicion de la forma
+
+    #+BEGIN_EXAMPLE
+      - A ::
+      - B ::
+      - C :: exadecimal
+    #+END_EXAMPLE
+
+    o
+
+    #+BEGIN_EXAMPLE
+      - A :: B :: C :: exadecimal
+    #+END_EXAMPLE
+
+*** resaltar texto
+
+    nadie quiere tener etiquetas a lo html
+
+    #+BEGIN_EXAMPLE
+      <etiqueta>
+        <etiqueta>
+          contenido
+        </fin_etiqueta>
+      </fin_etiqueta>
+    #+END_EXAMPLE
+
+    los lenguajes de marcas ligeras lo manejan de forma mas elegante
+
+    #+BEGIN_EXAMPLE
+      (org)       *bold*
+      (markdown)  **bold**
+      (mediawiki) '''bold'''
+
+      algun otro  <^bold^>
+    #+END_EXAMPLE
+
+    sin embargo segun el tema podrian crearse abiguedades y casos poco
+    claros resultando en marcas inecesarias, sobre todo cuando el tema
+    a tratar versa sobre algun lenguaje de progracamion como c, o
+    lips, donde los nombres de las funciones contienen marcas
+    segnificativas al lenguaje como =char **furcion( int** a)= o
+    =funcion_a_b_c_algo= que en caso de org el '_' se interpreta como
+    un subindice, o al documentar sobre emacs donde =*scratch*=
+    represenda el nobre de un bufer y no una palabra resaltada en bold
+    terdria resultados no desados, sin mencianar que resaltar un
+    elemento con mas de dos etiquetas es cuando menos poco claro, como
+    en
+
+    #+BEGIN_EXAMPLE
+      /*cursivoBold*/
+      ***cursivoBold***
+    #+END_EXAMPLE
+
+    asi que en este caso basados en texinfo podriamos tomar la
+    sintaxis
+
+    #+BEGIN_EXAMPLE
+      @x{}
+      @x()
+      @x[]
+      @x<>
+    #+END_EXAMPLE
+
+    donde '@' indica "a continuacion algo especialmente marcado", 'x'
+    es un caracter ascii imprimible, que describe la accion a aplicar
+    a lo contenido dentro de "{contenido}" o "(contenido)" o
+    "<contenido>" o "[contenido]"
+
+    *por que una '@'?* fuera de algun lenguaje mistico o el correo
+    podria ser el signo menos utilizado y mas aun con la estructura
+    "@x{}"
+
+    *y la 'x'?* si hemos de necesitar mas marcas que los caracteres
+    ascii imprimibles algo no estamos haciendo bien, los propuestos
+    son:
+
+    - b :: negrita
+    - e :: enfasis. Cuando un texto solo tiene un estilo de enfasis
+           como /italica/ o *bold* una marca "generica" es mas clara.
+    - u :: subrayado
+    - v :: verbatim
+    - s :: tachado
+    - c :: codigo
+    - $ :: comando
+    - k :: tecla/combinacion de teclas
+    - f :: fichero
+    - q :: cita
+    - z :: zero, sin marcas "tal cual"
+    - ^ :: superindice
+    - _ :: subindice
+
+    que cada caracter solo tenga un significado permite concatenar
+    como en
+
+    #+BEGIN_EXAMPLE
+      @uisb{underlineItalicStrikeBold}
+    #+END_EXAMPLE
+
+    en html seria
+
+    #+BEGIN_EXAMPLE
+      <strike><i><s><b>underlineItalicStrikeBold</b></s></i></stike>
+    #+END_EXAMPLE
+
+
+    *({[<>]})...?* mas opciones, mas diversion. Segun el contexto de
+    del contenido "{}" o "()" podria requerir *escapar* algunos
+    caracteres para delimitar adecuadamente el alcance, para minimizar
+    esto, puede optarse por el mas indicado segun la ocacion.
+
+    cuando no haya /escapatoria/, escapar con '@caracter' o
+    @z{caracter} podria ser lo indicado.
+
+*** y otras cosas mas complicadas
+**** comentar lineas
+
+     #+BEGIN_EXAMPLE
+       @ linea comentada
+     #+END_EXAMPLE
+
+     una '@' al inicio de linea seguida pon uno o mas espacios
+     comentaa la linea en cuestion
+
+**** mas alla del ASCII
+
+     preferiblemente se utilizara un sistema de codificacion acorde a
+     los tiempos modernos como UTF-8 o CESU-8, para dejar en el pasado
+     temas complicados como los acentos e insertar el caracter tal
+     cual. desgraciadamente buscar, copiar y pegar es una labor
+     degastante en esos casos:
+
+     #+BEGIN_EXAMPLE
+       @&{nombreGenericoDeCaracterComplicado}
+       @&{leftarrow}
+     #+END_EXAMPLE
+
+**** math
+
+     en caso de formulas matematicas, podriamos no reinventar la rueda
+     y tomar las formalos LaTex
+
+     #+BEGIN_EXAMPLE
+       @m{formulaMatematicaTex}
+     #+END_EXAMPLE
+
+**** valores-variables
+
+     #+BEGIN_EXAMPLE
+       @v{variable definida en alguna parte}
+     #+END_EXAMPLE
+
+**** enlaces
+
+     #+BEGIN_EXAMPLE
+       @l{ruta}
+     #+END_EXAMPLE
+
+     equivalente a
+
+     #+BEGIN_EXAMPLE
+       <a href="ruta">ruta</a>
+     #+END_EXAMPLE
+
+     y
+
+     #+BEGIN_EXAMPLE
+       @l{ruta,descripcion}
+     #+END_EXAMPLE
+
+     equivalente a
+
+     #+BEGIN_EXAMPLE
+       <a href="ruta">descripcion</a>
+     #+END_EXAMPLE
+
+     los enlaces internos se colocarian de forma
+
+     #+BEGIN_EXAMPLE
+       @t{target}
+       @t{target,descripcion}
+       @T{radioTarget}
+       @T{radioTarget,descripcion}
+     #+END_EXAMPLE
+
+     un /radio target/ convierte en enlace a este punto a culquier
+     aparicion que coincifa con =target= detro del documento, exptuado
+     bloques de codigo.
+
+     para /insertar/ un contenido dentro del documento no como un
+     enlace se hara uso de la etiqueta 'd' (data), sintaxis identica a
+     'l'
+
+     #+BEGIN_EXAMPLE
+       @d{path}
+       @d{path,descripcion}
+     #+END_EXAMPLE
+
+**** y el contenido mulmedia
+
+     #+BEGIN_EXAMPLE
+       ^ titulo :: descripcion
+       _ @d{path,titulo} :: descripcion
+     #+END_EXAMPLE
+
+     las imagenes, videos, audios, bloques de texto, se titulan en la
+     parte superior '^' o inferior '_' y se posicionan con "::" (sin
+     alineacion), "-:" (a la izquierda), ":-" (a la derecha)
+
+**** notas
+
+     #+BEGIN_EXAMPLE
+       @n{target}
+       @n{target,descripcion}
+       @n{nota en linea, descripcion}
+     #+END_EXAMPLE
+
+     los =target's= podrian colocarse al final del documento en una
+     seccion especial al estilo org, o al final de la seccion actual
+
+**** bloques de cosas
+
+     con un esquema similar a texinfo
+
+     #+BEGIN_EXAMPLE
+       @block
+         Lorem ipsum dolor sit amet, consectetur
+         adipiscing elit, sed eiusmod tempor incidunt ut
+         labore et dolore magna aliqua.
+       @end block
+     #+END_EXAMPLE
+
+     el contenido se indenta con dos espacios par evitar abiguedades,
+     por ejemplo al documentar el propia formato
+
+     #+BEGIN_EXAMPLE
+       @example
+         un bloque de ejemplo
+
+         @example
+         @end example
+       @end example
+     #+END_EXAMPLE
+
+     la indentacion anula la interpretacion del bloque interno y evita
+     que el bloque finalice con el primer =@end example=
+
+     los bloques propuestos
+
+     #+BEGIN_EXAMPLE
+       center
+       italic
+       quote
+       src
+       pre
+       math
+       custom
+     #+END_EXAMPLE
+
+     adicionamente puede configurarse cada bloque mediante banderas y
+     palabras clave
+     por ejemplo un un bloque =src=
+
+     #+BEGIN_EXAMPLE
+       @src lenguaje -n 0 -i l
+       @end src
+     #+END_EXAMPLE
+
+     =lenguaje= indica el lenguaje de programacion, =-n= para numerar
+     las lineas a partir de =0=, =-i= para /interpretar/ los enlaces
+     =@l{}= que contenga el bloque.
+
+*** Configuracion del documento
+
+    El formato de marcas de configuracion org se ve bien!
+
+    #+BEGIN_EXAMPLE
+      #+TITLE    :
+      #+SUBTITLE :
+      #+MAILTO   :
+      #+OVERVIEW :
+      #+EXPORT   :
+      #+SWITCHOFF:
+      #+MARKUP   :
+      #+CSS      :
+    #+END_EXAMPLE
+
+    se colocan al inicio del domento. quiza para mantener la
+    coherencia podria obtarse por algo como:
+
+    #+BEGIN_EXAMPLE
+      @TITLE    {}
+      @SUBTITLE {}
+      @MAILTO   {}
+      @OVERVIEW {}
+      @EXPORT   {}
+      @SWITCHOFF{}
+      @MARKUP   {}
+      @CSS      {}
+    #+END_EXAMPLE
+
+** Tablas
+
+   Sin duda un tema complejo, podrian tenerse una tabla totalmente
+   funcional con formulas y demas, completamente en texto, pero para
+   inciar:
+
+   #+BEGIN_EXAMPLE
+     | encabezado    | otro e  |
+     |===============|=========|
+     | elemento uno  | algo x  |
+     |---------------|---------|
+     | elemento dos  | algo a  |
+     |               |---------|
+     |               | algo b  |
+     |---------------|---------|
+     | d o s  c e l d a s      |
+   #+END_EXAMPLE
+
+   el encabezado se coloca a la cima, delimitado con "|===|==|"
+
+   cada elemento se divide con "|----|---|"
+
+   unir celdas es complicado podria tomarse en consideracion el numero
+   exacto de caracteres para obtener esta informacion, o colocar un
+   signo "invisible" de alineacion dentro la la tabla como '^'
+
+   para escapar '|' dentro de la tabla "@z{|}" o "@|", el que mas
+   coherencia con lo demas tenga
+
+* y que mas
+
+  Por defecto tener modo de navegacion/vision estructurado en forma de
+  arbol, es decir el indice es el contenido mismo, un TAB /oculta/ o
+  /expande/ una seccion, un CTRL+TAB hace lo mismo pero de manera
+  global a todo el documento.
+
+  De manera inicial se ofrecera la posibilidad de exportar en formato
+  html
+
+** y mis libros?
+
+   ...
+
+   si aun insistes, exporta a otro formato y termina tu libro alli.
+
+** Donde lo escribo
+
+   *GNU Emacs* o alguna otra /cosa/
+
+   ayudas al escribir serian: si coloco un '<' seguido de un(os)
+   caracter(es), + un TAB se coloca un "@aeuio{}" si estomos dentro de
+   una linea, si nos encotramos en una linea vacia (con identacion o
+   no) nos crea un bloque... y otras cosas basados en *org-mode*
+
+** Para los comunes
+
+   Un modo/metodo de libreOffice, le tiras/indicas el css con el que
+   visualizar lo que se valla generando al vuelo. o algo asi.
+
+** Como lo exporto
+
+   Se creara un programa en algun lenguaje descente que tenga una
+   escritura "academica" como referencia para aprendizaje por si
+   quieres extender las opciones, o crear tu propio formato
+   revolucionario con casinos y colegialas japonesas.
+
+** Por que no lo haces tu? ... si *TU* el que escribe.
+
+   Me encantaria, recientemente escribi una libreria regexp para
+   /parsear/ el texto, (en este mismo repositorio, junto con otras
+   cosas interesantes), sin embargo me falta la experiencia/ideas
+   necesaria y recursos que me proporcionen el tiempo para escribir un
+   modo en emacs, un visualizador que substituya a =man= con el estilo
+   =outline= de org-mode, y un conversor de formato escrito en un c
+   "academico".
+
+   Ademas si lo hago solo para mi quien querra usarlo?. Solo se
+   sumaria al monton de lenguajes de marcas ligeras underground medio
+   funcionales. Mas interesante sera crearlo entre todos y convertirlo
+   en un estandar ampliamente utilizado.
+
+   [[mailto:nasciiboy@gmail.com]]
