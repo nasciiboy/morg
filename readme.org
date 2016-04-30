@@ -241,7 +241,7 @@ llenas de molonidad.
     "::" (justificado) "-:" (con indentacion a la izquierda) o ":-"
     (alineado a la derecha).
 
-    pueden concatenerse varias definicion de la forma
+    pueden concatenerse varias definiciones de la forma
 
     #+BEGIN_EXAMPLE
       - A ::
@@ -278,23 +278,18 @@ llenas de molonidad.
     #+END_EXAMPLE
 
     sin embargo segun el tema podrian crearse abiguedades y casos poco
-    claros resultando en marcas inecesarias, sobre todo cuando el tema
-    a tratar versa sobre algun lenguaje de progracamion como c, o
-    lips, donde los nombres de las funciones contienen marcas
-    segnificativas al lenguaje como =char **furcion( int** a)= o
-    =funcion_a_b_c_algo= que en caso de org el '_' se interpreta como
-    un subindice, o al documentar sobre emacs donde =*scratch*=
-    represenda el nobre de un bufer y no una palabra resaltada en bold
-    terdria resultados no desados, sin mencianar que resaltar un
-    elemento con mas de dos etiquetas es cuando menos poco claro, como
-    en
+    claros, sobre todo cuando el tema a tratar versa sobre algun
+    lenguaje de progracamion como c, o lips, donde los nombres de las
+    funciones contienen marcas segnificativas al lenguaje como =char
+    **furcion( int** a)= o =funcion_a_b_c_algo= que en caso de org el
+    '_' se interpreta como un subindice, o al documentar sobre emacs
+    donde =*scratch*= represenda el nobre de un bufer y no una palabra
+    resaltada en bold terdria resultados no desados, sin mencianar que
+    resaltar un elemento con mas de dos etiquetas es cuando menos,
+    ademas de que pocas marcas pueden tenerse antes de comenzar a
+    tener que utiliza signos poco habituales.
 
-    #+BEGIN_EXAMPLE
-      /*cursivoBold*/
-      ***cursivoBold***
-    #+END_EXAMPLE
-
-    asi que en este caso basados en texinfo podriamos tomar la
+    asi que en este caso basados en texinfo podriamos utilizar la
     sintaxis
 
     #+BEGIN_EXAMPLE
@@ -416,6 +411,39 @@ llenas de molonidad.
        <a href="ruta">descripcion</a>
      #+END_EXAMPLE
 
+     para /insertar/ un contenido dentro del documento (no como un
+     enlace) se hara uso de la etiqueta 'd' (data), sintaxis identica a
+     'l'
+
+     #+BEGIN_EXAMPLE
+       @d{path}
+       @d{path,descripcion}
+     #+END_EXAMPLE
+
+     por ejemplo con
+
+     #+BEGIN_EXAMPLE
+       @d{img:path}
+     #+END_EXAMPLE
+
+     optenemos
+
+     #+BEGIN_EXAMPLE
+       <img src="path" />
+     #+END_EXAMPLE
+
+     y con
+
+     #+BEGIN_EXAMPLE
+       @d{img:path,descripcion}
+     #+END_EXAMPLE
+
+     optenemos
+
+     #+BEGIN_EXAMPLE
+       <img src="path">descripcion</img>
+     #+END_EXAMPLE
+
      los enlaces internos se colocarian de forma
 
      #+BEGIN_EXAMPLE
@@ -429,15 +457,6 @@ llenas de molonidad.
      aparicion que coincifa con =target= detro del documento, exptuado
      bloques de codigo.
 
-     para /insertar/ un contenido dentro del documento no como un
-     enlace se hara uso de la etiqueta 'd' (data), sintaxis identica a
-     'l'
-
-     #+BEGIN_EXAMPLE
-       @d{path}
-       @d{path,descripcion}
-     #+END_EXAMPLE
-
 **** y el contenido mulmedia
 
      #+BEGIN_EXAMPLE
@@ -448,6 +467,34 @@ llenas de molonidad.
      las imagenes, videos, audios, bloques de texto, se titulan en la
      parte superior '^' o inferior '_' y se posicionan con "::" (sin
      alineacion), "-:" (a la izquierda), ":-" (a la derecha)
+
+     opteniendo algo similar a
+
+     #+BEGIN_EXAMPLE
+       <div id="multimediaUpLeft">
+         <h1>titulo</h1>
+         <img src="path"/>
+         <p>
+           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+           eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut
+           enim ad minim veniam.
+         </p>
+       </div>
+     #+END_EXAMPLE
+
+     o
+
+     #+BEGIN_EXAMPLE
+       <div id="multimediaDownRigth">
+         <img src="path"/>
+         <p>
+           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+           eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut
+           enim ad minim veniam.
+         </p>
+         <h1>titulo</h1>
+       </div>
+     #+END_EXAMPLE
 
 **** notas
 
