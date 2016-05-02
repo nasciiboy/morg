@@ -279,15 +279,15 @@ llenas de molonidad.
 
     sin embargo segun el tema podrian crearse abiguedades y casos poco
     claros, sobre todo cuando el tema a tratar versa sobre algun
-    lenguaje de progracamion como c, o lips, donde los nombres de las
-    funciones contienen marcas segnificativas al lenguaje como =char
-    **furcion( int** a)= o =funcion_a_b_c_algo= que en caso de org el
-    '_' se interpreta como un subindice, o al documentar sobre emacs
-    donde =*scratch*= represenda el nobre de un bufer y no una palabra
-    resaltada en bold terdria resultados no desados, sin mencianar que
-    resaltar un elemento con mas de dos etiquetas es cuando menos,
-    ademas de que pocas marcas pueden tenerse antes de comenzar a
-    tener que utiliza signos poco habituales.
+    lenguaje de progracamion como =c= o =lips=, donde los nombres de
+    las funciones contienen marcas segnificativas al lenguaje como
+    =char **furcion( int** a)= o =funcion_a_b_c_algo= que en caso de
+    org el '_' se interpreta como un subindice, o al documentar sobre
+    emacs donde =*scratch*= represenda el nobre de un bufer y no una
+    palabra resaltada en bold terdria resultados no desados, sin
+    mencianar que resaltar un elemento con mas de dos etiquetas es
+    cuando menos, ademas de que pocas marcas pueden tenerse antes de
+    comenzar a tener que utiliza signos poco habituales.
 
     asi que en este caso basados en texinfo podriamos utilizar la
     sintaxis
@@ -320,6 +320,10 @@ llenas de molonidad.
     - s :: tachado
     - c :: codigo
     - $ :: comando
+    - a :: abreviatura <- alguien la ha usado?
+    - # :: direccion
+    - ' :: 'entre' <-parentesis
+    - : :: termino/definicion
     - k :: tecla/combinacion de teclas
     - f :: fichero
     - q :: cita
@@ -465,8 +469,9 @@ llenas de molonidad.
      #+END_EXAMPLE
 
      las imagenes, videos, audios, bloques de texto, se titulan en la
-     parte superior '^' o inferior '_' y se posicionan con "::" (sin
-     alineacion), "-:" (a la izquierda), ":-" (a la derecha)
+     parte superior '^', inferior '_', derecha '>' o izquierda '<' y
+     se posicionan con "::" (sin alineacion), "-:" (a la izquierda),
+     ":-" (a la derecha)
 
      opteniendo algo similar a
 
@@ -560,6 +565,67 @@ llenas de molonidad.
      las lineas a partir de =0=, =-i= para /interpretar/ los enlaces
      =@l{}= que contenga el bloque.
 
+**** Dudas de diseño
+
+     De optar por la sintaxis "@x()", la "contatenacion" de elementos
+     actura del mas siginificativo (cercano a '()')  al menos
+     siginificativo (cercana a '@') o viseversa?
+
+     por ejemplo
+
+     #+BEGIN_EXAMPLE
+       @bie(palabra)
+     #+END_EXAMPLE
+
+     es igual equivalente a
+
+
+     #+BEGIN_EXAMPLE
+       <b><i><e>palabra</e></i></b>
+     #+END_EXAMPLE
+
+     o
+
+     #+BEGIN_EXAMPLE
+       <e><i><b>palabra</b></i></e>
+     #+END_EXAMPLE
+
+     otra question importante es la forma de tratar etiquetas con 2
+     elentos en conjuncion con otras y su orden de evaluacion, por
+     ejemplo una etiqueta de dos elementas "deja" la cadena mas
+     significativa a la siguiente de menor nivel, o estas se
+     interpretan antes y "dejan" el residuo a la superior?
+
+     #+BEGIN_EXAMPLE
+       @bl{ ruta, descripcion }
+     #+END_EXAMPLE
+
+     tendria un equivalente a
+
+     #+BEGIN_EXAMPLE
+       <a href="ruta"><b>descripcion</b></a>
+     #+END_EXAMPLE
+
+     o
+
+     #+BEGIN_EXAMPLE
+       <b><a href="ruta">descripcion</a></b>
+     #+END_EXAMPLE
+
+     y para finalizar la separacion por coma sera lo ideal, donde
+     casos complicados requeririan un escape o generar una cadena
+     "literal", o anidar seria mas estetico
+
+     #+BEGIN_EXAMPLE
+       @l{ruta, "caso, complicado"}
+     #+END_EXAMPLE
+
+     o
+
+     #+BEGIN_EXAMPLE
+       @l((ruta)(cualquer caso))
+     #+END_EXAMPLE
+
 *** Configuracion del documento
 
     El formato de marcas de configuracion org se ve bien!
@@ -579,15 +645,16 @@ llenas de molonidad.
     coherencia podria obtarse por algo como:
 
     #+BEGIN_EXAMPLE
-      @TITLE    {}
-      @SUBTITLE {}
-      @MAILTO   {}
-      @OVERVIEW {}
-      @EXPORT   {}
-      @SWITCHOFF{}
-      @MARKUP   {}
-      @CSS      {}
+      @title
+      @subtitle
+      @mailto
+      @everview
+      @export
+      @switchoff
+      @markup
+      @css
     #+END_EXAMPLE
+
 
 ** Tablas
 
