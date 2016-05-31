@@ -1,0 +1,239 @@
+/* WORG.css inspired by http://orgmode.org/worg/org-tutorials/orgtutorial_dto-es.html */
+:root {
+                         /* COLOR VARS    */
+    --ctitle : #ff4500;  /* #+TITLE:      */
+    --cstart1: #87cefa;  /* *             */
+    --cstart2: #eedd82;  /* **            */
+    --cstart3: #00ffff;  /* ***           */
+    --cstart4: #ff4500;  /* ****          */
+    --cstart5: #98fb98;  /* *****         */
+    --cstart6: #7fffd4;  /* ******        */
+    --cstart7: #b0c4de;  /* *******       */
+    --cstart8: #ffa074;  /* ********      */
+    --ctcode : #b3b3b3;  /* =code=        */
+    --cbcode : #b3b3b3;  /* block code    */
+    --clink  : #00ffff;  /* link          */
+    --cblinkh: #556b2f;  /* link bg hover */
+    --cflinkh: #ffffff;  /* link fg hover */
+    --cthead : #ff7f24;  /* table head    */
+    --ctbody : #87cefa;  /* table body    */
+}
+
+@font-face { font-family: text;           src: local('sans-serif');                     }
+@font-face { font-family: text_bold;      src: local('sans-serif'); font-style: bold;   }
+@font-face { font-family: text_italic;    src: local('sans-serif'); font-style: italic; }
+@font-face { font-family: text_verse;     src: local('sans-serif'); font-style: italic; }
+@font-face { font-family: title;          src: local('cursive'   );                     }
+@font-face { font-family: heatline;       src: local('cursive'   );                     }
+@font-face { font-family: codetext;       src: local('monospace' );                     }
+@font-face { font-family: codeblock;      src: local('monospace' );                     }
+@font-face { font-family: description_dt; src: local('cursive'   );                     }
+@font-face { font-family: description_dd; src: local('sans'      );                     }
+
+html { background: #000; color: #ffffff;
+       margin: 0;
+       background-image: url(img/icon-nba-tv.jpg);
+       background-size: 12%;
+       background-attachment: fixed;
+       background-position: right bottom;
+       background-repeat: no-repeat;
+     }
+
+html body { color: white; font-size: 1.5em; font-family: text; line-height: 1.8em;
+            margin-top: 0; }
+
+html body #content { padding: 2em 2em 2em 2em;
+                     max-width: 80%; min-width: 620px;
+                     margin-left: 20px; }
+
+/* ################# HEATLINES */
+h1 { color: var( --ctitle  ); font-size:   3em; font-family: title;    } /* TITLE    */
+h2 { color: var( --cstart1 ); font-size: 1.6em; font-family: heatline; } /* *        */
+h3 { color: var( --cstart2 ); font-size: 1.5em; font-family: heatline; } /* **       */
+h4 { color: var( --cstart3 ); font-size: 1.4em; font-family: heatline; } /* ***      */
+h5 { color: var( --cstart4 ); font-size: 1.3em; font-family: heatline; } /* ****     */
+h6 { color: var( --cstart5 ); font-size: 1.2em; font-family: heatline; } /* *****    */
+h7 { color: var( --cstart6 ); font-size: 1.1em; font-family: heatline; } /* ******   */
+h8 { color: var( --cstart7 ); font-size: 1.1em; font-family: heatline; } /* *******  */
+h9 { color: var( --cstart8 ); font-size: 1.1em; font-family: heatline; } /* ******** */
+
+h1 { line-height: 1em;                                                 } /* TITLE    */
+h2 { padding: 10px 0 10px 0; border-bottom: 1px solid #ddd;            } /* *        */
+h3 {                                                                   } /* **       */
+h4 {                                                                   } /* ***      */
+h5 {                                                                   } /* ****     */
+h6 {                                                                   } /* *****    */
+h7 {                                                                   } /* ******   */
+h8 {                                                                   } /* *******  */
+h9 {                                                                   } /* ******** */
+
+h1.subheadline { font-size: 1.5em; color: #555; }
+
+/* ###################### TEXT */
+.outline-text-2 { color: #ffffff; text-align: justify;                 } /* *        */
+.outline-text-3 { color: #ffffff; text-align: justify;                 } /* **       */
+.outline-text-4 { color: #ffffff; text-align: justify;                 } /* ***      */
+.outline-text-5 { color: #ffffff; text-align: justify;                 } /* ****     */
+.outline-text-6 { color: #ffffff; text-align: justify;                 } /* *****    */
+.outline-text-7 { color: #ffffff; text-align: justify;                 } /* ******   */
+.outline-text-8 { color: #ffffff; text-align: justify;                 } /* *******  */
+.outline-text-9 { color: #ffffff; text-align: justify;                 } /* ******** */
+
+
+/* ####################### TOC */
+#table-of-contents { background-color: #000; border: 1px solid #CCC;
+                     position: fixed; right: 0em; top: 0em; overflow: auto;
+                     max-height: 80%; max-width: 35%; float: right; z-index: 1;
+                     box-shadow: 0 0 1em #777777; border-bottom-left-radius: 5px; }
+#table-of-contents h2 { color: #eedd82; background-color: #000;
+                        font-size: .8em; text-align: center;
+                        border: 0; padding: 0em 0.5em 0em 0.5em; }
+#table-of-contents #text-table-of-contents { display: none; text-align: left; }
+#table-of-contents:hover #text-table-of-contents { display: block; line-height: 1em;  }
+#table-of-contents:hover #text-table-of-contents ul { padding-left: 1em; padding-right: 1em; }
+#table-of-contents:hover #text-table-of-contents ul li { list-style: none; }
+
+#table-of-contents:hover #text-table-of-contents ul li a:hover
+                         { color: #fff; }
+
+/* *            */
+#table-of-contents:hover #text-table-of-contents ul li a
+{ text-decoration: none; color: var( --cstart1 ); font-size: .7em; }
+
+/* **           */
+#table-of-contents:hover #text-table-of-contents ul li ul li a
+                         { color: var( --cstart2 ); font-size: .6em; }
+/* ***          */
+#table-of-contents:hover #text-table-of-contents ul li ul li ul li a
+                         { color: var( --cstart3 ); font-size: .6em; }
+/* ****         */
+#table-of-contents:hover #text-table-of-contents ul li ul li ul li ul li a
+                         { color: var( --cstart4 ); font-size: .6em; }
+/* *****        */
+#table-of-contents:hover #text-table-of-contents ul li ul li ul li ul li ul li a
+                         { color: var( --cstart5 ); font-size: .6em; }
+/* ******       */
+#table-of-contents:hover #text-table-of-contents ul li ul li ul li ul li ul li ul li a
+                         { color: var( --cstart6 ); font-size: .6em; }
+/* *******      */
+#table-of-contents:hover #text-table-of-contents ul li ul li ul li ul li ul li ul li ul li a
+                         { color: var( --cstart7 ); font-size: .6em; }
+/* ********     */
+#table-of-contents:hover #text-table-of-contents ul li ul li ul li ul li ul li ul li ul li ul li a
+                         { color: var( --cstart8 ); font-size: .6em; }
+
+/* ############## CODE IN TEXT */
+code { background-color: #000; color: var( --ctcode );
+       font-size: 1em;  font-family: codetext;
+       padding: 0px 0.2em; }
+
+/* BLOCK ########## CODE BLOCK */
+pre { background-color: #000; color: var( --cbcode );
+      font-size: 100%; text-align: left; font-family: codeblock;
+      padding: 1.2em; border: 1px solid #ddd; overflow: auto; }
+
+pre.example { background-color: #000; color: var( --cbcode );
+              font-size: 100%; text-align: left; font-family: codeblock;
+              padding: 1.2em; border: 1px solid #ddd; overflow: auto; }
+
+/* BLOCK ############## BLOCK */
+.block { border: 1px solid #ddd; }
+.block p { background-color: #000; color: var( --cbcode );
+           font-size: 100%; white-space: pre; font-family: codeblock;
+           padding: 0em 0em 1em 1em; border: 0; margin: 0;
+           overflow: auto;  }
+.block a code { color: var( --clink );
+                text-decoration: underline; }
+.block a:hover code { background-color: var( --cblinkh );
+                      color: var( --cflinkh );
+                      text-decoration: none; }
+
+/* BLOCK ############## BLOOD */
+.blood {  }
+.blood p { font-size: 83%;
+           padding: 0em 0em 1em 1em; border: 0; margin: 0 0 0 1em;
+           overflow: auto;  }
+.blood a code { color: var( --clink );
+                text-decoration: underline; }
+.blood a:hover code { background-color: var( --cblinkh );
+                      color: var( --cflinkh );
+                      text-decoration: none; }
+
+/* BLOCK ############## CENTER */
+div.center { text-align: center; display: table; margin: 0 auto; }
+
+/* BLOCK ############### VERSE */
+.verse { text-align: center; color: #b3b3b3;
+         font-style: italic; font-family: text_verse; }
+
+/* BLOCK ############### QUOTE */
+blockquote { display: table; margin: 0em auto;
+             line-height: 1em; white-space: pre; }
+blockquote p { margin: 0; }
+
+/* BLOCK ############# ITALIC */
+.italic { font-family: text_italic; }
+
+/* ############### FONT STYLE */
+b          { font-family: text_bold; }       /* *BOLD*       */
+i          { font-family: text_italic; }     /* /ITALIC/     */
+.underline { text-decoration: underline; }   /* _UNDERLINE_  */
+
+/* #################### LINKS */
+a { color: var( --clink ); text-decoration: underline; }
+a:hover { background-color: var( --cblinkh ); color: var( --cflinkh );
+          text-decoration: none; }
+
+a code { color: var( --ctcode );
+         text-decoration: underline; }
+a:hover code { background-color: var( --cblinkh );
+               color: var( --cflinkh );
+               text-decoration: none; }
+
+/* ############ FOOTNOTE LINK */
+a.footref { color: var( --clink ); text-decoration: none; }
+a.footref:hover { background-color: #556b2f; color: #ffffff; text-decoration: none; }
+a.footnum { color: var( --clink ); text-decoration: none; }
+a.footnum:hover { background-color: #556b2f; color: #ffffff; text-decoration: none; }
+
+/* #################### LIST  */
+ul.org-ul li { color: #fff; font-size: 1em;
+               list-style-type: square; }
+ul.org-ul li b { font-weight: bold; }
+ul.org-ul li p { color: #fff; font-size: 1em; }
+
+/* ############### DESCRIPTION */
+dl.org-dl { padding-bottom: 2em; }         /* body           */
+dl.org-dl dt { color: #daa520;             /* description dt */
+               font-size: 1.2em; font-family: description_dt;
+               margin-left: 0.6em; float: left; }
+dl.org-dl dd:before { color: #ffffff;      /* description dd */
+                      content: ": ";
+                      font-size: 1.0em; font-family: description_dd;
+                      font-style: bold; white-space: pre; }
+dl.org-dl dd { color: #ffffff;             /* description dd */
+               font-size: 1.0em; font-family: description_dd; font-style: bold;
+               margin-left: 1em;  }
+
+/* ####################### IMG */
+div.figure { text-align: center; }
+img { border: none; max-width: 100%;
+      filter: grayscale( 100% ); filter: invert(100%); }
+img:hover { filter: none; }
+
+/* ##################### TABLE */
+table { text-align: left; }
+table thead { border: none; color: var( --cthead ); background: #000; }
+table thead tr th { }
+table tbody { border-bottom: 2px solid #fff; color: var( --ctbody ); }
+table tbody tr td { }
+
+div.media-LeftLeft { width: 90%;
+                     margin: 1em 0em 0em 2em;
+                     border: 1px solid #ddd;
+                     display: table;}
+div.media-LeftLeft div.media-dt { display: table-cell; width: 30%;
+                                  vertical-align: middle; text-align: center;
+
+                                  border-right: 1px solid #fff; }
+div.media-LeftLeft div.media-dd { display: table-cell; padding: 1em; }

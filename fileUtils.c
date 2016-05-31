@@ -21,17 +21,18 @@ int countSpaces( char * reccord ){
 int fileTok( char * reccord, unsigned int size, FILE *stream ){
   static FILE *file = 0;
   int c, len = 0;
-  if( stream != file ) file = stream;
+  if( file != stream ) file = stream;
 
-  if( file == 0 ) c = EOF;
-  else
-    while( (c = fgetc( file )) != '\n' && c != EOF && size-- )
+  if( file ){
+    while( (c = fgetc( file )) != '\n' && !feof( file ) && size-- )
       reccord[ len++ ] = c;
 
-  reccord[ len ] = '\0';
+    reccord[ len ] = '\0';
 
-  if( len || c != EOF ) return 1;
+    if( len || !feof( file ) ) return 1;
+  }
 
+  *reccord = 0;
   file = 0;
   return 0;
 }
