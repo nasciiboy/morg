@@ -1,0 +1,37 @@
+- list element
+
+  + list element
+
+  + another list el
+
+  + last element
+
+  other simple text
+
+  > dialog list 1
+
+  > dialog list 2
+
+  > dialog list 3
+
+    - def :: inner def
+
+- another list element
+  list element multi line
+
+  a) list element
+
+  b) another muli line
+    list element multi line
+
+    1. and other more inner list
+
+    > dialog list
+
+  c) last element
+
+  other simple text
+
+- last element
+
+simple text

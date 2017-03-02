@@ -1,0 +1,38 @@
+..title    > Recursive Regexp Raptor
+..author   > nasciiboy
+..lang     > es
+..options  > highlight
+..style    > worg-data/worg.css
+
+..quote >
+  «La conciencia es el patron que se forma cuando apredemos a mirar hacia atras
+  de nosotros mismos, incluso antes de nuestra propia existencia.»
+
+* Introduccion
+
+  Al igual que muchos de mis predecesores, quede fascinado por la utilidad de
+  las expresiones regulares.
+
+  Este libro asi como todo el codigo que en el aparece esta cubierto por
+  licencias con derechos de izquierda (Copyleft).
+
+  Para el libro se utiliza la licencia GNU FDL version 1.3.
+
+  Para el codigo se utiliza la licencia GNU GPL version 3.
+
+  El libro deberia estar acompañado por copias de ambas licencias, en caso
+  contrario puede optener una copia desde @l(https://www.gnu.org/licenses/fdl-1.3.html) y
+  @l(https://www.gnu.org/licenses/gpl.html)
+
+  El codigo de este libro se encuentra alojado en
+  @l(https://github.com/nasciiboy/raptor-book), bajo el sistema de control de
+  versiones @$(git).
+
+  Puedes clonar el repositorio con el comando:
+
+  ..src > sh
+    git clone https://github.com/nasciiboy/raptor-book.git
+  < src..
+
+  Cualquier duda o contrubucion sera bien resivida en el correo electronico
+  @l(mailto:nasciiboy@@gmail.com).

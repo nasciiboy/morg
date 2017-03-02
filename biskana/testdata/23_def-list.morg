@@ -1,0 +1,27 @@
+- hey :: hi
+
+- hi  :: hey
+
++ hey :: hi
+
++ hi  :: hey
+
+- Multi line def
+  of Multi line def
+  of Multi line def :: is a def
+
+
++ Multi line def
+  of Multi line def
+  of Multi line def :: is a def
+
+
+- incomplete Multi line def
+  of Multi line def
+  of Multi line def ::
+
+- multi Multi line def
+  of Multi line def
+  of Multi line def ::
+
+  awesome def

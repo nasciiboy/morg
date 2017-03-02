@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
+<head>
+<title>Recursive Regexp Raptor</title>
+<meta name="subtitle" content="La Guia Para Construir Un Motor Regexp" />
+<meta name="author" content="nasciiboy" />
+<meta name="date" content="2016" />
+<meta name="tags" content="regex regexp c-prog algorithm" />
+<meta name="licence" content="GNU FDL v1.3" />
+<link rel="stylesheet" type="text/css" href="worg-data/worg.css" />
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+</head>
+<body>
+<div id="toc">
+<p>index</p>
+<div id="toc-contents">
+<span class="toc" ><a class="h2" href="#fights-are-welcome" ><em>fights</em> are <b>welcome</b></a></span>
+<span class="toc" ><a class="h3" href="#a-sub-headline" >a sub headline</a></span>
+<span class="toc" ><a class="h4" href="#third-Hedline" >third Hedline</a></span>
+<span class="toc" ><a class="h2" href="#another-headline" >another headline</a></span>
+<span class="toc" ><a class="h3" href="#last-headline" >last headline</a></span>
+<span class="toc" ><a class="h2" href="#or-no" >or no</a></span>
+</div>
+</div>
+<h1>Recursive Regexp Raptor</h1>
+<blockquote>
+<p>hello morg</p>
+</blockquote>
+<h2 id="fights-are-welcome" ><em>fights</em> are <b>welcome</b></h2>
+<div class="hBody-2" >
+<dl>
+<dt><p>morg</p>
+</dt>
+<dd><p><em>simple</em>, <b>full</b> and <i>fun</i> <kbd>markup</kbd> <code>language</code></p>
+</dd>
+</dl>
+</div>
+<h3 id="a-sub-headline" >a sub headline</h3>
+<div class="hBody-3" >
+<div class="about" >
+<div class="about-dt" >
+<p>warning</p>
+</div>
+<div class="about-dd" >
+<p>a simple multi line warning</p>
+</div>
+</div>
+</div>
+<h4 id="third-Hedline" >third Hedline</h4>
+<div class="hBody-4" >
+<div class="highlight"><pre><span></span><span class="n">printf</span><span class="p">(</span> <span class="s">&quot;hello morg&quot;</span> <span class="p">)</span>
+</pre></div>
+<p>simple text</p>
+</div>
+<h2 id="another-headline" >another headline</h2>
+<div class="hBody-2" >
+<ul>
+<li><p>list 1st</p>
+</li>
+<li><p>list 2st</p>
+<div class="about" >
+<div class="about-dt" >
+<p>about</p>
+</div>
+<div class="about-dd" >
+<ul>
+<li><p>inner about list</p>
+</li>
+</ul>
+<ul>
+<li><p>other inner about list</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="s">&quot;fmt&quot;</span>
+
+<span class="kd">func</span> <span class="nx">main</span><span class="p">(){</span>
+  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span> <span class="s">&quot;hello inner about src block&quot;</span> <span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="s2">&quot;hello morg</span>
+</pre></div>
+</li>
+<li><p>list 3st</p>
+</li>
+</ul>
+<p>simple text</p>
+</div>
+<h3 id="last-headline" >last headline</h3>
+<div class="hBody-3" >
+<div class="emph" >
+<p>simple emph block</p>
+<div class="bold" >
+<p>simple inner bold block</p>
+</div>
+</div>
+</div>
+<h2 id="or-no" >or no</h2>
+<div class="hBody-2" >
+<div class="about" >
+<div class="about-dt" >
+<p>Recursive Regexp Raptor</p>
+<p><b>Licence:</b> GNU GPL v3</p>
+</div>
+<div class="about-dd" >
+<div class="figure" >
+<h1>Code</h1>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;regexp3.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;charUtils.h&quot;</span><span class="cp"></span>
+
+<span class="cp">#define TRUE                 1</span>
+<span class="cp">#define FALSE                0</span>
+<span class="cp">#define MAX_CATCHS          16</span>
+<span class="cp">#define INF         1073741824 </span><span class="c1">// 2^30</span>
+
+<span class="cp">#define MOD_ALPHA            1</span>
+<span class="cp">#define MOD_OMEGA            2</span>
+<span class="cp">#define MOD_LONLEY           4</span>
+<span class="cp">#define MOD_FwrByChar        8</span>
+<span class="cp">#define MOD_COMMUNISM       16</span>
+<span class="cp">#define MOD_NEGATIVE       128</span>
+
+<span class="k">struct</span> <span class="n">CATch</span> <span class="p">{</span>
+  <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">ptr</span><span class="p">[</span> <span class="n">MAX_CATCHS</span> <span class="p">];</span>
+  <span class="kt">int</span>   <span class="n">len</span><span class="p">[</span> <span class="n">MAX_CATCHS</span> <span class="p">];</span>
+  <span class="kt">int</span>   <span class="n">id</span> <span class="p">[</span> <span class="n">MAX_CATCHS</span> <span class="p">];</span>
+  <span class="kt">int</span>   <span class="n">idx</span><span class="p">;</span>
+  <span class="kt">int</span>   <span class="n">index</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">static</span> <span class="n">Catch</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="n">TEXT</span> <span class="p">{</span>
+  <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span>
+  <span class="kt">int</span>   <span class="n">pos</span><span class="p">;</span>
+  <span class="kt">int</span>   <span class="n">len</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">static</span> <span class="n">text</span><span class="p">;</span>
+
+<span class="k">enum</span> <span class="n">TYPE</span> <span class="p">{</span> <span class="n">PATH</span><span class="p">,</span> <span class="n">GROUP</span><span class="p">,</span> <span class="n">HOOK</span><span class="p">,</span> <span class="n">SET</span><span class="p">,</span> <span class="n">BACKREF</span><span class="p">,</span> <span class="n">META</span><span class="p">,</span> <span class="n">RANGEAB</span><span class="p">,</span> <span class="n">POINT</span><span class="p">,</span> <span class="n">SIMPLE</span> <span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">RE</span> <span class="p">{</span>
+  <span class="k">const</span>    <span class="kt">char</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span>
+  <span class="kt">int</span>            <span class="n">len</span><span class="p">;</span>
+  <span class="k">enum</span>     <span class="n">TYPE</span>  <span class="n">type</span><span class="p">;</span>
+  <span class="kt">unsigned</span> <span class="kt">char</span>  <span class="n">mods</span><span class="p">;</span>
+  <span class="kt">unsigned</span> <span class="kt">int</span>   <span class="n">loopsMin</span><span class="p">,</span> <span class="n">loopsMax</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">static</span> <span class="kt">int</span>  <span class="nf">walker</span>       <span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span>  <span class="n">rexp</span> <span class="p">);</span>
+<span class="k">static</span> <span class="kt">int</span>  <span class="nf">trekking</span>     <span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span> <span class="p">);</span>
+<span class="k">static</span> <span class="kt">int</span>  <span class="nf">looper</span>       <span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span> <span class="p">);</span>
+<span class="k">static</span> <span class="kt">int</span>  <span class="nf">loopGroup</span>    <span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span> <span class="p">);</span>
+<span class="k">static</span> <span class="kt">int</span>  <span class="nf">tracker</span>      <span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">track</span> <span class="p">);</span>
+<span class="k">static</span> <span class="kt">int</span>  <span class="nf">trackerSet</span>   <span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">track</span> <span class="p">);</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">cutSimple</span>    <span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">track</span> <span class="p">);</span>
+<span class="k">static</span> <span class="kt">int</span>  <span class="nf">cutByType</span>    <span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">track</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">type</span> <span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">cutByLen</span>     <span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">track</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">len</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">type</span> <span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">cutRexp</span>      <span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">len</span> <span class="p">);</span>
+
+<span class="k">static</span> <span class="kt">int</span>  <span class="nf">walkMeta</span>     <span class="p">(</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">len</span> <span class="p">);</span>
+<span class="k">static</span> <span class="kt">int</span>  <span class="nf">walkSet</span>      <span class="p">(</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">len</span> <span class="p">);</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">getMods</span>      <span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">track</span> <span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">getLoops</span>     <span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">track</span> <span class="p">);</span>
+
+<span class="k">static</span> <span class="kt">int</span>  <span class="nf">match</span>        <span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span> <span class="p">);</span>
+<span class="k">static</span> <span class="kt">int</span>  <span class="nf">matchSet</span>     <span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span>  <span class="n">rexp</span> <span class="p">);</span>
+<span class="k">static</span> <span class="kt">int</span>  <span class="nf">matchBackRef</span> <span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span> <span class="p">);</span>
+<span class="k">static</span> <span class="kt">int</span>  <span class="nf">matchRange</span>   <span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="kt">int</span> <span class="n">chr</span> <span class="p">);</span>
+<span class="k">static</span> <span class="kt">int</span>  <span class="nf">matchMeta</span>    <span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">chr</span> <span class="p">);</span>
+<span class="k">static</span> <span class="kt">int</span>  <span class="nf">matchText</span>    <span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">txt</span> <span class="p">);</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">openCatch</span>    <span class="p">(</span> <span class="kt">int</span> <span class="o">*</span><span class="n">index</span> <span class="p">);</span>
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">closeCatch</span>   <span class="p">(</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">index</span> <span class="p">);</span>
+<span class="k">static</span> <span class="kt">int</span>  <span class="nf">lastIdCatch</span>  <span class="p">(</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">id</span>    <span class="p">);</span>
+
+<span class="kt">int</span> <span class="nf">regexp3</span><span class="p">(</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">txt</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">re</span> <span class="p">){</span>
+  <span class="k">struct</span> <span class="n">RE</span>    <span class="n">rexp</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">result</span>   <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">text</span><span class="p">.</span><span class="n">len</span>     <span class="o">=</span> <span class="n">strLen</span><span class="p">(</span> <span class="n">txt</span> <span class="p">);</span>
+  <span class="n">Catch</span><span class="p">.</span><span class="n">ptr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">txt</span><span class="p">;</span>
+  <span class="n">Catch</span><span class="p">.</span><span class="n">len</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+  <span class="n">Catch</span><span class="p">.</span><span class="n">id</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">Catch</span><span class="p">.</span><span class="n">index</span>  <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="n">rexp</span><span class="p">.</span><span class="n">ptr</span>     <span class="o">=</span> <span class="n">re</span><span class="p">;</span>
+  <span class="n">rexp</span><span class="p">.</span><span class="n">type</span>    <span class="o">=</span> <span class="n">PATH</span><span class="p">;</span>
+  <span class="n">rexp</span><span class="p">.</span><span class="n">len</span>     <span class="o">=</span> <span class="n">strLen</span><span class="p">(</span> <span class="n">re</span> <span class="p">);</span>
+  <span class="n">rexp</span><span class="p">.</span><span class="n">mods</span>    <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+  <span class="k">if</span><span class="p">(</span> <span class="n">text</span><span class="p">.</span><span class="n">len</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">rexp</span><span class="p">.</span><span class="n">len</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+
+  <span class="n">getMods</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">rexp</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rexp</span> <span class="p">);</span>
+
+  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">forward</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">loops</span> <span class="o">=</span> <span class="n">rexp</span><span class="p">.</span><span class="n">mods</span> <span class="o">&amp;</span> <span class="n">MOD_ALPHA</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="n">text</span><span class="p">.</span><span class="n">len</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">loops</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">forward</span> <span class="p">){</span>
+    <span class="n">forward</span>    <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">Catch</span><span class="p">.</span><span class="n">idx</span>  <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">text</span><span class="p">.</span><span class="n">pos</span>   <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">text</span><span class="p">.</span><span class="n">ptr</span>   <span class="o">=</span> <span class="n">txt</span>          <span class="o">+</span> <span class="n">i</span><span class="p">;</span>
+    <span class="n">text</span><span class="p">.</span><span class="n">len</span>   <span class="o">=</span> <span class="n">Catch</span><span class="p">.</span><span class="n">len</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">i</span><span class="p">;</span>
+
+    <span class="k">if</span><span class="p">(</span> <span class="n">walker</span><span class="p">(</span> <span class="n">rexp</span> <span class="p">)</span> <span class="p">){</span>
+      <span class="k">if</span>     <span class="p">(</span>  <span class="n">rexp</span><span class="p">.</span><span class="n">mods</span> <span class="o">&amp;</span> <span class="n">MOD_OMEGA</span>    <span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span> <span class="n">text</span><span class="p">.</span><span class="n">pos</span> <span class="o">==</span> <span class="n">text</span><span class="p">.</span><span class="n">len</span> <span class="p">)</span>                            <span class="k">return</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="k">else</span> <span class="n">Catch</span><span class="p">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">else</span> <span class="k">if</span><span class="p">(</span>  <span class="n">rexp</span><span class="p">.</span><span class="n">mods</span> <span class="o">&amp;</span> <span class="n">MOD_LONLEY</span>   <span class="p">)</span>                    <span class="k">return</span> <span class="n">TRUE</span><span class="p">;</span>
+      <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="p">(</span><span class="n">rexp</span><span class="p">.</span><span class="n">mods</span> <span class="o">&amp;</span> <span class="n">MOD_FwrByChar</span><span class="p">)</span> <span class="o">||</span> <span class="n">text</span><span class="p">.</span><span class="n">pos</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="n">result</span><span class="o">++</span><span class="p">;</span>
+      <span class="k">else</span>   <span class="p">{</span>  <span class="n">forward</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span>                           <span class="n">result</span><span class="o">++</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">walker</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="n">rexp</span> <span class="p">){</span>
+  <span class="k">struct</span> <span class="n">RE</span> <span class="n">track</span><span class="p">;</span>
+  <span class="k">for</span><span class="p">(</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">oTpos</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">oCindex</span> <span class="o">=</span> <span class="n">Catch</span><span class="p">.</span><span class="n">index</span><span class="p">,</span> <span class="n">oCidx</span> <span class="o">=</span> <span class="n">Catch</span><span class="p">.</span><span class="n">idx</span><span class="p">;</span>
+       <span class="n">cutByType</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">rexp</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">track</span><span class="p">,</span> <span class="n">PATH</span> <span class="p">);</span>
+       <span class="n">text</span><span class="p">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">oTpos</span><span class="p">,</span> <span class="n">Catch</span><span class="p">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">oCindex</span><span class="p">,</span> <span class="n">Catch</span><span class="p">.</span><span class="n">idx</span> <span class="o">=</span> <span class="n">oCidx</span> <span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">trekking</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">track</span> <span class="p">)</span> <span class="p">)</span> <span class="k">return</span> <span class="n">TRUE</span><span class="p">;</span>
+
+  <span class="k">return</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">trekking</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span> <span class="p">){</span>
+  <span class="k">struct</span> <span class="n">RE</span> <span class="n">track</span><span class="p">;</span>
+  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">,</span> <span class="n">iCatch</span><span class="p">;</span> <span class="n">tracker</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">track</span> <span class="p">);</span> <span class="p">){</span>
+    <span class="k">switch</span><span class="p">(</span> <span class="n">track</span><span class="p">.</span><span class="n">type</span> <span class="p">){</span>
+    <span class="k">case</span> <span class="nl">HOOK</span><span class="p">:</span>
+      <span class="n">openCatch</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">iCatch</span> <span class="p">);</span>
+      <span class="n">result</span> <span class="o">=</span> <span class="n">loopGroup</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">track</span> <span class="p">);</span>
+      <span class="k">if</span><span class="p">(</span> <span class="n">result</span> <span class="p">)</span> <span class="n">closeCatch</span><span class="p">(</span> <span class="n">iCatch</span> <span class="p">);</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nl">GROUP</span><span class="p">:</span> <span class="k">case</span> <span class="nl">PATH</span><span class="p">:</span>
+      <span class="n">result</span> <span class="o">=</span> <span class="n">loopGroup</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">track</span> <span class="p">);</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nl">SET</span><span class="p">:</span>
+      <span class="k">if</span><span class="p">(</span> <span class="n">track</span><span class="p">.</span><span class="n">ptr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;^&#39;</span> <span class="p">){</span>
+        <span class="n">cutRexp</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">track</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span> <span class="n">track</span><span class="p">.</span><span class="n">mods</span> <span class="o">&amp;</span> <span class="n">MOD_NEGATIVE</span> <span class="p">)</span> <span class="n">track</span><span class="p">.</span><span class="n">mods</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">MOD_NEGATIVE</span><span class="p">;</span>
+        <span class="k">else</span>                            <span class="n">track</span><span class="p">.</span><span class="n">mods</span> <span class="o">|=</span>  <span class="n">MOD_NEGATIVE</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="k">case</span> <span class="nl">BACKREF</span><span class="p">:</span> <span class="k">case</span> <span class="nl">META</span><span class="p">:</span> <span class="k">case</span> <span class="nl">RANGEAB</span><span class="p">:</span> <span class="k">case</span> <span class="nl">POINT</span><span class="p">:</span> <span class="k">case</span> <span class="nl">SIMPLE</span><span class="p">:</span>
+      <span class="n">result</span> <span class="o">=</span> <span class="n">looper</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">track</span> <span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span><span class="p">(</span> <span class="n">result</span> <span class="o">==</span> <span class="n">FALSE</span> <span class="p">)</span> <span class="k">return</span> <span class="n">FALSE</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">looper</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span> <span class="p">){</span>
+  <span class="kt">int</span> <span class="n">forward</span><span class="p">,</span> <span class="n">loops</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+  <span class="k">if</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">mods</span> <span class="o">&amp;</span> <span class="n">MOD_NEGATIVE</span> <span class="p">)</span>
+    <span class="k">while</span><span class="p">(</span> <span class="n">loops</span> <span class="o">&lt;</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">loopsMax</span> <span class="o">&amp;&amp;</span> <span class="n">text</span><span class="p">.</span><span class="n">pos</span> <span class="o">&lt;</span> <span class="n">text</span><span class="p">.</span><span class="n">len</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">match</span><span class="p">(</span> <span class="n">rexp</span> <span class="p">)</span> <span class="p">){</span>
+      <span class="n">text</span><span class="p">.</span><span class="n">pos</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+      <span class="n">loops</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="k">else</span>
+    <span class="k">while</span><span class="p">(</span> <span class="n">loops</span> <span class="o">&lt;</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">loopsMax</span> <span class="o">&amp;&amp;</span> <span class="n">text</span><span class="p">.</span><span class="n">pos</span> <span class="o">&lt;</span> <span class="n">text</span><span class="p">.</span><span class="n">len</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">forward</span> <span class="o">=</span> <span class="n">match</span><span class="p">(</span> <span class="n">rexp</span> <span class="p">))</span> <span class="p">){</span>
+      <span class="n">text</span><span class="p">.</span><span class="n">pos</span> <span class="o">+=</span> <span class="n">forward</span><span class="p">;</span>
+      <span class="n">loops</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">loops</span> <span class="o">&lt;</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">loopsMin</span> <span class="o">?</span> <span class="nl">FALSE</span> <span class="p">:</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">loopGroup</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span> <span class="p">){</span>
+  <span class="kt">int</span> <span class="n">loops</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">textPos</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span>
+
+  <span class="k">if</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">mods</span> <span class="o">&amp;</span> <span class="n">MOD_NEGATIVE</span> <span class="p">){</span>
+    <span class="k">while</span><span class="p">(</span> <span class="n">loops</span> <span class="o">&lt;</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">loopsMax</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">walker</span><span class="p">(</span> <span class="o">*</span><span class="n">rexp</span> <span class="p">)</span> <span class="p">){</span>
+      <span class="n">textPos</span><span class="o">++</span><span class="p">;</span>
+      <span class="n">text</span><span class="p">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">textPos</span><span class="p">;</span>
+      <span class="n">loops</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">text</span><span class="p">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">textPos</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">else</span>
+    <span class="k">while</span><span class="p">(</span> <span class="n">loops</span> <span class="o">&lt;</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">loopsMax</span> <span class="o">&amp;&amp;</span> <span class="n">walker</span><span class="p">(</span> <span class="o">*</span><span class="n">rexp</span> <span class="p">)</span> <span class="p">)</span>
+      <span class="n">loops</span><span class="o">++</span><span class="p">;</span>
+
+  <span class="k">return</span> <span class="n">loops</span> <span class="o">&lt;</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">loopsMin</span> <span class="o">?</span> <span class="nl">FALSE</span> <span class="p">:</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">tracker</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">track</span> <span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">len</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="k">return</span> <span class="n">FALSE</span><span class="p">;</span>
+
+  <span class="k">switch</span><span class="p">(</span> <span class="o">*</span><span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="p">){</span>
+  <span class="k">case</span> <span class="sc">&#39;:&#39;</span><span class="o">:</span> <span class="n">cutByLen</span> <span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">META</span>  <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="k">case</span> <span class="sc">&#39;.&#39;</span><span class="o">:</span> <span class="n">cutByLen</span> <span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">POINT</span> <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="k">case</span> <span class="sc">&#39;@&#39;</span><span class="o">:</span> <span class="n">cutByLen</span> <span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span>
+                      <span class="n">countCharDigits</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">),</span>
+                                     <span class="n">BACKREF</span> <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="k">case</span> <span class="sc">&#39;(&#39;</span><span class="o">:</span> <span class="n">cutByType</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span>  <span class="n">GROUP</span>   <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="k">case</span> <span class="sc">&#39;&lt;&#39;</span><span class="o">:</span> <span class="n">cutByType</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span>  <span class="n">HOOK</span>    <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="k">case</span> <span class="sc">&#39;[&#39;</span><span class="o">:</span> <span class="n">cutByType</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span>  <span class="n">SET</span>     <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="k">default</span> <span class="o">:</span> <span class="n">cutSimple</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span>           <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">getLoops</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span> <span class="p">);</span>
+  <span class="n">getMods</span> <span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span> <span class="p">);</span>
+  <span class="k">return</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">cutSimple</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">track</span> <span class="p">){</span>
+  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
+    <span class="k">switch</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="p">){</span>
+    <span class="k">case</span> <span class="sc">&#39;(&#39;</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;&lt;&#39;</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;[&#39;</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;@&#39;</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;:&#39;</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;.&#39;</span><span class="o">:</span>
+      <span class="n">cutByLen</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">SIMPLE</span>  <span class="p">);</span> <span class="k">return</span><span class="p">;</span>
+    <span class="k">case</span> <span class="sc">&#39;?&#39;</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;+&#39;</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;*&#39;</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;{&#39;</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;#&#39;</span><span class="o">:</span>
+      <span class="k">if</span><span class="p">(</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span> <span class="n">cutByLen</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span>     <span class="mi">1</span><span class="p">,</span> <span class="n">SIMPLE</span>  <span class="p">);</span>
+      <span class="k">else</span>         <span class="n">cutByLen</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">SIMPLE</span>  <span class="p">);</span>
+      <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+  <span class="n">cutByLen</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">len</span><span class="p">,</span> <span class="n">SIMPLE</span>  <span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">cutByLen</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">track</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">len</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">type</span> <span class="p">){</span>
+  <span class="o">*</span><span class="n">track</span>       <span class="o">=</span> <span class="o">*</span><span class="n">rexp</span><span class="p">;</span>
+  <span class="n">track</span><span class="o">-&gt;</span><span class="n">type</span>  <span class="o">=</span> <span class="n">type</span><span class="p">;</span>
+  <span class="n">track</span><span class="o">-&gt;</span><span class="n">len</span>   <span class="o">=</span> <span class="n">len</span><span class="p">;</span>
+  <span class="n">cutRexp</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">len</span> <span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">cutByType</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">track</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">type</span> <span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">len</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="k">return</span> <span class="n">FALSE</span><span class="p">;</span>
+
+  <span class="o">*</span><span class="n">track</span> <span class="o">=</span> <span class="o">*</span><span class="n">rexp</span><span class="p">;</span>
+  <span class="n">track</span><span class="o">-&gt;</span><span class="n">type</span> <span class="o">=</span> <span class="n">type</span><span class="p">;</span>
+  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">cut</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">deep</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="n">i</span> <span class="o">+=</span> <span class="n">walkMeta</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">len</span> <span class="o">-</span> <span class="n">i</span> <span class="p">))</span> <span class="o">&lt;</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">){</span>
+    <span class="k">switch</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="p">){</span>
+    <span class="k">case</span> <span class="sc">&#39;(&#39;</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;&lt;&#39;</span><span class="o">:</span> <span class="n">deep</span><span class="o">++</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="sc">&#39;)&#39;</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;&gt;&#39;</span><span class="o">:</span> <span class="n">deep</span><span class="o">--</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="sc">&#39;[&#39;</span><span class="o">:</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">walkSet</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">len</span> <span class="o">-</span> <span class="n">i</span> <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">switch</span><span class="p">(</span> <span class="n">type</span> <span class="p">){</span>
+    <span class="k">case</span> <span class="nl">HOOK</span>    <span class="p">:</span> <span class="n">cut</span> <span class="o">=</span> <span class="n">deep</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nl">GROUP</span>   <span class="p">:</span> <span class="n">cut</span> <span class="o">=</span> <span class="n">deep</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nl">SET</span>     <span class="p">:</span> <span class="n">cut</span> <span class="o">=</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;]&#39;</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nl">PATH</span>    <span class="p">:</span> <span class="n">cut</span> <span class="o">=</span> <span class="n">deep</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;|&#39;</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span><span class="p">(</span> <span class="n">cut</span> <span class="p">){</span>
+      <span class="n">track</span><span class="o">-&gt;</span><span class="n">len</span>  <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+      <span class="n">cutRexp</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">);</span>
+      <span class="k">if</span><span class="p">(</span> <span class="n">type</span> <span class="o">!=</span> <span class="n">PATH</span> <span class="p">)</span> <span class="n">cutRexp</span><span class="p">(</span> <span class="n">track</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
+      <span class="k">return</span> <span class="n">TRUE</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="n">cutRexp</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">len</span> <span class="p">);</span>
+  <span class="k">return</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">cutRexp</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">len</span> <span class="p">){</span>
+  <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="o">+=</span> <span class="n">len</span><span class="p">;</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">len</span> <span class="o">-=</span> <span class="n">len</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">walkSet</span><span class="p">(</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">len</span> <span class="p">){</span>
+  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="n">i</span> <span class="o">+=</span> <span class="n">walkMeta</span><span class="p">(</span> <span class="n">str</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">len</span> <span class="o">-</span> <span class="n">i</span> <span class="p">))</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;]&#39;</span> <span class="p">)</span> <span class="k">return</span> <span class="n">i</span><span class="p">;</span>
+
+  <span class="k">return</span> <span class="n">len</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">walkMeta</span><span class="p">(</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">len</span> <span class="p">){</span>
+  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">2</span> <span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;:&#39;</span> <span class="p">)</span> <span class="k">return</span> <span class="n">i</span><span class="p">;</span>
+
+  <span class="k">return</span> <span class="n">len</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">getMods</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">track</span> <span class="p">){</span>
+  <span class="kt">int</span> <span class="n">inMods</span> <span class="o">=</span> <span class="o">*</span><span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="o">==</span> <span class="sc">&#39;#&#39;</span><span class="p">,</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">track</span><span class="o">-&gt;</span><span class="n">mods</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">MOD_NEGATIVE</span><span class="p">;</span>
+
+  <span class="k">while</span><span class="p">(</span> <span class="n">inMods</span> <span class="p">)</span>
+    <span class="k">switch</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">[</span> <span class="o">++</span><span class="n">pos</span> <span class="p">]</span> <span class="p">){</span>
+    <span class="k">case</span> <span class="sc">&#39;^&#39;</span><span class="o">:</span> <span class="n">track</span><span class="o">-&gt;</span><span class="n">mods</span> <span class="o">|=</span>  <span class="n">MOD_ALPHA</span>     <span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="sc">&#39;$&#39;</span><span class="o">:</span> <span class="n">track</span><span class="o">-&gt;</span><span class="n">mods</span> <span class="o">|=</span>  <span class="n">MOD_OMEGA</span>     <span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="sc">&#39;?&#39;</span><span class="o">:</span> <span class="n">track</span><span class="o">-&gt;</span><span class="n">mods</span> <span class="o">|=</span>  <span class="n">MOD_LONLEY</span>    <span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="sc">&#39;~&#39;</span><span class="o">:</span> <span class="n">track</span><span class="o">-&gt;</span><span class="n">mods</span> <span class="o">|=</span>  <span class="n">MOD_FwrByChar</span> <span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="sc">&#39;*&#39;</span><span class="o">:</span> <span class="n">track</span><span class="o">-&gt;</span><span class="n">mods</span> <span class="o">|=</span>  <span class="n">MOD_COMMUNISM</span> <span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="sc">&#39;/&#39;</span><span class="o">:</span> <span class="n">track</span><span class="o">-&gt;</span><span class="n">mods</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">MOD_COMMUNISM</span> <span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="sc">&#39;!&#39;</span><span class="o">:</span> <span class="n">track</span><span class="o">-&gt;</span><span class="n">mods</span> <span class="o">|=</span>  <span class="n">MOD_NEGATIVE</span>  <span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">default</span> <span class="o">:</span> <span class="n">inMods</span>       <span class="o">=</span>  <span class="n">FALSE</span>         <span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+
+  <span class="n">cutRexp</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">pos</span> <span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">getLoops</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">track</span> <span class="p">){</span>
+  <span class="n">track</span><span class="o">-&gt;</span><span class="n">loopsMin</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">track</span><span class="o">-&gt;</span><span class="n">loopsMax</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+  <span class="k">if</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">len</span> <span class="p">)</span>
+    <span class="k">switch</span><span class="p">(</span> <span class="o">*</span><span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="p">){</span>
+    <span class="k">case</span> <span class="sc">&#39;?&#39;</span> <span class="o">:</span> <span class="n">cutRexp</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span> <span class="n">track</span><span class="o">-&gt;</span><span class="n">loopsMin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">track</span><span class="o">-&gt;</span><span class="n">loopsMax</span> <span class="o">=</span>   <span class="mi">1</span><span class="p">;</span> <span class="k">return</span><span class="p">;</span>
+    <span class="k">case</span> <span class="sc">&#39;+&#39;</span> <span class="o">:</span> <span class="n">cutRexp</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span> <span class="n">track</span><span class="o">-&gt;</span><span class="n">loopsMin</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">track</span><span class="o">-&gt;</span><span class="n">loopsMax</span> <span class="o">=</span> <span class="n">INF</span><span class="p">;</span> <span class="k">return</span><span class="p">;</span>
+    <span class="k">case</span> <span class="sc">&#39;*&#39;</span> <span class="o">:</span> <span class="n">cutRexp</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span> <span class="n">track</span><span class="o">-&gt;</span><span class="n">loopsMin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">track</span><span class="o">-&gt;</span><span class="n">loopsMax</span> <span class="o">=</span> <span class="n">INF</span><span class="p">;</span> <span class="k">return</span><span class="p">;</span>
+    <span class="k">case</span> <span class="sc">&#39;{&#39;</span> <span class="o">:</span> <span class="n">cutRexp</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
+      <span class="n">track</span><span class="o">-&gt;</span><span class="n">loopsMin</span> <span class="o">=</span> <span class="n">aToi</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="p">);</span>
+      <span class="n">cutRexp</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">countCharDigits</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="p">)</span> <span class="p">);</span>
+      <span class="k">if</span><span class="p">(</span> <span class="o">*</span><span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="o">==</span> <span class="sc">&#39;,&#39;</span> <span class="p">){</span>
+        <span class="n">cutRexp</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span> <span class="o">*</span><span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="o">==</span> <span class="sc">&#39;}&#39;</span> <span class="p">)</span>
+          <span class="n">track</span><span class="o">-&gt;</span><span class="n">loopsMax</span> <span class="o">=</span> <span class="n">INF</span><span class="p">;</span>
+        <span class="k">else</span> <span class="p">{</span>
+          <span class="n">track</span><span class="o">-&gt;</span><span class="n">loopsMax</span> <span class="o">=</span> <span class="n">aToi</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="p">);</span>
+          <span class="n">cutRexp</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">countCharDigits</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span>  <span class="p">)</span> <span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="n">track</span><span class="o">-&gt;</span><span class="n">loopsMax</span> <span class="o">=</span> <span class="n">track</span><span class="o">-&gt;</span><span class="n">loopsMin</span><span class="p">;</span>
+
+      <span class="n">cutRexp</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">match</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span> <span class="p">){</span>
+  <span class="k">switch</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">type</span> <span class="p">){</span>
+  <span class="k">case</span> <span class="nl">POINT</span>  <span class="p">:</span> <span class="k">return</span> <span class="n">text</span><span class="p">.</span><span class="n">pos</span> <span class="o">&lt;</span> <span class="n">text</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+  <span class="k">case</span> <span class="nl">SET</span>    <span class="p">:</span> <span class="k">return</span> <span class="n">matchSet</span>    <span class="p">(</span> <span class="o">*</span><span class="n">rexp</span> <span class="p">);</span>
+  <span class="k">case</span> <span class="nl">BACKREF</span><span class="p">:</span> <span class="k">return</span> <span class="n">matchBackRef</span><span class="p">(</span>  <span class="n">rexp</span> <span class="p">);</span>
+  <span class="k">case</span> <span class="nl">RANGEAB</span><span class="p">:</span> <span class="k">return</span> <span class="n">matchRange</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">text</span><span class="p">.</span><span class="n">ptr</span><span class="p">[</span><span class="n">text</span><span class="p">.</span><span class="n">pos</span><span class="p">]</span>  <span class="p">);</span>
+  <span class="k">case</span> <span class="nl">META</span>   <span class="p">:</span> <span class="k">return</span> <span class="n">matchMeta</span> <span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">text</span><span class="p">.</span><span class="n">ptr</span><span class="p">[</span><span class="n">text</span><span class="p">.</span><span class="n">pos</span><span class="p">]</span>  <span class="p">);</span>
+  <span class="k">default</span>     <span class="o">:</span> <span class="k">return</span> <span class="n">matchText</span> <span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">text</span><span class="p">.</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">text</span><span class="p">.</span><span class="n">pos</span> <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">matchText</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">txt</span> <span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">mods</span> <span class="o">&amp;</span> <span class="n">MOD_COMMUNISM</span> <span class="p">)</span>
+    <span class="k">return</span>    <span class="n">strnEqlCommunist</span><span class="p">(</span> <span class="n">txt</span><span class="p">,</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">,</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">len</span> <span class="p">)</span> <span class="o">?</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="nl">len</span> <span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">else</span> <span class="k">return</span> <span class="n">strnEql</span>         <span class="p">(</span> <span class="n">txt</span><span class="p">,</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">,</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">len</span> <span class="p">)</span> <span class="o">?</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="nl">len</span> <span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">matchRange</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="kt">int</span> <span class="n">chr</span> <span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">mods</span> <span class="o">&amp;</span> <span class="n">MOD_COMMUNISM</span> <span class="p">){</span>
+    <span class="n">chr</span> <span class="o">=</span> <span class="n">toLower</span><span class="p">(</span> <span class="n">chr</span> <span class="p">);</span>
+    <span class="k">return</span> <span class="n">chr</span> <span class="o">&gt;=</span> <span class="n">toLower</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">[</span> <span class="mi">0</span> <span class="p">]</span> <span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">chr</span> <span class="o">&lt;=</span> <span class="n">toLower</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">[</span> <span class="mi">2</span> <span class="p">]</span> <span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span>
+    <span class="k">return</span> <span class="n">chr</span> <span class="o">&gt;=</span>          <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">[</span> <span class="mi">0</span> <span class="p">]</span>   <span class="o">&amp;&amp;</span> <span class="n">chr</span> <span class="o">&lt;=</span>          <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">[</span> <span class="mi">2</span> <span class="p">];</span>
+<span class="p">}</span>
+
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">matchMeta</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">chr</span> <span class="p">){</span>
+  <span class="k">switch</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">){</span>
+  <span class="k">case</span> <span class="sc">&#39;a&#39;</span> <span class="o">:</span> <span class="k">return</span>  <span class="n">isAlpha</span><span class="p">(</span> <span class="n">chr</span> <span class="p">);</span>
+  <span class="k">case</span> <span class="sc">&#39;A&#39;</span> <span class="o">:</span> <span class="k">return</span> <span class="o">!</span><span class="n">isAlpha</span><span class="p">(</span> <span class="n">chr</span> <span class="p">);</span>
+  <span class="k">case</span> <span class="sc">&#39;d&#39;</span> <span class="o">:</span> <span class="k">return</span>  <span class="n">isDigit</span><span class="p">(</span> <span class="n">chr</span> <span class="p">);</span>
+  <span class="k">case</span> <span class="sc">&#39;D&#39;</span> <span class="o">:</span> <span class="k">return</span> <span class="o">!</span><span class="n">isDigit</span><span class="p">(</span> <span class="n">chr</span> <span class="p">);</span>
+  <span class="k">case</span> <span class="sc">&#39;w&#39;</span> <span class="o">:</span> <span class="k">return</span>  <span class="n">isAlnum</span><span class="p">(</span> <span class="n">chr</span> <span class="p">);</span>
+  <span class="k">case</span> <span class="sc">&#39;W&#39;</span> <span class="o">:</span> <span class="k">return</span> <span class="o">!</span><span class="n">isAlnum</span><span class="p">(</span> <span class="n">chr</span> <span class="p">);</span>
+  <span class="k">case</span> <span class="sc">&#39;s&#39;</span> <span class="o">:</span> <span class="k">return</span>  <span class="n">isSpace</span><span class="p">(</span> <span class="n">chr</span> <span class="p">);</span>
+  <span class="k">case</span> <span class="sc">&#39;S&#39;</span> <span class="o">:</span> <span class="k">return</span> <span class="o">!</span><span class="n">isSpace</span><span class="p">(</span> <span class="n">chr</span> <span class="p">);</span>
+  <span class="k">default</span>  <span class="o">:</span> <span class="k">return</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">chr</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">matchSet</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="n">rexp</span> <span class="p">){</span>
+  <span class="k">struct</span> <span class="n">RE</span> <span class="n">track</span><span class="p">;</span>
+  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">trackerSet</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">rexp</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">track</span> <span class="p">);</span> <span class="p">){</span>
+    <span class="k">switch</span><span class="p">(</span> <span class="n">track</span><span class="p">.</span><span class="n">type</span> <span class="p">){</span>
+    <span class="k">case</span> <span class="nl">RANGEAB</span><span class="p">:</span> <span class="k">case</span> <span class="nl">META</span><span class="p">:</span>
+      <span class="n">result</span> <span class="o">=</span> <span class="n">match</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">track</span> <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">default</span><span class="o">:</span>
+      <span class="k">if</span><span class="p">(</span> <span class="n">track</span><span class="p">.</span><span class="n">mods</span> <span class="o">&amp;</span> <span class="n">MOD_COMMUNISM</span> <span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">strnChrCommunist</span><span class="p">(</span> <span class="n">track</span><span class="p">.</span><span class="n">ptr</span><span class="p">,</span> <span class="n">text</span><span class="p">.</span><span class="n">ptr</span><span class="p">[</span> <span class="n">text</span><span class="p">.</span><span class="n">pos</span> <span class="p">],</span> <span class="n">track</span><span class="p">.</span><span class="n">len</span>  <span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span>
+      <span class="k">else</span> <span class="n">result</span> <span class="o">=</span> <span class="n">strnChr</span>      <span class="p">(</span> <span class="n">track</span><span class="p">.</span><span class="n">ptr</span><span class="p">,</span> <span class="n">text</span><span class="p">.</span><span class="n">ptr</span><span class="p">[</span> <span class="n">text</span><span class="p">.</span><span class="n">pos</span> <span class="p">],</span> <span class="n">track</span><span class="p">.</span><span class="n">len</span>  <span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span><span class="p">(</span> <span class="n">result</span> <span class="p">)</span> <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">trackerSet</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">track</span> <span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">len</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="k">return</span> <span class="n">FALSE</span><span class="p">;</span>
+
+  <span class="k">if</span><span class="p">(</span> <span class="o">*</span><span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="o">==</span> <span class="sc">&#39;:&#39;</span> <span class="p">)</span> <span class="n">cutByLen</span> <span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">META</span>  <span class="p">);</span>
+  <span class="k">else</span> <span class="p">{</span>
+    <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
+      <span class="k">switch</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="p">){</span>
+      <span class="k">case</span> <span class="sc">&#39;:&#39;</span><span class="o">:</span>      <span class="n">cutByLen</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span>     <span class="n">i</span><span class="p">,</span> <span class="n">SIMPLE</span>  <span class="p">);</span> <span class="k">goto</span> <span class="n">setLM</span><span class="p">;</span>
+      <span class="k">case</span> <span class="sc">&#39;-&#39;</span><span class="o">:</span>
+        <span class="k">if</span><span class="p">(</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span> <span class="n">cutByLen</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span>     <span class="mi">3</span><span class="p">,</span> <span class="n">RANGEAB</span> <span class="p">);</span>
+        <span class="k">else</span>         <span class="n">cutByLen</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">SIMPLE</span>  <span class="p">);</span>
+        <span class="k">goto</span> <span class="n">setLM</span><span class="p">;</span>
+      <span class="p">}</span>
+
+    <span class="n">cutByLen</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">len</span><span class="p">,</span> <span class="n">SIMPLE</span>  <span class="p">);</span>
+  <span class="p">}</span>
+
+ <span class="nl">setLM</span><span class="p">:</span>
+  <span class="n">track</span><span class="o">-&gt;</span><span class="n">loopsMin</span> <span class="o">=</span> <span class="n">track</span><span class="o">-&gt;</span><span class="n">loopsMax</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="n">track</span><span class="o">-&gt;</span><span class="n">mods</span>    <span class="o">&amp;=</span> <span class="o">~</span><span class="n">MOD_NEGATIVE</span><span class="p">;</span>
+  <span class="k">return</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">matchBackRef</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span> <span class="p">){</span>
+  <span class="k">const</span> <span class="kt">int</span> <span class="n">backRefId</span>    <span class="o">=</span> <span class="n">aToi</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">);</span>
+  <span class="k">const</span> <span class="kt">int</span> <span class="n">backRefIndex</span> <span class="o">=</span> <span class="n">lastIdCatch</span><span class="p">(</span> <span class="n">backRefId</span> <span class="p">);</span>
+  <span class="k">if</span><span class="p">(</span> <span class="n">gpsCatch</span><span class="p">(</span> <span class="n">backRefIndex</span> <span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span>
+      <span class="n">strnEql</span><span class="p">(</span> <span class="n">text</span><span class="p">.</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">text</span><span class="p">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">gpsCatch</span><span class="p">(</span> <span class="n">backRefIndex</span> <span class="p">),</span> <span class="n">lenCatch</span><span class="p">(</span> <span class="n">backRefIndex</span> <span class="p">)</span> <span class="p">)</span> <span class="o">==</span> <span class="n">FALSE</span> <span class="p">)</span>
+    <span class="k">return</span> <span class="n">FALSE</span><span class="p">;</span>
+  <span class="k">else</span> <span class="k">return</span> <span class="n">lenCatch</span><span class="p">(</span> <span class="n">backRefIndex</span> <span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">lastIdCatch</span><span class="p">(</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">id</span> <span class="p">){</span>
+  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">Catch</span><span class="p">.</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">index</span><span class="o">--</span> <span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">Catch</span><span class="p">.</span><span class="n">id</span><span class="p">[</span> <span class="n">index</span> <span class="p">]</span> <span class="o">==</span> <span class="n">id</span> <span class="p">)</span> <span class="k">return</span> <span class="n">index</span><span class="p">;</span>
+
+  <span class="k">return</span> <span class="n">MAX_CATCHS</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">openCatch</span><span class="p">(</span> <span class="kt">int</span> <span class="o">*</span><span class="n">index</span> <span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span> <span class="n">Catch</span><span class="p">.</span><span class="n">index</span> <span class="o">&lt;</span> <span class="n">MAX_CATCHS</span> <span class="p">){</span>
+    <span class="o">*</span><span class="n">index</span> <span class="o">=</span> <span class="n">Catch</span><span class="p">.</span><span class="n">index</span><span class="o">++</span><span class="p">;</span>
+    <span class="n">Catch</span><span class="p">.</span><span class="n">ptr</span><span class="p">[</span> <span class="o">*</span><span class="n">index</span> <span class="p">]</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">text</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span>
+    <span class="n">Catch</span><span class="p">.</span><span class="n">id</span> <span class="p">[</span> <span class="o">*</span><span class="n">index</span> <span class="p">]</span> <span class="o">=</span> <span class="n">Catch</span><span class="p">.</span><span class="n">idx</span><span class="o">++</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="o">*</span><span class="n">index</span> <span class="o">=</span> <span class="n">MAX_CATCHS</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">closeCatch</span><span class="p">(</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">index</span> <span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="n">MAX_CATCHS</span> <span class="p">)</span>
+    <span class="n">Catch</span><span class="p">.</span><span class="n">len</span><span class="p">[</span> <span class="n">index</span> <span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">text</span><span class="p">.</span><span class="n">ptr</span><span class="p">[</span> <span class="n">text</span><span class="p">.</span><span class="n">pos</span> <span class="p">]</span> <span class="o">-</span> <span class="n">Catch</span><span class="p">.</span><span class="n">ptr</span><span class="p">[</span> <span class="n">index</span> <span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">totCatch</span><span class="p">(){</span> <span class="k">return</span> <span class="n">Catch</span><span class="p">.</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="nf">gpsCatch</span><span class="p">(</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">index</span> <span class="p">){</span>
+  <span class="k">return</span> <span class="p">(</span> <span class="n">index</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="n">Catch</span><span class="p">.</span><span class="n">index</span> <span class="p">)</span> <span class="o">?</span> <span class="n">Catch</span><span class="p">.</span><span class="n">ptr</span><span class="p">[</span> <span class="n">index</span> <span class="p">]</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">lenCatch</span><span class="p">(</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">index</span> <span class="p">){</span>
+  <span class="k">return</span> <span class="p">(</span> <span class="n">index</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="n">Catch</span><span class="p">.</span><span class="n">index</span> <span class="p">)</span> <span class="o">?</span> <span class="n">Catch</span><span class="p">.</span><span class="n">len</span><span class="p">[</span> <span class="n">index</span> <span class="p">]</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">char</span> <span class="o">*</span> <span class="nf">cpyCatch</span><span class="p">(</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">str</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">index</span> <span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span> <span class="n">index</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="n">Catch</span><span class="p">.</span><span class="n">index</span> <span class="p">)</span>
+    <span class="n">strnCpy</span><span class="p">(</span> <span class="n">str</span><span class="p">,</span> <span class="n">Catch</span><span class="p">.</span><span class="n">ptr</span><span class="p">[</span> <span class="n">index</span> <span class="p">],</span> <span class="n">Catch</span><span class="p">.</span><span class="n">len</span><span class="p">[</span> <span class="n">index</span> <span class="p">]</span> <span class="p">);</span>
+  <span class="k">else</span> <span class="o">*</span><span class="n">str</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+
+  <span class="k">return</span> <span class="n">str</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">char</span> <span class="o">*</span> <span class="nf">rplCatch</span><span class="p">(</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">newStr</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">rplStr</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">id</span> <span class="p">){</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">oNewStr</span> <span class="o">=</span> <span class="n">newStr</span><span class="p">;</span>
+  <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">last</span> <span class="o">=</span> <span class="n">Catch</span><span class="p">.</span><span class="n">ptr</span><span class="p">[</span> <span class="mi">0</span> <span class="p">];</span>
+
+  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rpLen</span> <span class="o">=</span> <span class="n">strLen</span><span class="p">(</span> <span class="n">rplStr</span> <span class="p">);</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="n">Catch</span><span class="p">.</span><span class="n">index</span><span class="p">;</span> <span class="n">index</span><span class="o">++</span> <span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">id</span> <span class="o">==</span> <span class="n">Catch</span><span class="p">.</span><span class="n">id</span><span class="p">[</span> <span class="n">index</span> <span class="p">]</span> <span class="p">){</span>
+      <span class="k">if</span><span class="p">(</span> <span class="n">last</span> <span class="o">&gt;</span> <span class="n">Catch</span><span class="p">.</span><span class="n">ptr</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="p">)</span> <span class="n">last</span> <span class="o">=</span> <span class="n">Catch</span><span class="p">.</span><span class="n">ptr</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+
+      <span class="n">strnCpy</span><span class="p">(</span> <span class="n">newStr</span><span class="p">,</span> <span class="n">last</span><span class="p">,</span> <span class="n">Catch</span><span class="p">.</span><span class="n">ptr</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">-</span> <span class="n">last</span> <span class="p">);</span>
+      <span class="n">newStr</span> <span class="o">+=</span> <span class="n">Catch</span><span class="p">.</span><span class="n">ptr</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">-</span> <span class="n">last</span><span class="p">;</span>
+      <span class="n">strCpy</span><span class="p">(</span> <span class="n">newStr</span><span class="p">,</span> <span class="n">rplStr</span> <span class="p">);</span>
+      <span class="n">newStr</span> <span class="o">+=</span> <span class="n">rpLen</span><span class="p">;</span>
+      <span class="n">last</span>    <span class="o">=</span> <span class="n">Catch</span><span class="p">.</span><span class="n">ptr</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">+</span> <span class="n">Catch</span><span class="p">.</span><span class="n">len</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+    <span class="p">}</span>
+
+  <span class="n">strnCpy</span><span class="p">(</span> <span class="n">newStr</span><span class="p">,</span> <span class="n">last</span><span class="p">,</span> <span class="n">Catch</span><span class="p">.</span><span class="n">ptr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">Catch</span><span class="p">.</span><span class="n">len</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">last</span> <span class="p">);</span>
+  <span class="k">return</span> <span class="n">oNewStr</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">char</span> <span class="o">*</span> <span class="nf">putCatch</span><span class="p">(</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">newStr</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">putStr</span> <span class="p">){</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">oNewStr</span> <span class="o">=</span> <span class="n">newStr</span><span class="p">;</span>
+
+  <span class="k">while</span><span class="p">(</span> <span class="o">*</span><span class="n">putStr</span> <span class="p">)</span>
+    <span class="k">switch</span><span class="p">(</span> <span class="o">*</span><span class="n">putStr</span> <span class="p">){</span>
+    <span class="k">case</span> <span class="sc">&#39;#&#39;</span><span class="o">:</span>
+      <span class="k">if</span><span class="p">(</span> <span class="o">*++</span><span class="n">putStr</span> <span class="o">==</span> <span class="sc">&#39;#&#39;</span> <span class="p">)</span>
+        <span class="o">*</span><span class="n">newStr</span><span class="o">++</span> <span class="o">=</span> <span class="o">*</span><span class="n">putStr</span><span class="o">++</span><span class="p">;</span>
+      <span class="k">else</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">aToi</span><span class="p">(</span> <span class="n">putStr</span> <span class="p">);</span>
+        <span class="n">cpyCatch</span><span class="p">(</span> <span class="n">newStr</span><span class="p">,</span> <span class="n">index</span> <span class="p">);</span>
+        <span class="n">newStr</span> <span class="o">+=</span> <span class="n">lenCatch</span><span class="p">(</span> <span class="n">index</span> <span class="p">);</span>
+        <span class="n">putStr</span> <span class="o">+=</span> <span class="n">countCharDigits</span><span class="p">(</span> <span class="n">putStr</span> <span class="p">);</span>
+      <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">default</span> <span class="o">:</span> <span class="o">*</span><span class="n">newStr</span><span class="o">++</span> <span class="o">=</span> <span class="o">*</span><span class="n">putStr</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+
+  <span class="o">*</span><span class="n">newStr</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+
+  <span class="k">return</span> <span class="n">oNewStr</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>last text</p>
+</div>
+</body>
+</html>

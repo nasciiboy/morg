@@ -1,0 +1,14 @@
+* header A
+
+  link to @l(#header B)
+
+*** @l(#header-C<>header B)
+
+    @l(#header A<>link to Header A)
+
+** header C
+
+   @l(https://github.com/nasciiboy/regexp3)
+
+
+@l(mailto:nasciiboy@@gmail.com<>mail)

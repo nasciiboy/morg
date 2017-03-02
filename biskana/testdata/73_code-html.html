@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
+<head>
+<title>Recursive Regexp Raptor</title>
+<meta name="subtitle" content="La Guia Para Construir Un Motor Regexp" />
+<meta name="author" content="nasciiboy" />
+<meta name="date" content="2016" />
+<meta name="tags" content="regex regexp c-prog algorithm" />
+<meta name="licence" content="GNU FDL v1.3" />
+<link rel="stylesheet" type="text/css" href="worg-data/worg.css" />
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+</head>
+<body>
+<h1>Recursive Regexp Raptor</h1>
+<div class="highlight"><pre><span></span><span class="nb">echo</span> hello morg
+</pre></div>
+<div class="highlight"><pre><span></span><span class="nb">echo</span> hello morg
+
+whoamy
+</pre></div>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;              /* incluye información acerca de la biblioteca estándar */</span><span class="cp"></span>
+
+<span class="n">main</span><span class="p">(){</span>                         <span class="cm">/* define una función llamada main</span>
+<span class="cm">                                   que no recibe valores de argumentos */</span>
+                                <span class="cm">/* las proposiciones de main están encerradas entre llaves */</span>
+  <span class="n">printf</span><span class="p">(</span> <span class="s">&quot;hola, mundo</span><span class="se">\n</span><span class="s">&quot;</span> <span class="p">);</span>    <span class="cm">/* main llama a la función printf de biblioteca estándar</span>
+<span class="cm">                                   para escribir esta secuencia de caracteres;</span>
+<span class="cm">                                   \n representa el carácter nueva línea */</span>
+<span class="p">}</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="s">&quot;fmt&quot;</span>
+
+<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Hello, 世界&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="p">(</span><span class="nb">defun</span> <span class="nv">our-copy-tree</span> <span class="p">(</span><span class="nv">tr</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">atom</span> <span class="nv">tr</span><span class="p">)</span>
+      <span class="nv">tr</span>
+    <span class="p">(</span><span class="nb">cons</span> <span class="p">(</span><span class="nv">our-copy-tree</span> <span class="p">(</span><span class="nb">car</span> <span class="nv">tr</span><span class="p">))</span>
+          <span class="p">(</span><span class="nv">our-copy-tree</span> <span class="p">(</span><span class="nb">cdr</span> <span class="nv">tr</span><span class="p">)))))</span>
+</pre></div>
+<pre class="code" ><code class="morg">@c(inline-command C)
+
+..C &gt; block-command C</code></pre>
+</body>
+</html>

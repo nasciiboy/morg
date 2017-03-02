@@ -1,0 +1,16 @@
+..img > img/a.png
+
+..img > img/b.png
+
+  hello img
+
+..img > img/c.png
+
+  ..src > c
+    #include <stdio.h>
+
+    int main(){
+      puts( "Hello C image\n" );
+
+      return 0;
+    }
