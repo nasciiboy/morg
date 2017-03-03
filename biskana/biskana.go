@@ -31,7 +31,6 @@ type DocInfo struct {
 func MakeHtml( str, title string ) string {
   head, docInfo := MakeHtmlHead( str )
 
-
   if docInfo.title == "" {
     if title != "" {
       head = "<title>" +   title    + "</title>\n" + head

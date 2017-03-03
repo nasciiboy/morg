@@ -100,7 +100,6 @@ func dragAllTextByIndent( str string, indent int ) (string, int) {
         init += width
         continue
       }
-
     }
 
     init += width

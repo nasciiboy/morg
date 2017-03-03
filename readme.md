@@ -11,15 +11,15 @@ creador
 
 Como toda creacion humana la informatica ha respondido a las necesidades de los
 presentes deacuerdo a los conocimientos y habilidades disponibles. Acaso al
-inicio alguien cosidero la necesidad de codificar informacion mas alla del
+inicio alguien considero la necesidad de codificar informacion mas alla del
 conjunto de caracteres USAmericano? claro que no, los humanos no somos tan
 inteligentes, y avansamos a base de apaños, resolviendo unas pocas dificultades
 de vez en vez, lamentablemente solo mirando en retrospectiva esto se torna
 evidente, y al hacerlo quedamos obligados a cuestionar nuestra realidad.
 
-En esta ocacion veamos en perspectiva hacia al pasado al mas
-importante recurso de la humanidad <q>la informacion</q> y los medios a
-nuestro alcance para crearla e interactuar con ella.
+En esta ocacion veamos en perspectiva al mas importante recurso de la humanidad
+<q>la informacion</q> y los medios a nuestro alcance para crearla e interactuar
+con ella.
 
 <blockquote>
 <em>seccion pendiente</em> llena de palabras con muchas letras, donde se
@@ -30,7 +30,7 @@ Con lo anterior llegamos a la siguente conclucion, <em>tener libros impresos
 esta chulo, aunque poco practico e ineficiente es, si se compara con otos
 formatos de documentacion</em>, por ello surgieron las paginas man, los
 derivados de TeX, XML, la web y sobre ella la wikipedia. Sin embargo seguimos
-forjando informacion, pensando imprimir en papel, con la consecuencia directa de
+forjando informacion, pensando en imprimir en papel, con la consecuencia directa de
 que todos los formatos de documentacion surgidos despues del transistor son un
 dolor en el culo, y es momento de forjar un sistema a la altura, apenas mas
 complicado que ascii, e igual de valido que cualquier hijo vastardo de
@@ -63,8 +63,8 @@ Entoces por que no utilizamos info para escribir la wikipedia?
 - Esta lleno de marcas y cosas misticas (pensadas para imprimir libros)
 
 - Una ves finalizado el documento hay que "compilar" para exportar a otros
-  formato mas manejables, es decir pasar del fuente <span class="file" >.texi</span> a info, html, pdf,
-  ... y si no campila te comes los mocos!
+  formato mas manejables, es decir, pasar del fuente <span class="file" >.texi</span> a info, html, pdf,
+  ... y si no compila te comes los mocos!
 
 ### Practico
 
@@ -79,7 +79,7 @@ esta a tu alcance *es* infame y si has de recorrerlo por paginas es *perverso*
 
 Si aspiras a ser un *heroe del teclado* y por "curiosidad" se te ha ocurrido
 mirar el codigo html de cualquer pagina web, habras llegado a la conclucion de
-que el mejor lugar para guardar un mensaje que nadie ha de ver jamas esta dentro
+que el mejor lugar para guardar un mensaje que nadie ha de ver jamas, esta dentro
 de una etiqueta html anidada sobre cientos de etiquetas html en una linea unica
 sin ningun salto de linea.
 
@@ -105,7 +105,7 @@ formato, de eso ya seguiran encargandose los formatos existentes
 ## Propuesta
 
 html es tan feo que la wikipedia utiliza mediawiki (uno de los tantos lenguajes
-de marcas ligeros que existen). Por su parte sitios como github directamente
+de marcas ligeros que existen). Por su parte, sitios como github directamente
 pasan de html, fomentando el uso de markdown, org, ReStructured Text, texto
 plano, etc. Algo similar ocurre con plataformas de gestion de contenido y
 herramientas para la creacion de blogs como en el caso de wordPress
@@ -113,10 +113,12 @@ herramientas para la creacion de blogs como en el caso de wordPress
 Por alguna razon desconocida los sistemas de marcado ligero son comodos, sin
 embargo, si algun error se les ha de atribuir (que probablemente sea la razon de
 que existan tantos) es, **no valerse por si mismos**, al mas minimo
-inconveniente se recurre a trozos de codigo html o latex. El formato que creemos
-ha de ser tan agradable a la vista que incluso no requiera ninguna herramienta
-para su uso, los mas intrepidos haran alarde de valerse solo con `less`, `more`,
-`cat` o mariposas.
+inconveniente se recurre a trozos de codigo html o latex, resultando en
+horrendos engendros <q><em>facilitadores</em></q> de estos ultimos.
+
+El formato que creemos ha de ser tan agradable a la vista que incluso no
+requiera ninguna herramienta especial para su visualizacion y creacion, los mas
+intrepidos haran alarde de valerse solo con `less`, `more`, `cat` o mariposas.
 
 Ya, esta bonito, sencillo y autosuficiente! algo mas? que tal un **Proyecto de
 <s>Complementacion</s> Documentacion Humana**, por que no crear un super
@@ -155,7 +157,7 @@ origen
    └── wikipedia
 ```
 
-un error es, permitir que la informacion desaparesca, mas aun dejarla en custodia
+un error es, permitir que la informacion desaparesca, mas aun, dejarla en custodia
 de entes que solo permiten el acceso a unos cuantos elegidos.
 
 A un lado el copyrigth, los bytes no tienen dueños!
@@ -167,13 +169,13 @@ Sobre la implementacion... solo hay ideas, informacion mas adelante
 
 Un buen sistema de documentacion priorisa la estructura sobre el aspecto.
 
-La estructura minima, consiste en separar el documento en secciones
-(encabezados) gerarquizados
+La estructura minima, consiste en separar el documento en secciones,
+encabezados gerarquizados
 
-*una marca un nivel*: un titular inicia con el signo `*` seguido por (un)
+*una marca un nivel*: un encabezado inicia con el signo `*` seguido por (un)
 espacio(s) y el nombre de la seccion.
 
-El numero de `*` indica el nivel del titular, su equivalente  en html seria
+El numero de `*` indica el nivel del encabezado, su equivalente  en html seria
 
 - `*` == `h1`
 - `**` == `h2`
@@ -232,7 +234,7 @@ a. lista ordenada alfabeticamente
 
 a) lista ordenada alfabeticamente
 
-   contenido de elemento [a]
+   contenido de elemento a
 ```
 
 El contenido de una lista debe indentarse segun la seccion de la que forme
@@ -398,19 +400,17 @@ su equivalente html seria
 <em>y los `({[<>]})`?</em> Mas opciones, mas diversion.
 
 Segun sea el contexto `{}` o `()` podrian requerir el *escape* de algun
-caracter. Para minimizar la inclucion de signo extraños, los delimitadores se
+caracter. Para minimizar la inclucion de signos extraños, los delimitadores se
 aplican deacuerdo a la necesidad y gusto del <q>creador</q>.
 
-cuando no haya *escapatoria*, para anular el es significado de un caracter se
+cuando no haya *escapatoria*, para anular el significado de un caracter se
 antecede con `@` (nota: para que aparesca `@` hay que colocar `@@`)
 
 ```
 @b(1@). punto uno)
 ```
 
-al expandir la etiqueta `@)` se substituye por `)`
-
-asi
+al expandir la etiqueta `@)` se substituye por `)`, asi:
 
 ```
 <b>1). Punto uno</b>
@@ -533,22 +533,25 @@ que se traduce en
 ```
 
 (nota: en el futuro se planea presindir del signo `#` haciendo primero una
-revicion a todas las referencias internas del documento)
+busqueda en todas las referencias internas del documento. En caso de no encotrar
+coincidencias dejar la referencia tal cual)
 
 ##### como funciona esta magia?
 
 todas los <q>comandos</q> tienen esta estructura `@x(custom<>contenido)`. Donde
-`custom` es un parametro personalizado y `contenido` el contenido del comando
+`custom` es un parametro personalizado y opcional. Por su parte `contenido` es
+el contenido del comando
 
-Cuando un comando, por ejemplo los enlaces requieren un `custom` y este no se ha
+Cuando un comando, por ejemplo, los enlaces requieren un `custom` y este no se ha
 especificado, se genera apartir del `contenido`, extrayendo las marcas expeciales
-dejando unicamente texto.
+dejando unicamente el texto.
 
-Cuando el comando no requiere de un `custom` este se ignora o se utiliza como
-identificador o etiqueta segun sea el caso (nota: esto esta a consideracion)
+Cuando el comando no requiere de un `custom` y este es proporcionado, el comando
+o lo ignora o se utiliza como identificador o etiqueta segun sea el caso (nota:
+esto esta a consideracion y podria requerir sintaxis adicional)
 
 Cuando el comando esta dentro de otro comando, el comando interno *pasa* su
-contenido al comando exterior, por ejemplo:
+contenido al comando externo, por ejemplo:
 
 ```
 @l(#encabezado<>lo que sea con @e(enfasis con @b(algo<>bold)))
@@ -598,9 +601,10 @@ y radio objetivos con
 @T{radioTarget,descripcion}
 ```
 
-un *radio target* convierte en enlace que referencia a la definicion del radio
-objetivo a culquier texto que coincida con =target= (insensible a minusculas
-o mayusculas) detro del documento, exeptuado bloques de codigo.
+un *radio target* conbierte en un enlace a cualquier palabra que encaja con la
+descripcion del radio opjetivo (ignorando entre mayusculas y minusculas), el
+objetivo de todos los enlaces, es la declaracion misma del objetivo. Los bloques
+de codigo quedan exentos de este comportamiento
 
 #### notas
 
@@ -650,20 +654,24 @@ o
     mas contenido
 ```
 
-Bien? hay varios tipos de comandos y varias formas de optener su contenido. Por
+Bien? Hay varios tipos de comandos y varias formas de optener su contenido. Por
 un lado tenemo comandos donde el cuerpo se define en una sola linea o mas
-indentadas, sin lineas de espacio
+indentadas.
 
 ```
 ..comando > contenido contenido contenido
   contenido
 ```
 
+El contenido o *argumentos* abarcan hasta la aparicion de la primer linea en
+blanco o sin la indentacion apropiada.
+
 en este tipo de comandos se encuentran los de configuracion del documento
 
 ```
 ..title    > titulo del documento
-  puede abarcar varias lineas (siempre con indentacion
+  puede abarcar varias lineas, siempre con indentacion y sin lineas
+  en blanco
 
   esto queda fuera del comando titulo
 
@@ -673,12 +681,10 @@ en este tipo de comandos se encuentran los de configuracion del documento
 ..options  > highlight
 ```
 
-El contenido o *argumentos* abarcan hasta la aparicion de la primer linea en
-blanco o sin la indentacion apropiada. Adicionalmente los comandos de
-configuracion se colocan al inicio del documento, uno en cada linea y sin
-espacios en blanco al inicio y no tiene cierre, es decir `< title..` no
-significa nada para el comando `title`.
-
+Adicionalmente, los comandos de configuracion se colocan al inicio del documento
+y terminan cuando aparece el primer parrafo o encabezado. Los comandos de
+configuracion no deben tener espacios en blanco al inicio, ni etiqueta de
+cierre, es decir `< title..` no significa nada para el comando `title`.
 
 tambien tenemos comandos que solo tiene cuerpo
 
@@ -694,7 +700,7 @@ tambien tenemos comandos que solo tiene cuerpo
   esta es bold
 
 ..center >
-  y esto va centrada
+  y esta va centrada
 < center..
 
 ..quote >
@@ -729,13 +735,13 @@ de codigo
 ```
 
 aqui el contenido despues del (y en la misma linea que) `>` especifica el
-lenguaje, por su parte el cuerpo del bloque es toda linea que cumpla con la
+lenguaje, por su parte, el cuerpo del bloque es toda linea que cumpla con la
 indentacion
 
-por ultimo teneos bloque con *argumentos* de multiples lineas y *cuerpo*
+por ultimo, teneos bloque con *argumentos* de multiples lineas y *cuerpo*
 
 ```
-..figure > esto el el titulo
+..figure > esto el titulo
   de una mini seccion
 
   este es el contenido de la mini seccion
@@ -757,20 +763,30 @@ un comando tiene esta estructura
 tambien hay lugar para imagenes y video
 
 ```
-..img parametros-especiales > fuente
+..img parametros-especiales > direccion/a/mi/imagen.jpg
 
   descripcion, contenido o lo que sea
 
-..video parametros-especiales > fuente
+..video parametros-especiales > direccion/a/mi/video.mkv
 
   descripcion, contenido o lo que sea
 ```
 
 ya vimos que son los argumentos y el cuerpo, los `parametros` son modificadores
-para el bloque, como podrian ser interpretar algun tipo de enfasis dentro de un
-bloque de codigo, agregar un identificador o algun tipo de resaltado. Aunque los
-parametros pueden ser variados, deben ser pocos, uno, dos o tres por comando de
-bloque, remarcar que el formato no es para crear espectaculos visuales.
+para el comando, como podrian ser:
+
+- interpretar algun tipo de enfasis dentro de un
+  bloque de codigo
+
+- agregar un identificador
+
+- establecer la orientacion visual de los elementos
+
+- ...
+
+Aunque los parametros pueden ser variados, deben ser pocos, uno, dos maxime tres
+por comando de bloque. Remarcar que el formato no es para crear espectaculos
+visuales.
 
 los bloques propuestos
 
@@ -780,6 +796,7 @@ img
 video
 figure
 quote
+verse
 emph
 center
 bold
@@ -806,11 +823,13 @@ tags
 description
 id
 options
-lang o language
+lang/language
 ```
 
 a resaltar `options`, que sirve para especificar como ha de comportarse el
-traductor/visualisador del formato
+traductor/visualisador del formato, de este, al igual que los parametros aun no
+defino su estructura (las mas comunes son: `cosa`, `bandera:valor`,
+`bandera=valor`)
 
 #### Tablas
 
@@ -847,9 +866,8 @@ para esto pobria ofreserse algo como:
   @ subencabezado
 ```
 
-donde un una `@` al mismo nivel de indentacion del inicio del
-nombre del encabezado seguido por un espacio en blanco establece
-un subencabezado
+donde un una `@` al mismo nivel de indentacion del inicio del nombre del
+encabezado seguido por un espacio en blanco establece un subencabezado
 
 poder concatenar varias definiciones
 
@@ -871,7 +889,7 @@ variables de substitucion
 @V{variable definida en alguna parte}
 ```
 
-(la siguiente es una idea que abandone en pro de parametros en los bloque, pero igual
+(la siguiente, es una idea que abandone en pro de parametros en los bloque, pero igual
 resulta interesante)
 
 En algunos bloques poder establecer la orientacion del contenido, o agregar una
@@ -947,8 +965,8 @@ genera
 |-----------------------------------------|
 ```
 
-en org-mode, existe una forma para colacar el resultado de ejecutar un bloque de
-codigo fuente, es asi
+en org-mode, existe una forma para colocar el resultado de ejecutar un bloque de
+codigo fuente. Es asi:
 
 ```
 #+BEGIN_SRC elisp
@@ -984,9 +1002,10 @@ o
 < src..
 ```
 
-otra duda surge, los comandos `@` deberian poderse concateran de la forma
-`@abcd(cosas)` o ser de una orden unica? si pueden concatenarse cuales? y en que
-orden de ejecucion?
+otra duda surge y aunque antes se expuso como posibilidad es la forma de
+concatenar los comandos `@`. Deberian poderse concateran de la forma
+`@abcd(cosas)`? o solo deberia haber ordenes sencillas? si pueden concatenarse
+cuales? y en que orden de ejecucion?
 
 para terminar dos opciones para establecer un encabezado/bloque con un
 idetificador
@@ -997,15 +1016,33 @@ idetificador
 ..figure > @t(identificador-personalizado<>argumento)
 ```
 
-si el encabezado inicio con un comando `t` especifica el identificador y texto a
+si el encabezado, inicia con un comando `t` especifica el identificador y texto a
 utilizar
 
-tambien podria ser
+es decir, con
 
 ```
-** identificador-personalizado <> contenido del encabezado
+** @t(identificador<>titulo del encabezado)
+```
 
-..figure > identificador-personalizado <> argumento
+y
+
+```
+** @t(identificador) titulo del encabezado
+```
+
+generar
+
+```
+<h2 id="identificador" >titulo del encabezado</h2>
+```
+
+aunque considero mas congruente utilizar
+
+```
+** identificador <> contenido del encabezado
+
+..figure > identificador <> argumento
 ```
 
 #### porg
@@ -1014,7 +1051,7 @@ los ficheros `po` producidos con `gettext` se utilizan para traducir documentos
 de un lenguaje a otro, si gettext no muere en el intento... con morg podemos
 hacer algo mucho mas sencillo para traducir documentos
 
-imaginemos que tenomos este texto
+imaginemos que tenemos este texto
 
 ```
 * nivel uno
@@ -1062,16 +1099,19 @@ a si se ve como documento `porg`
 se toma el contenido fuente, se duplica cada seccion, se coloca justo debajo
 del original y se marca con algun signo especial el contenido original.
 
-por que esto es sencillo? estas trabajando con el contenido original, se puede
-contrastar la traduccion directamente y no requiere compilaciones y trucos
-complejos... para generar la traduccion, necesario es solo borrar las lineas con
-la marca especial!
+<em>por que esto es sencillo?</em> estas trabajando con el contenido original, se puede
+contrastar la traduccion directamente y no requiere compilaciones ni trucos
+complejos.
 
-Si agregamos un programa que haga todo automagicamente, con una pretraduccion,
+Para generar la traduccion, solo es necesario borrar las lineas con la marca
+especial, por que la estructura del documento siempre esta precente, es decir,
+siempre tenemos el producto final, solo eliminamos lo inecesario!
+
+Si agregamos un programa que haga todo automagicamente, con una pre-traduccion,
 el tabajo sera pan comido!
 
-incluso y fantaceando, podria haber ficheros rorg, (rss org), las fantacias no
-custan nada.
+incluso y fantaceando, podria haber ficheros para reemplazar rss (rorg) y que el
+navegador interprete directamente morg. Las fantacias no cuestan nada.
 
 ### biskana
 
@@ -1096,13 +1136,15 @@ aun no hay codigo para manejar las tablas de datos (proximamente)
 
 #### Como usar
 
-Primero tenemos que tener instalado *go* en el sistema, esta el la guia de
-[instalacion oficial](https://golang.org/doc/install) (la verdad no recuerdo
-como lo instale)
+Primero tenemos que tener instalado *go* en el
+sistema, [esta](https://golang.org/doc/install) es la guia de instalacion
+oficial (la verdad no recuerdo como lo instale)
 
 `biskana` es solo un componete del proyecto, de momento el unico escrito, para
-su uso se envolvio en el comando `morg` ([aqui](https://github.com/nasciiboy/morg) el codigo en todo su explendor), el cual hara muchas mas cosas, pero de
-momento solo se encarga de exportar a html los fichereso que le indiquemos.
+su uso se envolvio en el comando `morg`
+([aqui](https://github.com/nasciiboy/morg) el codigo en todo su explendor), el
+cual hara muchas mas cosas, mientras tanto se limita a exportar a html los
+ficheros que le indiquemos.
 
 Asi optenemos el codigo y generamos el ejecutable
 
@@ -1121,7 +1163,7 @@ go get -u -v github.com/nasciiboy/morg
 para utilizar el comando
 
 ``` sh
-morg fichero-uno.mog fichero-dos.morg ...
+morg fichero-uno.morg fichero-dos.morg ...
 ```
 
 el resultado es un fichero en el directorio actual de tabajo con terminacion `.html`
@@ -1135,11 +1177,11 @@ fichero morg
 ```
 
 coloque un estilo por defecto en el codigo fuente, para modificarlo lo mas
-sencillo es hacerlo en el fichero resultado a mano, ademas para esta opcion
+sencillo es hacerlo en el fichero resultado (a mano), ademas para esta opcion
 debes tener la capeta `highlight` en la misma dereccion del resultado
 
-para optener tu carpeta `highlight` ve a [esta](https://highlightjs.org/download/) pagina y especifica que lenguages
-deseas, descarga, descomprime y coloca en la misma carpeta del resaltado
+para optener tu carpeta `highlight` ve a [esta](https://highlightjs.org/download/) pagina y especifica que lenguajes
+deseas, descarga, descomprime y coloca en la misma carpeta del resultado
 
 Si por el contrario si (tienes instalado y) quieres marcar de resaltado de
 codigo utilizando `pygments` debes utilazar esta opcion de configuracion
@@ -1158,17 +1200,19 @@ la hoja de estilo se especifica asi
 ..style > direccion/a/mi/style.css
 ```
 
-no asuro que el programa te explote en la cara, de momento ha servido para dos
-pequeñas pruebas
+no aseguro que el programa no te explote en la cara, de momento ha servido para
+dos pequeñas pruebas
 
 #### porque Go
 
 por nada en especial... cuando empece a escribir el codigo hace cosa de un año
 en C mis habilidades no daban para mucho, no es que ahora sea un jodido guru,
-pero algo he aprendido, he? por que C? por velocidad y eficiencia, si vas a
-hacer un proyecto tan ambicioso mal seria que fuese lagueado. Aun si el proyecto
-se escribiese en un lenguaje interpretado en algun momento deberia portarse a C
-o similar.
+pero algo he aprendido, he? pero por que C? por velocidad y eficiencia, si vas a
+hacer un proyecto tan ambicioso, mal seria que fuese lagueado y demorara aun
+unos pocos segundos en mostrar el contenido.
+
+Aun si el proyecto se escribiese en un lenguaje interpretado en algun momento
+deberia portarse a C o similar.
 
 podria haber elegido C++... pero me cruce con Go, no es un lenguage que proboque
 facinacion en mi, pero solo es 3 veces mas lento que C y tiene ideas muy
@@ -1178,6 +1222,10 @@ contar con punteros de verdad (al menos con un nivel de indireccion) obliga a
 hacer apaños impresionantes. Desde luego, como recien llegado a go y tras una
 ligera prueba del lenguaje este comentario puede ser una cagada, disculpad mi
 ignorancia.
+
+Por cierto, pygments, en un tremendo consumidor de tiempo, desconosco si es por
+estar escrito en python, o por la naturaleza compleja de su labor. Habra que
+reescribir una version mas veloz.
 
 #### el codigo
 
@@ -1189,17 +1237,14 @@ que cualquier indicio de aparicion de cruft sera señal de refleccion y futura
 refactorizacion e incluso reescritura
 
 `biskana` no es el programa definitivo, lo pienso como un componente *el
-traductor* a otros lenguajes o dicho de otra manera el *renderizador* de texto a
-texto, cuando el codigo alcance cierto grado de madures sera dividido en otro
-companente `katana` este sera el parser del formato que genere una estructura o
-formato de aun mas facil traduccion, clasificando cada seccion del documento.
+traductor* a otros lenguajes o dicho de otra manera el *renderizador* (que hace
+realidad nuesras fantacias) de texto a texto, cuando el codigo alcance cierto
+grado de madures sera dividido en otro companente `katana` este sera el parser
+del formato que genere una estructura o formato de aun mas facil traduccion,
+clasificando cada seccion del documento.
 
-Luego con esto ya sea `biscana` para traducir o `*ana` (`*`? algun buen nombre
-que termine en ana? se me ocurre `nirvana` y `hana`) para desplegar el documento
-en una terminal o aplicacion grafica
-
-momentaneamente supongo que la mejor manera en que de deben
-clasificarse/generarse las seccionos es como entes independientes sin estar
+Momentaneamente supongo que la mejor manera en que de deben
+clasificarse/generarse las secciones es como entes independientes sin estar
 influenciados por el nivel de anidamento por ejemplo
 
 ```
@@ -1268,7 +1313,7 @@ si no como
 ```
 <p class="li-1" >elemento 1</p>
 <p class="li-1" >elemento 2</p>
-  <p class="li-2" >subelemento 2.1</p>
+<p class="li-2" >subelemento 2.1</p>
 <p class="li-1" >elemento 3</p>
 ```
 
@@ -1276,9 +1321,10 @@ este enfoque requiere de un monton de nuevas etiquetas, en el caso de exportar a
 html, por el otro lado en un programa, esto no tiene ningun inconveniente,
 incluso sera mas sencillo la visualizacion
 
-varios modulos, necesario sera implementar, uno, encargado de la busqueda (local
-y web) del un documento, `katana` para parsear el documento, `biscana` como
-exportador, `*ana` como visualizador/navegador del documento y `morg` (nombre
+Varios modulos, necesario sera implementar, uno, encargado de la busqueda (local
+y web) del un documento, `katana` para parsear el documento, `biskana` como
+exportador, `*ana` (`*`? algun buen nombre que termine en ana? se me ocurre
+`nirvana` y `hana`) como visualizador/navegador del documento y `morg` (nombre
 tentativo) como cohesianador de todo
 
 son solo ideas, que tal?
@@ -1319,7 +1365,7 @@ visualiza en el navegador el html.
 El segundo, es una colaboracion que estaba haciendo para traducir un manual de
 emacs. Por motivos varios no he terminado y necesita una serio correccion.
 
-Por que poner algo tan vago? en el se muestra el concepto de utilizar morg para
+<em>Por que poner algo tan vago?</em> en el se muestra el concepto de utilizar morg para
 traducir manuales de forma
 sencilla. [aqui](https://github.com/nasciiboy/emacs-lisp-intro-es) el repo, el
 resultado (no muy bueno por no actualizar el formato)
@@ -1385,7 +1431,8 @@ comenta y difunde
 
 Quiero terminar, aclarando lo siguiente: difundo estas ideas y codigo bajo la
 licencia GNU AGPL v3, si tienes las habilidades para hacer lo planteado
-programando todo por cuenta propia, te pido que lo hagas bajo esta licencia.
+programando todo por cuenta propia, te pido que lo hagas (aunque no estas
+obligado) bajo esta licencia.
 
 Incluso sin financiacion, programare lo que pueda, cuando pueda, simplemente por
 ser un reto emocionante, empesando por incorporar el formato a hugo (en unos

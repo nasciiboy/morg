@@ -18,11 +18,11 @@ func main(){
   }
 
   for _, inputFileName := range os.Args[1:] {
-		inputBytes, err := ioutil.ReadFile( inputFileName )
-		if err != nil {
-			fmt.Fprintf( os.Stderr, "morg: Couldn't open '%s', error: %v\n", inputFileName, err )
-			continue
-		}
+    inputBytes, err := ioutil.ReadFile( inputFileName )
+    if err != nil {
+      fmt.Fprintf( os.Stderr, "morg: Couldn't open '%s', error: %v\n", inputFileName, err )
+      continue
+    }
 
     pwd, _          := os.Getwd()
     outputBaseName  := path.Base( inputFileName )

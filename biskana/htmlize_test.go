@@ -6,7 +6,7 @@ func TestToHtml(t *testing.T) {
   marckupTriggerTest( t )
   swapTest( t )
   marckupTest( t )
-  //customTest( t )
+  customTest( t )
   humanTest( t )
   complexTest( t )
 }

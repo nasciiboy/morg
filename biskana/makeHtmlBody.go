@@ -154,7 +154,6 @@ func getAbout( str string ) int {
   _, wHead    := getLine( str )
   _, wBody    := dragAllTextByIndent( str[wHead:], countIndentSpaces( str ) + 2 )
   width       := wHead + wBody
-
   head        := str[:width]
 
   var re regexp3.RE
@@ -174,7 +173,6 @@ func getAbout( str string ) int {
   walkMorg( body, 0 )
   htmlBody += "</div>\n"
   htmlBody += "</div>\n"
-
 
   return width
 }
@@ -326,7 +324,7 @@ func makeCommand( command, options, args, body string ){
 
 func makeCommandSrc( options, args, body string ){
   if goptions.pygments {
-    pygCode, make := pygments.Highlight( body, args, "html", "utf-8")
+    pygCode, make := pygments.Highlight( body, args, "html", "utf-8" )
 
     if make == false { goto simple }
 

@@ -188,6 +188,8 @@ table tbody tr td { }
 .italic { font-family: text_italic; }
 .center { text-align: center; justify-content: center; }
 
+.figure h1 { color: var( --FGCstart2 ); font-size: 1.5em; font-family: heatline; }
+
 /* ABOUT */
 .about { width: 100%; display: inline-flex; flex-flow: row nowrap; flex-direction: row;  }
 .about div.about-dt { order: 1; padding-left: 1em;

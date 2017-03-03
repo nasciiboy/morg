@@ -99,7 +99,7 @@ func marckupParser( str string, operator byte ) (body, text, custom string, i in
     forward = 1
 
     if len(str[i:]) >= 2 && str[i:i+2] == "<>" {
-      forward   = 2
+      forward    = 2
       custom     = text
       text, body = "", ""
     } else {
