@@ -32,20 +32,20 @@ func main(){
 
     outputFileName  := path.Join( pwd, outputBaseName + ".html" )
 
-    fileOutput, err := os.Create( outputFileName )
+    outputFile, err := os.Create( outputFileName )
     if err != nil {
-			fmt.Fprintf( os.Stderr, "morg: Couldn't open '%s', error: %v\n", outputFileName, err )
+      fmt.Fprintf( os.Stderr, "morg: Couldn't create '%s', error: %v\n", outputFileName, err )
       continue
     }
 
     outputBytes := []byte( biskana.MakeHtml( string(inputBytes), outputBaseName ) )
 
-    _, err = fileOutput.Write( outputBytes )
+    _, err = outputFile.Write( outputBytes )
     if err != nil {
-			fmt.Fprintf( os.Stderr, "morg: Couldn't write '%s', error: %v\n", outputFileName, err )
+      fmt.Fprintf( os.Stderr, "morg: Couldn't write '%s', error: %v\n", outputFileName, err )
       continue
     }
 
-    fileOutput.Close()
+    outputFile.Close()
   }
 }

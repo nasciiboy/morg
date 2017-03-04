@@ -56,7 +56,7 @@ func ToText( str string ) (result string) {
   return result
 }
 
-func marckupTrigger( str string ) (string, string, int) {
+func marckupTrigger( str string ) (result, text string, width int) {
   switch len( str ) {
   case 0: return  "",  "", 0
   case 1: return str, str, 1
@@ -84,53 +84,53 @@ func marckupTrigger( str string ) (string, string, int) {
   default : return str[:3], str[:3], 3
   }
 
-  strLize, strText, i := labelize( str[3:], label, operator )
-  return strLize, strText, i + 3
+  result, text, width = labelize( str[3:], label, operator )
+  return result, text, width + 3
 }
 
-func labelize( str string, label, operator byte ) (string, string, int) {
-  body, text, custom, i := marckupParser( str, operator )
+func labelize( str string, label, operator byte ) (result, text string, width int) {
+  result, text, custom, width := marckupParser( str, operator )
 
-  return ToLabel( label, body, spaceSwap( custom, " " ) ), text, i
+  return ToLabel( result, spaceSwap( custom, " " ), label ), text, width
 }
 
-func marckupParser( str string, operator byte ) (body, text, custom string, i int) {
+func marckupParser( str string, operator byte ) (result, text, custom string, i int) {
   for forward := 0; i < len( str ); i += forward {
     forward = 1
 
     if len(str[i:]) >= 2 && str[i:i+2] == "<>" {
-      forward    = 2
-      custom     = text
-      text, body = "", ""
+      forward      = 2
+      custom       = text
+      text, result = "", ""
     } else {
       if str[ i ] == operator { i++; break }
 
       switch str[ i ] {
-      case '<': body += "&lt;"
-                text += "&lt;"
-      case '>': body += "&gt;"
-                text += "&gt;"
-      case '&': body += "&amp;"
-                text += "&amp;"
-      case '"': body += "&quot;"
-                text += "&quot;"
+      case '<': result += "&lt;"
+                text   += "&lt;"
+      case '>': result += "&gt;"
+                text   += "&gt;"
+      case '&': result += "&amp;"
+                text   += "&amp;"
+      case '"': result += "&quot;"
+                text   += "&quot;"
       case '@':
-        var tmpBody, tmpText string
-        tmpBody, tmpText, forward = marckupTrigger( str[i:] )
-        body += tmpBody
-        text += tmpText
-      default : body += str[i:i+1]
-                text += str[i:i+1]
+        var tmpResult, tmpText string
+        tmpResult, tmpText, forward = marckupTrigger( str[i:] )
+        result += tmpResult
+        text   += tmpText
+      default : result += str[i:i+1]
+                text   += str[i:i+1]
       }
     }
   }
 
   if custom == "" { custom = text }
 
-  return body, text, custom, i
+  return result, text, custom, i
 }
 
-func ToLabel( label byte, body, text string ) string {
+func ToLabel( body, custom string, label byte ) string {
   switch label {
   case '!' : return body
   case '"' : return "<cite>" + body + "</cite>"
@@ -172,7 +172,7 @@ func ToLabel( label byte, body, text string ) string {
   case 'K' : return body // "keyword"
   case 'L' : return body // "label"
   case 'M' : return body
-  case 'N' : return "<span class=\"defnote\" id=\"" + ToLink(body) + "\" >" + body + "</span>"
+  case 'N' : return "<span class=\"defnote\" id=\"" + ToLink(custom) + "\" >" + body + "</span>"
   case 'O' : return body
   case 'P' : return body
   case 'Q' : return body
@@ -201,16 +201,16 @@ func ToLabel( label byte, body, text string ) string {
   case 'j' : return body
   case 'k' : return "<kbd>" + body + "</kbd>"
   case 'l' :
-    if text[0] == '#' && body[0] == '#' { body = body[1:] }
-    return "<a href=\"" + ToLink( text ) + "\" >" + body + "</a>"
+    if custom[0] == '#' && body[0] == '#' { body = body[1:] }
+    return "<a href=\"" + ToLink( custom ) + "\" >" + body + "</a>"
   case 'm' : return "<span class=\"math\" >" + body + "</span>"
-  case 'n' : return "<span class=\"note\" ><sup><a href=\"#" + ToLink(body) + "\" >" + body + "</a></sup></span>"
+  case 'n' : return "<span class=\"note\" ><sup><a href=\"#" + ToLink(custom) + "\" >" + body + "</a></sup></span>"
   case 'o' : return body
   case 'p' : return body
   case 'q' : return "<q>" + body + "</q>"
   case 'r' : return body // ref
   case 's' : return body
-  case 't' : return "<span id=\"" + text + "\" >" + body + "</span>"
+  case 't' : return "<span id=\"" + custom + "\" >" + body + "</span>"
   case 'u' : return "<u>" + body + "</u>"
   case 'v' : return "<code class=\"verbatim\" >" + body + "</code>"
   case 'w' : return body
@@ -227,8 +227,6 @@ func ToLabel( label byte, body, text string ) string {
 
 func ToLink( link string ) string {
   var re regexp3.RE
-  re.Match( link, "#^:s*<:s*[^:s]+>+" )
-  t := re.GetCatch( 1 )
-  re.Match( t, "<:s>" )
+  re.Match( linelize( link ), "<:s+>" )
   return re.RplCatch( "-", 1 )
 }

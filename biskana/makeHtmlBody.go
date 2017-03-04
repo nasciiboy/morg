@@ -36,7 +36,7 @@ func walkMorg( str string, level int ) int {
     switch whoIsThere( line ) {
     case HEADLINE:
       if level > 0 { return init }
-      init += getHead( str[init:], level )
+      init += getHeadline( str[init:], level )
     case COMMAND : init += getCommand( str[init:] )
     case TEXT    : init += getText   ( str[init:] )
     case LIST    : init += walkList  ( str[init:] )
@@ -200,34 +200,39 @@ func getText( str string ) int {
   return len(str)
 }
 
-func getHead( str string, level int ) int {
-  line, width := getLine( str )
-  init        := width
+func getHeadline( str string, level int ) int {
+  sHead, width := getLine( str )
 
   var re regexp3.RE
-  re.Match( line, "#^<:*+>:s+<:s*:S+>*" )
-  hLevel   := len( re.GetCatch( 1 ) ) + goptions.hShift
-  htmlBody += fmt.Sprintf( "<h%d id=\"%s\" >", hLevel, ToLink(ToText(re.GetCatch( 2 ))) )
-  htmlBody += ToHtml( re.GetCatch( 2 ) )
+  re.Match( sHead, "#^<:*+>:b+<.+>" )
+
+  indentLevel  := len( re.GetCatch( 1 ) ) + 1
+  hLevel       := len( re.GetCatch( 1 ) ) + goptions.HShift
+  sBody, wBody := dragTextByIndent( str[width:], indentLevel )
+  width        += wBody
+  sHead         = linelize( re.GetCatch( 2 ) + linelize( sBody ) )
+
+  htmlBody += fmt.Sprintf( "<h%d id=\"%s\" >", hLevel, ToLink( ToText( sHead ) ) )
+  htmlBody += ToHtml( sHead )
   htmlBody += fmt.Sprintf( "</h%d>\n", hLevel )
 
-  if goptions.toc {
-    htmlToc += fmt.Sprintf( "<span class=\"toc\" ><a class=\"h%d\" href=\"#%s\" >", hLevel, ToLink(ToText(re.GetCatch( 2 ))) )
-    htmlToc += ToHtml( re.GetCatch( 2 ) )
+  if goptions.Toc {
+    htmlToc += fmt.Sprintf( "<span class=\"toc\" ><a class=\"h%d\" href=\"#%s\" >", hLevel, ToLink( ToText( sHead ) ) )
+    htmlToc += ToHtml( sHead )
     htmlToc += fmt.Sprintf( "</a></span>\n" )
   }
 
-  if len( str[init:] ) > 0 {
-    if re.Match( str[init:], "#^(:b*\n)*:*+:b" ) > 0 {
-      return init
-    } else if re.Match( str[init:], "#?:S" ) > 0 {
+  if len( str[width:] ) > 0 {
+    if re.Match( str[width:], "#^(:b*\n)*:*+:b" ) > 0 {
+      return width
+    } else if re.Match( str[width:], "#?:S" ) > 0 {
       htmlBody += fmt.Sprintf( "<div class=\"hBody-%d\" >\n", hLevel )
-      init     +=  walkMorg( str[init:], 1 )
+      width    +=  walkMorg( str[width:], 1 )
       htmlBody += "</div>\n"
     }
   }
 
-  return  init
+  return  width
 }
 
 func getCommand( str string ) int {
@@ -248,11 +253,11 @@ func getCommand( str string ) int {
   switch command {
   case "title", "subtitle", "author", "translator", "lang", "language", "licence",
        "date", "tags", "mail", "description", "id", "style", "options":
-    _, width    = getHeadCommand( str[init:], indentLevel )
+    _, width    = dragTextByIndent( str[init:], indentLevel )
     init       += width
-  case "figure", "img", "ignore":
+  case "figure", "img", "video", "ignore":
     var head string
-    head, width = getHeadCommand( str[init:], indentLevel )
+    head, width = dragTextByIndent( str[init:], indentLevel )
     args        = linelize( spaceSwap( args + head, " ") )
     init       += width
 
@@ -277,7 +282,7 @@ func getBodyCommand( str, closePattern string, indentLevel int ) (body string, w
 
     switch whoIsThere( line ) {
     case COMMAND, LIST:
-      if re.Match( line, "#^<:b{2,}>" ) == 0 || re.LenCatch( 1 ) < indentLevel {
+      if indent := countIndentSpaces( line ); indent < 2 || indent < indentLevel {
         return clearSpacesAtEnd( str[:init] ), init
       }
 
@@ -288,7 +293,7 @@ func getBodyCommand( str, closePattern string, indentLevel int ) (body string, w
           return str[:init - 1 ], init + width
         }
         return str[:init], init + width
-      } else if re.Match( line, "#^<:b{2,}>" ) == 0 || re.LenCatch( 1 ) < indentLevel {
+      } else if indent := countIndentSpaces( line ); indent < 2 || indent < indentLevel {
         return clearSpacesAtEnd( str[:init] ), init
       }
 
@@ -303,16 +308,13 @@ func getBodyCommand( str, closePattern string, indentLevel int ) (body string, w
   return str, len(str)
 }
 
-func getHeadCommand( str string, indentLevel int ) (string, int) {
-  return dragTextByIndent( str,  indentLevel )
-}
-
 func makeCommand( command, options, args, body string ){
   switch command {
   // case "title", "subtitle", "author", "translator", "lang", "language", "licence",
   //      "date", "tags", "mail", "description", "id", "style", "options":
   case "figure" : makeCommandFigure( options, args, body )
   case "img"    : makeCommandImg   ( options, args, body )
+  case "video"  : makeCommandVideo ( options, args, body )
   case "quote"  : makeCommandQuote ( command, args, body )
   case "src"    : makeCommandSrc   ( options, args, body )
   case "example", "pre", "diagram":
@@ -323,7 +325,7 @@ func makeCommand( command, options, args, body string ){
 }
 
 func makeCommandSrc( options, args, body string ){
-  if goptions.pygments {
+  if goptions.Pygments {
     pygCode, make := pygments.Highlight( body, args, "html", "utf-8" )
 
     if make == false { goto simple }
@@ -350,6 +352,20 @@ func makeCommandImg( options, args, body string ){
   htmlBody += "<img src=\"" + args + "\" />\n"
   walkMorg( body, 0 )
   htmlBody += "</div>\n"
+}
+
+func makeCommandVideo( options, args, body string ){
+  htmlBody += "<video controls >\n"
+  htmlBody += "<source src=\"" + args + "\""
+
+  var re regexp3.RE
+  if re.Match( args, "#$:.<ogg|mp4>" ) > 0 {
+    htmlBody +=  " type=\"video/" + re.GetCatch( 1 ) + "\""
+  }
+
+  htmlBody += " >\n"
+  walkMorg( body, 0 )
+  htmlBody += "</video>\n"
 }
 
 func makeCommandFont( command, args, body string ){

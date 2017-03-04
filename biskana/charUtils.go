@@ -16,12 +16,14 @@ func getLine( str string ) (string, int) {
 }
 
 func clearSpacesAtEnd( str string ) string {
-  var re regexp3.RE
-  if re.Match( str, "#$<:s+>" ) > 0 {
-    return str[:re.GpsCatch( 1 )]
+  for i := len( str ) - 1; i >= 0; i-- {
+    switch str[i] {
+    case ' ', '\t', '\n', '\v', '\f', '\r' :
+    default: return str[:i+1]
+    }
   }
 
-  return str
+  return ""
 }
 
 func linelize( str string ) (result string){
@@ -33,8 +35,7 @@ func linelize( str string ) (result string){
   }
 
   if re.Match( result, "<:b*\n:b*>" ) > 0 {
-    tmp := re.RplCatch( " ", 1 )
-    result = tmp
+    result = re.RplCatch( " ", 1 )
   }
 
   return clearSpacesAtEnd( result )
@@ -49,31 +50,32 @@ func spaceSwap( str, swap string ) (result string){
   return str
 }
 
-func rmIndent( str string, indentLevel int ) (result string) {
+func rmIndent( str string, indentLevel int ) string {
   var re regexp3.RE
-
   if re.Match( str, fmt.Sprintf( "#^:b{%d}", indentLevel )) > 0 {
     str = str[ indentLevel : ]
   }
 
   re.Match( str, fmt.Sprintf( "<\n:b{%d}>", indentLevel ))
-  result = re.RplCatch( "\n", 1 )
-
-  return result
+  return re.RplCatch( "\n", 1 )
 }
 
 func countIndentSpaces( str string ) int {
-  var re regexp3.RE
-  re.Match( str, "#^<:b*>" )
+  for i := 0; i < len( str ); i++ {
+    switch str[i] {
+    case ' ', '\t', '\n', '\v', '\f', '\r' :
+    default: return i
+    }
+  }
 
-  return len(re.GetCatch( 1 ))
+  return len(str)
 }
 
 func dragTextByIndent( str string, indent int ) (string, int) {
   var re regexp3.RE
   strIndent := fmt.Sprintf( "#^:b{%d,}:S", indent )
 
-  for init, width, line := 0, 0, ""; len(str[init:]) > 0; {
+  for init, width, line := 0, 0, ""; init < len(str); {
     line, width = getLine( str[init:] )
 
     if re.Match( line, strIndent ) == 0 {
@@ -90,15 +92,15 @@ func dragAllTextByIndent( str string, indent int ) (string, int) {
   var re regexp3.RE
   strIndent := fmt.Sprintf( "#^:b{%d,}:S", indent )
 
-  for init, width, line := 0, 0, ""; len(str[init:]) > 0; {
+  for init, width, line := 0, 0, ""; init < len(str); {
     line, width = getLine( str[init:] )
 
     if re.Match( line, strIndent ) == 0  {
       switch whoIsThere( line ) {
-      default: return str[:init], init
       case EMPTY, COMMENT:
         init += width
         continue
+      default: return str[:init], init
       }
     }
 

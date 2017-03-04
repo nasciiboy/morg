@@ -21,14 +21,14 @@ func parseOptions( docInfo DocInfo ) (result DocInfo) {
   result = docInfo
 
   var re regexp3.RE
-  if re.Match( docInfo.options, "highlight" ) > 0 {
-    result.optionsData.highlight = true
+  if re.Match( docInfo.Options, "highlight" ) > 0 {
+    result.OptionsData.Highlight = true
   }
-  if re.Match( docInfo.options, "toc" ) > 0 {
-    result.optionsData.toc = true
+  if re.Match( docInfo.Options, "toc" ) > 0 {
+    result.OptionsData.Toc       = true
   }
-  if re.Match( docInfo.options, "pygments" ) > 0 {
-    result.optionsData.pygments = true
+  if re.Match( docInfo.Options, "pygments" ) > 0 {
+    result.OptionsData.Pygments  = true
   }
 
   return result
@@ -76,20 +76,20 @@ func genSetup( str string ) int {
 
 func makeSetup( command, options, arg string ){
   switch command {
-  case "title"      : docInfo.title       = arg; makeSetupTitle( options, arg )
-  case "style"      : docInfo.style       = arg; makeSetupStyle( options, arg )
-  case "subtitle"   : docInfo.subtitle    = arg; makeSetupMeta ( command, arg )
-  case "author"     : docInfo.author      = arg; makeSetupMeta ( command, arg )
-  case "translator" : docInfo.translator  = arg; makeSetupMeta ( command, arg )
-  case "licence"    : docInfo.licence     = arg; makeSetupMeta ( command, arg )
-  case "id"         : docInfo.id          = arg; makeSetupMeta ( command, arg )
-  case "date"       : docInfo.date        = arg; makeSetupMeta ( command, arg )
-  case "tags"       : docInfo.tags        = arg; makeSetupMeta ( command, arg )
-  case "description": docInfo.description = arg; makeSetupMeta ( command, arg )
-  case "mail"       : docInfo.mail        = arg; makeSetupMeta ( command, arg )
-  case "options"    : docInfo.options     = arg
+  case "title"      : docInfo.Title       = arg; makeSetupTitle( options, arg )
+  case "style"      : docInfo.Style       = arg; makeSetupStyle( options, arg )
+  case "subtitle"   : docInfo.Subtitle    = arg; makeSetupMeta ( command, arg )
+  case "author"     : docInfo.Author      = arg; makeSetupMeta ( command, arg )
+  case "translator" : docInfo.Translator  = arg; makeSetupMeta ( command, arg )
+  case "licence"    : docInfo.Licence     = arg; makeSetupMeta ( command, arg )
+  case "id"         : docInfo.Id          = arg; makeSetupMeta ( command, arg )
+  case "date"       : docInfo.Date        = arg; makeSetupMeta ( command, arg )
+  case "tags"       : docInfo.Tags        = arg; makeSetupMeta ( command, arg )
+  case "description": docInfo.Description = arg; makeSetupMeta ( command, arg )
+  case "mail"       : docInfo.Mail        = arg; makeSetupMeta ( command, arg )
+  case "options"    : docInfo.Options     = arg
   case "lang", "language":
-                      docInfo.lang        = arg
+                      docInfo.Lang        = arg
   }
 }
 

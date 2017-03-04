@@ -5,48 +5,48 @@ import (
 )
 
 type Options struct {
-  toc           bool
-  highlight     bool
-  pygments      bool
-  hShift        int
+  Toc           bool
+  Highlight     bool
+  Pygments      bool
+  HShift        int
 }
 
 type DocInfo struct {
-  title         string
-  subtitle      string
-  author        string
-  translator    string
-	mail          string
-	licence       string
-  id            string
-  style         string
-	date          string
-	tags          string
-	description   string
-  lang          string
-  options       string
-  optionsData   Options
+  Title         string
+  Subtitle      string
+  Author        string
+  Translator    string
+  Mail          string
+  Licence       string
+  Id            string
+  Style         string
+  Date          string
+  Tags          string
+  Description   string
+  Lang          string
+  Options       string
+  OptionsData   Options
 }
 
 func MakeHtml( str, title string ) string {
   head, docInfo := MakeHtmlHead( str )
 
-  if docInfo.title == "" {
+  if docInfo.Title == "" {
     if title != "" {
       head = "<title>" +   title    + "</title>\n" + head
-      docInfo.title = title
+      docInfo.Title = title
     } else {
       head = "<title>" + "untitled" + "</title>\n" + head
     }
   }
 
-  if docInfo.lang == "" { docInfo.lang = "en" }
+  if docInfo.Lang == "" { docInfo.Lang = "en" }
   html :=
     "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
     "<!DOCTYPE html>\n" +
-    "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"" + docInfo.lang + "\" xml:lang=\"" + docInfo.lang + "\">\n"
+    "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"" + docInfo.Lang + "\" xml:lang=\"" + docInfo.Lang + "\">\n"
 
-  if docInfo.optionsData.highlight {
+  if docInfo.OptionsData.Highlight {
     html += "<head>\n" + head +
       "<meta  http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n" +
       "<link rel=\"stylesheet\" href=\"highlight/styles/atelier-forest-dark.css\" />\n" +
@@ -59,12 +59,12 @@ func MakeHtml( str, title string ) string {
       "</head>\n"
   }
 
-  docInfo.optionsData.hShift = 1
-  body, toc := MakeHtmlBodyWithOptions( str, docInfo.optionsData )
+  docInfo.OptionsData.HShift = 1
+  body, toc := MakeHtmlBodyWithOptions( str, docInfo.OptionsData )
 
   html += "<body>\n"
 
-  if docInfo.optionsData.toc {
+  if docInfo.OptionsData.Toc {
     html += "<div id=\"toc\">\n" +
       "<p>index</p>\n" +
       "<div id=\"toc-contents\">\n" +
@@ -73,8 +73,8 @@ func MakeHtml( str, title string ) string {
       "</div>\n"
   }
 
-  if docInfo.title != "" {
-    html += "<h1>" + ToHtml( docInfo.title ) + "</h1>\n" +
+  if docInfo.Title != "" {
+    html += "<h1>" + ToHtml( docInfo.Title ) + "</h1>\n" +
       body + "</body>\n"
   } else {
     html += body + "</body>\n"
@@ -99,8 +99,6 @@ func whoIsThere( line string ) uint {
   } else if re.Match( line, "#^:b*:.:.:b*[:w:-:_]+[^:>]*:>" ) > 0 { return COMMAND
   } else                                                          { return TEXT
   }
-
-  return 0
 }
 
 const ( LIST_ERR = iota; LIST_MINUS; LIST_PLUS; LIST_NUM; LIST_ALPHA; LIST_MDEF; LIST_PDEF; LIST_DIALOG )
@@ -109,10 +107,10 @@ func whatListIsThere( list string ) uint {
   var re regexp3.RE
 
   if        re.Match( list, "#^:b*:>:b+:S"            ) > 0 { return LIST_DIALOG
-  } else if re.Match( list, "#^:b*-:b+:S"             ) > 0 {
+  } else if re.Match( list, "#^:b*-:b+<:S>"           ) > 0 {
     if re.Match( list[re.GpsCatch( 1 ):], "#?:b::{2}" ) > 0 { return LIST_MDEF  }
                                                               return LIST_MINUS
-  } else if re.Match( list, "#^:b*:+:b+:S"            ) > 0 {
+  } else if re.Match( list, "#^:b*:+:b+<:S>"          ) > 0 {
     if re.Match( list[re.GpsCatch( 1 ):], "#?:b::{2}" ) > 0 { return LIST_PDEF  }
                                                               return LIST_PLUS
   } else if re.Match( list, "#^:b*:d+[.)]:b+:S"       ) > 0 { return LIST_NUM

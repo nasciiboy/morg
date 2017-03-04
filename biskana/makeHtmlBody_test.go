@@ -20,11 +20,12 @@ func TestMakeHtmlBody( t *testing.T ) {
     "11_src-commad",
     "12_figure-commad",
     "13_emphs-command",
+    "14_video-command",
     "20_basic-list",
     "21_inner-list",
     "22_mixed-list",
     "23_def-list",
-    "25_basic-note",
+    "25_basic-about",
 	}
 
   doBodyTestsReference( t, files )

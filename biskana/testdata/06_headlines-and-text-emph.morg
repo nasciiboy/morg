@@ -5,6 +5,8 @@ demostraciones de @e(tipografías) o de @e(borradores) de diseño para probar el
 diseño visual antes de insertar el texto final.
 
 ** header @i(h2)
+   in multiple
+   lines
 
 Existen múltiples variantes del texto original, algunas casi sin parecido con
 él. Estas versiones incluyen letras adicionales que no son comunes en latín
@@ -18,7 +20,8 @@ Neque porro quisquam est qui do@b(lorem ipsum) quia @b(dolor sit amet, consectet
 
 A pesar de estar extraído de ese escrito, el texto usado habitualmente@^([cita requerida]) es:
 
-** header h2
+** Neque porro quisquam est qui do@b(lorem ipsum) quia @b(dolor
+   sit amet, consectetur, adipisci velit)@^(2)
 
 El texto en sí no tiene sentido, aunque no es completamente aleatorio, sino que
 deriva de un texto de @e(Cicerón) en lengua @e(latina), a cuyas palabras se les han
