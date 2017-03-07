@@ -111,25 +111,31 @@ h9.subtitle { color: var( --FGCtitle  ); font-size: 1.0em; font-family: heatline
 
 /* *        */
 #toc #toc-contents a.h1
-{ color: var( --FGCstart2 ); font-size: .6em; list-style: none; padding-left: 0.0em }
+{ color: var( --FGCtitle  ); font-size: .6em; list-style: none; padding-left: 0.0em }
 /* **       */
 #toc #toc-contents a.h2
-{ color: var( --FGCstart3 ); font-size: .6em; list-style: none; padding-left: 0.2em }
+{ color: var( --FGCstart1 ); font-size: .6em; list-style: none; padding-left: 0.2em }
 /* ***      */
 #toc #toc-contents a.h3
-{ color: var( --FGCstart4 ); font-size: .6em; list-style: none; padding-left: 0.4em }
+{ color: var( --FGCstart2 ); font-size: .6em; list-style: none; padding-left: 0.4em }
 /* ****     */
 #toc #toc-contents a.h4
-{ color: var( --FGCstart5 ); font-size: .6em; list-style: none; padding-left: 0.6em }
+{ color: var( --FGCstart3 ); font-size: .6em; list-style: none; padding-left: 0.6em }
 /* *****    */
 #toc #toc-contents a.h5
-{ color: var( --FGCstart6 ); font-size: .6em; list-style: none; padding-left: 0.8em }
+{ color: var( --FGCstart4 ); font-size: .6em; list-style: none; padding-left: 0.8em }
 /* ******   */
 #toc #toc-contents a.h6
-{ color: var( --FGCstart7 ); font-size: .6em; list-style: none; padding-left: 1.0em }
+{ color: var( --FGCstart5 ); font-size: .6em; list-style: none; padding-left: 1.0em }
 /* *******  */
 #toc #toc-contents a.h7
-{ color: var( --FGCstart8 ); font-size: .6em; list-style: none; padding-left: 1.2em }
+{ color: var( --FGCstart6 ); font-size: .6em; list-style: none; padding-left: 1.2em }
+
+#toc #toc-contents a.h8
+{ color: var( --FGCstart7 ); font-size: .6em; list-style: none; padding-left: 1.4em }
+
+#toc #toc-contents a.h9
+{ color: var( --FGCstart9 ); font-size: .6em; list-style: none; padding-left: 1.6em }
 
 
 /* ############### FONT STYLE */

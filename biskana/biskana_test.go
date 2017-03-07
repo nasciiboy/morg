@@ -7,7 +7,7 @@ import (
 )
 
 func TestWhoIsThere( t *testing.T ) {
-  rr := []string{ "COMMAND", "HEADLINE", "LIST", "DEFINITION", "ABOUT", "TEXT", "COMMENT", "EMPTY" }
+  rr := []string{ "COMMAND", "HEADLINE", "TABLE", "LIST", "DEFINITION", "ABOUT", "TEXT", "COMMENT", "EMPTY" }
 
   data := []struct {
     expected uint
@@ -50,6 +50,15 @@ func TestWhoIsThere( t *testing.T ) {
     { HEADLINE, "*** headline" },
     { HEADLINE, "***\t " },
     { HEADLINE, "***\t headline" },
+    {    TABLE, "| |" },
+    {    TABLE, "| cel 1 | cel 2 |" },
+    {    TABLE, "\t\t | cel 1 \t| cel 2 |\t" },
+    {    TABLE, "|------|-------|" },
+    {    TABLE, "|------|-------|\t" },
+    {    TABLE, "\t\t |------|-------|\t" },
+    {    TABLE, "|======|=======|" },
+    {    TABLE, "|======|=======|\t" },
+    {    TABLE, "\t\t |======|=======|\t" },
     {     LIST, "- ." },
     {     LIST, "- list" },
     {     LIST, " - e" },

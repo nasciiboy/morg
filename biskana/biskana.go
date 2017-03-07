@@ -85,7 +85,7 @@ func MakeHtml( str, title string ) string {
   return html
 }
 
-const ( COMMAND = iota; HEADLINE; LIST; DEFINITION; ABOUT; TEXT; COMMENT; EMPTY )
+const ( COMMAND = iota; HEADLINE; TABLE; LIST; DEFINITION; ABOUT; TEXT; COMMENT; EMPTY )
 
 func whoIsThere( line string ) uint {
   var re regexp3.RE
@@ -93,6 +93,7 @@ func whoIsThere( line string ) uint {
   } else if re.Match( line, "#^$:s+"                        ) > 0 { return EMPTY
   } else if re.Match( line, "#^:@(:s)"                      ) > 0 { return COMMENT
   } else if re.Match( line, "#^:*+:b"                       ) > 0 { return HEADLINE
+  } else if re.Match( line, "#^$:b*:|([^|]+:|)+:s*"         ) > 0 { return TABLE
   } else if re.Match( line, "#^:b*(-|:+|(:d+|:a+)[.)]):b+:S") > 0 { return LIST
   } else if re.Match( line, "#^:b*:>:b+:S"                  ) > 0 { return LIST
   } else if re.Match( line, "#^:b*::{2}:b+:S"               ) > 0 { return ABOUT

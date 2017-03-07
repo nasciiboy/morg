@@ -106,14 +106,10 @@ func marckupParser( str string, operator byte ) (result, text, custom string, i 
       if str[ i ] == operator { i++; break }
 
       switch str[ i ] {
-      case '<': result += "&lt;"
-                text   += "&lt;"
-      case '>': result += "&gt;"
-                text   += "&gt;"
-      case '&': result += "&amp;"
-                text   += "&amp;"
-      case '"': result += "&quot;"
-                text   += "&quot;"
+      case '<': result, text = result + "&lt;"  , text + "&lt;"
+      case '>': result, text = result + "&gt;"  , text + "&gt;"
+      case '&': result, text = result + "&amp;" , text + "&amp;"
+      case '"': result, text = result + "&quot;", text + "&quot;"
       case '@':
         var tmpResult, tmpText string
         tmpResult, tmpText, forward = marckupTrigger( str[i:] )

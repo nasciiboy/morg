@@ -9,7 +9,7 @@ import (
 func TestMakeHtmlHead( t *testing.T ) {
 	files := []string{
     "00_empty",
-    "30_simple-head",
+    "60_simple-head",
 	}
 
   doHeadTestsReference( t, files )

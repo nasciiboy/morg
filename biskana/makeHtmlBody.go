@@ -37,6 +37,7 @@ func walkMorg( str string, level int ) int {
     case HEADLINE:
       if level > 0 { return init }
       init += getHeadline( str[init:], level )
+    case TABLE   : init += getTable  ( str[init:] )
     case COMMAND : init += getCommand( str[init:] )
     case TEXT    : init += getText   ( str[init:] )
     case LIST    : init += walkList  ( str[init:] )
@@ -134,7 +135,7 @@ func makeDefList( head, body string ){
   head = head[ :re.GpsCatch( 1 ) ]
 
   htmlBody += "<dt>"
-  walkMorg( head, 0 )
+  htmlBody += ToHtml( linelize( head ) )
   htmlBody += "</dt>\n"
 
   htmlBody += "<dd>"
@@ -234,6 +235,91 @@ func getHeadline( str string, level int ) int {
 
   return  width
 }
+
+func getTable( str string ) int {
+  line, width := getLine( str )
+  init        := 0
+  indentLevel := countIndentSpaces( line )
+
+
+  for whoIsThere( line ) == TABLE && indentLevel == countIndentSpaces( line ) {
+    init += width
+
+    line, width = getLine( str[init:] )
+  }
+
+  strTable := clearSpacesAtEnd( rmIndent( str[:init], indentLevel ) )
+  makeTable( strTable )
+
+  return init
+}
+
+func makeTable( str string ){
+  htmlBody += "<table><tbody>\n"
+
+  headerTable, width := getTableHeader( str )
+
+  if width > 0 {
+    htmlBody += "<thead><tr>"
+    makeTableCell( headerTable, "th" )
+    htmlBody += "</tr></thead>\n"
+  }
+
+  bodyTable := str[width:]
+
+  if len(bodyTable) > 0 {
+    htmlBody += "<tbody>"
+    makeTableBody( bodyTable )
+    htmlBody += "</tbody>\n"
+  }
+
+  htmlBody += "</table>\n"
+}
+
+func getTableHeader( str string ) (string, int) {
+  var re regexp3.RE
+  if re.Match( str, "#?\n<:b*:|(=+:|)+:b*\n*>" ) > 0 {
+    return str[:re.GpsCatch( 1 )], re.GpsCatch( 1 ) + re.LenCatch( 1 )
+  }
+
+  return "", 0
+}
+
+func getTableRow( str string ) (string, int) {
+  var re regexp3.RE
+  if re.Match( str, "#?\n<:b*:|(-+:|)+:b*\n*>" ) > 0 {
+    return str[:re.GpsCatch( 1 )], re.GpsCatch( 1 ) + re.LenCatch( 1 )
+  }
+
+  return str, len(str)
+}
+
+func makeTableBody( str string ){
+  row, init := getTableRow( str )
+  for init < len(str) {
+    htmlBody += "<tr>"
+    makeTableCell( row, "td" )
+    htmlBody += "</tr>\n"
+    irow, width := getTableRow( str[init:] )
+    row,  init   = irow, init + width
+  }
+
+  htmlBody += "<tr>"
+  makeTableCell( row, "td" )
+  htmlBody += "</tr>\n"
+}
+
+func makeTableCell( str, kind string ){
+  var re regexp3.RE
+  re.Match( str, ":|:b+<:b+:|>+#!" )
+
+  for i := uint32(1); i <= re.TotCatch(); i++ {
+    htmlBody += "<" + kind + ">"
+    htmlBody += ToHtml( linelize( re.GetCatch( i ) ))
+    htmlBody += "</" + kind + ">"
+  }
+}
+
 
 func getCommand( str string ) int {
   line, width  := getLine( str )
