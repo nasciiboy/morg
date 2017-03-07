@@ -211,15 +211,17 @@ func getHeadline( str string, level int ) int {
   hLevel       := len( re.GetCatch( 1 ) ) + goptions.HShift
   sBody, wBody := dragTextByIndent( str[width:], indentLevel )
   width        += wBody
-  sHead         = linelize( re.GetCatch( 2 ) + linelize( sBody ) )
+  sHead         = spaceSwap( re.GetCatch( 2 ) + " " +  sBody, " " )
+  resultHead, _, customHead, _ := marckupParser( sHead, 0 )
+  resultHead, customHead = linelize(resultHead), linelize(customHead)
 
-  htmlBody += fmt.Sprintf( "<h%d id=\"%s\" >", hLevel, ToLink( ToText( sHead ) ) )
-  htmlBody += ToHtml( sHead )
+  htmlBody += fmt.Sprintf( "<h%d id=\"%s\" >", hLevel, ToLink( customHead ) )
+  htmlBody += resultHead
   htmlBody += fmt.Sprintf( "</h%d>\n", hLevel )
 
   if goptions.Toc {
-    htmlToc += fmt.Sprintf( "<span class=\"toc\" ><a class=\"h%d\" href=\"#%s\" >", hLevel, ToLink( ToText( sHead ) ) )
-    htmlToc += ToHtml( sHead )
+    htmlToc += fmt.Sprintf( "<span class=\"toc\" ><a class=\"h%d\" href=\"#%s\" >", hLevel, ToLink( customHead ) )
+    htmlToc += resultHead
     htmlToc += fmt.Sprintf( "</a></span>\n" )
   }
 
@@ -241,10 +243,8 @@ func getTable( str string ) int {
   init        := 0
   indentLevel := countIndentSpaces( line )
 
-
   for whoIsThere( line ) == TABLE && indentLevel == countIndentSpaces( line ) {
     init += width
-
     line, width = getLine( str[init:] )
   }
 
@@ -256,7 +256,6 @@ func getTable( str string ) int {
 
 func makeTable( str string ){
   htmlBody += "<table><tbody>\n"
-
   headerTable, width := getTableHeader( str )
 
   if width > 0 {
@@ -268,7 +267,7 @@ func makeTable( str string ){
   bodyTable := str[width:]
 
   if len(bodyTable) > 0 {
-    htmlBody += "<tbody>"
+    htmlBody += "<tbody>\n"
     makeTableBody( bodyTable )
     htmlBody += "</tbody>\n"
   }
@@ -319,7 +318,6 @@ func makeTableCell( str, kind string ){
     htmlBody += "</" + kind + ">"
   }
 }
-
 
 func getCommand( str string ) int {
   line, width  := getLine( str )

@@ -3,3 +3,18 @@
 *** header h3
 ** header h2
 * header h1
+** custom id <> header h2
+
+** multi line
+   headline
+
+** custom id
+   <>
+   multi line
+   headline
+
+** multi line
+   custom id <>
+   multi
+   line
+   headline
