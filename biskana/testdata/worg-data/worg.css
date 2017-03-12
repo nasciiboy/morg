@@ -214,6 +214,10 @@ div.highlight  { overflow: auto; background-color: #151515;
                  text-align: left; font-family: codeblock;
                }
 
+/* CODE */
+div.cols { align-items: strech; } /* strech, center, flex-start, flex-end, baseline, initial, inherit */
+div.cols-element   { padding: 1em; }
+
 /* pygments */
 .highlight .hll {                                    }
 .highlight .c   { color: #808080                     } /* Comment */

@@ -27,7 +27,9 @@ func TestMakeHtmlBody( t *testing.T ) {
     "23_def-list",
     "25_basic-about",
     "30_basic-table",
+    "31_multiline-table-cels",
     // "31_complex-table",
+    "40_basic-cols",
 	}
 
   doBodyTestsReference( t, files )

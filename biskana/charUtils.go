@@ -15,6 +15,20 @@ func getLine( str string ) (string, int) {
   return str, len( str )
 }
 
+func getLines( str string ) (result []string) {
+  last := 0;
+  for i, c := range str {
+    if c == '\n' {
+      result = append( result, str[last:i] )
+      last = i + 1
+    }
+  }
+
+  if last < len( str ) { result = append( result, str[last:] ) }
+
+  return result
+}
+
 func clearSpacesAtEnd( str string ) string {
   for i := len( str ) - 1; i >= 0; i-- {
     switch str[i] {

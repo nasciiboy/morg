@@ -212,8 +212,9 @@ func getHeadline( str string, level int ) int {
   sBody, wBody := dragTextByIndent( str[width:], indentLevel )
   width        += wBody
   sHead         = spaceSwap( re.GetCatch( 2 ) + " " +  sBody, " " )
+
   resultHead, _, customHead, _ := marckupParser( sHead, 0 )
-  resultHead, customHead = linelize(resultHead), linelize(customHead)
+  resultHead,    customHead     = linelize( resultHead ), linelize( customHead )
 
   htmlBody += fmt.Sprintf( "<h%d id=\"%s\" >", hLevel, ToLink( customHead ) )
   htmlBody += resultHead
@@ -255,7 +256,7 @@ func getTable( str string ) int {
 }
 
 func makeTable( str string ){
-  htmlBody += "<table><tbody>\n"
+  htmlBody += "<table>\n"
   headerTable, width := getTableHeader( str )
 
   if width > 0 {
@@ -309,14 +310,28 @@ func makeTableBody( str string ){
 }
 
 func makeTableCell( str, kind string ){
-  var re regexp3.RE
-  re.Match( str, ":|:b+<:b+:|>+#!" )
+  s := getLines( str )
+  var cells []string
 
-  for i := uint32(1); i <= re.TotCatch(); i++ {
+  for _, line := range( s ) {
+    var re regexp3.RE
+    re.Match( line, ":|:b<:b:|>+#!" )
+
+    for i := 1; uint32(i) <= re.TotCatch(); i++ {
+      if i <= len( cells ) {
+        cells[i-1] += " " + re.GetCatch( uint32(i) )
+      } else {
+        cells = append( cells, re.GetCatch( uint32(i) ) )
+      }
+    }
+  }
+
+  for _, c := range( cells ) {
     htmlBody += "<" + kind + ">"
-    htmlBody += ToHtml( linelize( re.GetCatch( i ) ))
+    htmlBody += ToHtml( linelize( c ))
     htmlBody += "</" + kind + ">"
   }
+
 }
 
 func getCommand( str string ) int {
@@ -346,7 +361,7 @@ func getCommand( str string ) int {
     init       += width
 
     fallthrough
-  case "src", "center", "bold", "emph", "italic", "quote", "example", "pre", "diagram":
+  case "src", "center", "bold", "emph", "italic", "quote", "example", "pre", "diagram", "art", "cols":
     body, width = getBodyCommand( str[init:], closePattern, indentLevel )
     init       += width
 
@@ -397,11 +412,12 @@ func makeCommand( command, options, args, body string ){
   // case "title", "subtitle", "author", "translator", "lang", "language", "licence",
   //      "date", "tags", "mail", "description", "id", "style", "options":
   case "figure" : makeCommandFigure( options, args, body )
+  case "cols"   : makeCommandCols  ( options, args, body )
   case "img"    : makeCommandImg   ( options, args, body )
   case "video"  : makeCommandVideo ( options, args, body )
   case "quote"  : makeCommandQuote ( command, args, body )
   case "src"    : makeCommandSrc   ( options, args, body )
-  case "example", "pre", "diagram":
+  case "example", "pre", "diagram", "art":
     makeCommandExample( options, args, body )
   case "center", "bold", "emph", "italic":
     makeCommandFont( command, args, body )
@@ -431,6 +447,45 @@ func makeCommandFigure( options, args, body string ){
   htmlBody += "</div>\n"
 }
 
+func makeCommandCols( options, args, body string ){
+  htmlBody += "<div class=\"cols\" style=\"width: 100%; display: inline-flex; flex-flow: row nowrap; flex-direction: row; \">\n"
+
+  cols, width := getCols( body ), 100
+
+  if cols != nil { width = 100 / len(cols) }
+
+  for i, c := range( cols ) {
+    htmlBody += "<div class=\"cols-element\" "
+    htmlBody += fmt.Sprintf( "style=\" order: %d; width: %d%%; ", i + 1, width )
+    htmlBody += "\">\n"
+
+    walkMorg( c, 0 )
+    htmlBody += "</div>\n"
+  }
+
+  htmlBody += "</div>\n"
+}
+
+func getCols( str string ) (result []string) {
+  init, width, last, line := 0, 0, 0, "";
+  for init < len(str) {
+    line, width = getLine( str[init:] )
+
+    if line == "::" {
+      result = append( result, str[last:init] )
+      last = init + width
+    }
+
+    init += width
+  }
+
+  if last < init {
+    result = append( result, str[last:init] )
+  }
+
+  return result
+}
+
 func makeCommandImg( options, args, body string ){
   htmlBody += "<div class=\"img\">\n"
   htmlBody += "<img src=\"" + args + "\" />\n"
@@ -439,6 +494,7 @@ func makeCommandImg( options, args, body string ){
 }
 
 func makeCommandVideo( options, args, body string ){
+  htmlBody += "<div class=\"video\">\n"
   htmlBody += "<video controls >\n"
   htmlBody += "<source src=\"" + args + "\""
 
@@ -448,8 +504,10 @@ func makeCommandVideo( options, args, body string ){
   }
 
   htmlBody += " >\n"
-  walkMorg( body, 0 )
   htmlBody += "</video>\n"
+
+  walkMorg( body, 0 )
+  htmlBody += "</div>\n"
 }
 
 func makeCommandFont( command, args, body string ){
