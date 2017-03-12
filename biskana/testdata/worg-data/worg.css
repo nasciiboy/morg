@@ -175,10 +175,10 @@ dt { color: var( --FGCdt );
 dd { color: #ffffff; font-size: 1.0em; font-family: description_dd; font-style: bold; }
 
 
-.img { margin-top: 1em; text-align: center; }
-img  { max-width: 100%; min-width: 75%; filter: invert( 100% ); }
+figure { margin-top: 1em; text-align: center; }
+img    { max-width: 100%; min-width: 75%; filter: invert( 100% ); }
 img:hover { filter: invert( 0% ); }
-
+figcaption {}
 
 table { text-align: left; width: 100%; margin-top: 1em; }
 table thead { border: none; color: var( --FGCthead ); background: var( --BGCthead ); }
@@ -194,7 +194,7 @@ table tbody tr td { }
 .italic { font-family: text_italic; }
 .center { text-align: center; justify-content: center; }
 
-.figure h1 { color: var( --FGCstart2 ); font-size: 1.5em; font-family: heatline; }
+.figure .title { color: white; font-size: 1.2em; font-weight: 600; font-family: heatline; }
 
 /* ABOUT */
 .about { width: 100%; display: inline-flex; flex-flow: row nowrap; flex-direction: row;  }

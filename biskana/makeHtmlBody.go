@@ -442,7 +442,7 @@ simple:
 
 func makeCommandFigure( options, args, body string ){
   htmlBody += "<div class=\"figure\" >\n"
-  htmlBody += "<h1>" + ToHtml( args ) + "</h1>\n"
+  htmlBody += "<p class=\"title\">" + ToHtml( args ) + "</p>\n"
   walkMorg( body, 0 )
   htmlBody += "</div>\n"
 }
@@ -487,10 +487,16 @@ func getCols( str string ) (result []string) {
 }
 
 func makeCommandImg( options, args, body string ){
-  htmlBody += "<div class=\"img\">\n"
+  htmlBody += "<figure>\n"
   htmlBody += "<img src=\"" + args + "\" />\n"
-  walkMorg( body, 0 )
-  htmlBody += "</div>\n"
+
+  if len( body ) != 0 {
+    htmlBody += "<figcaption>\n"
+    walkMorg( body, 0 )
+    htmlBody += "</figcaption>\n"
+  }
+
+  htmlBody += "</figure>\n"
 }
 
 func makeCommandVideo( options, args, body string ){
@@ -504,9 +510,11 @@ func makeCommandVideo( options, args, body string ){
   }
 
   htmlBody += " >\n"
+  htmlBody += "Your browser does not support HTML5 video\n"
   htmlBody += "</video>\n"
 
   walkMorg( body, 0 )
+
   htmlBody += "</div>\n"
 }
 
