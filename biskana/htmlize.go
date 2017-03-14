@@ -129,7 +129,7 @@ func marckupParser( str string, operator byte ) (result, text, custom string, i 
 func ToLabel( body, custom string, label byte ) string {
   switch label {
   case '!' : return body
-  case '"' : return "<cite>" + body + "</cite>"
+  case '"' : return "<q>" + body + "</q>"
   case '#' : return "<span class=\"path\" >" + body + "</span>"
   case '$' : return "<code class=\"command\" >" + body + "</code>"
   case '%' : return body // "parentesis"

@@ -21,6 +21,7 @@ func TestMakeHtmlBody( t *testing.T ) {
     "12_figure-commad",
     "13_emphs-command",
     "14_video-command",
+    "15_quote-command",
     "20_basic-list",
     "21_inner-list",
     "22_mixed-list",

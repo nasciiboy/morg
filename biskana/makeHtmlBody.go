@@ -532,6 +532,26 @@ func makeCommandExample( options, args, body string ){
 
 func makeCommandQuote( options, args, body string ){
   htmlBody += "<blockquote>\n"
-  walkMorg( body, 0 )
+
+  init, width, line := 0, 0, "";
+  var re regexp3.RE
+  for init < len(body) {
+    line, width = getLine( body[init:] )
+    if whoIsThere( line ) == EMPTY {
+      init += width
+    } else if re.Match( line, "#^--" ) > 0 {
+      init += width
+      p, w := dragTextByIndent( body[init:], 2 )
+      htmlBody += "<div class=\"quote-author\" >\n"
+      htmlBody += "<p>";
+      htmlBody += ToHtml( linelize( line[2:] + " " + p ) );
+      htmlBody += "</p>\n";
+      htmlBody += "</div>\n"
+      init += w
+    } else {
+      init += getText( body[init:] )
+    }
+  }
+
   htmlBody += "</blockquote>\n"
 }

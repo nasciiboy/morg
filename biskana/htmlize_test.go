@@ -32,8 +32,8 @@ func marckupTriggerTest( t *testing.T ){
     { "@\t>h", "@\t>", "@\t>", 3 },
     { "@b{h", "<b>h</b>", "h", 4 },
     { "@e{h", "<em>h</em>", "h", 4 },
-    { "@\"{h", "<cite>h</cite>", "h", 4 },
-    { "@\"{cite @e(emph)}", "<cite>cite <em>emph</em></cite>", "cite emph", 17 },
+    { "@\"{h", "<q>h</q>", "h", 4 },
+    { "@\"{cite @e(emph)}", "<q>cite <em>emph</em></q>", "cite emph", 17 },
     { "@q<quote @e<emph @i[italic]>>", "<q>quote <em>emph <i>italic</i></em></q>", "quote emph italic", 29 },
     { "@b<something <@> something-more>", "<b>something &lt;&gt; something-more</b>", "something &lt;&gt; something-more", 32 },
     { "@b<something <>b>", "<b>b</b>", "b", 17 },
@@ -86,7 +86,7 @@ func marckupTest( t *testing.T ){
     input, output string
   }{
     // { "@!(test)", "test" },
-    { "@\"(test)", "<cite>test</cite>" },
+    { "@\"(test)", "<q>test</q>" },
     // { "@#(test)", "pathtest" },
     { "@$(test)", "<code class=\"command\" >test</code>" },
     { "@$[test]", "<code class=\"command\" >test</code>" },
@@ -275,7 +275,7 @@ func complexTest( t *testing.T ){
     input, output string
   }{
     { "@e(Who's Theme)", "<em>Who's Theme</em>" },
-    { "@\"(@e(THE RAPTOR) @c(Code) @b(Book))", "<cite><em>THE RAPTOR</em> <code>Code</code> <b>Book</b></cite>" },
+    { "@\"(@e(THE RAPTOR) @c(Code) @b(Book))", "<q><em>THE RAPTOR</em> <code>Code</code> <b>Book</b></q>" },
     { "@e(THE @q(RAPTOR)) @c(Code) @b(Book)", "<em>THE <q>RAPTOR</q></em> <code>Code</code> <b>Book</b>" },
     { "@e(@b(@i(T))HE RAPTOR) @c(Code) @b(Book)", "<em><b><i>T</i></b>HE RAPTOR</em> <code>Code</code> <b>Book</b>" },
     { "@e(The Good,) @b(The Bad &) @k(The Queen)", "<em>The Good,</em> <b>The Bad &amp;</b> <kbd>The Queen</kbd>" },

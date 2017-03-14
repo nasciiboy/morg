@@ -1,29 +1,33 @@
 :root {
                            /* COLOR VARS    */
-    --FGCtitle : #ff4500;  /* #+TITLE:      */
-    --FGCstart1: #4B99D2;  /* *             */
-    --FGCstart2: #00ffff;  /* **            */
-    --FGCstart3: #ff4500;  /* ***           */
-    --FGCstart4: #98fb98;  /* ****          */
-    --FGCstart5: #b0c4de;  /* *****         */
-    --FGCstart6: #7fffd4;  /* ******        */
-    --FGCstart7: #db2e24;  /* *******       */
-    --FGCstart8: #ff4500;  /* ********      */
-    --FGCtext  : #ffffff;
-    --FGCemph  : #ffffff;  /* 4B99D2        */
-    --FGCtcode : #bfbfff;  /* code          */
-    --FGCbcode : #b3b3b3;  /* block code    */
-    --FGCtcomm : #ff4500;  /* command       */
-    --FGCfile  : #eedd82;  /* file          */
-    --FGCmath  : #98fb98;  /* math          */
-    --FGClink  : #00ffff;  /* link          */
-    --BGClinkh : #556b2f;  /* link bg hover */
-    --FGClinkh : #ffffff;  /* link fg hover */
-    --BGCdt    : #b3b3b3;  /* dl bg dt      */
-    --FGCdt    : #ffffff;  /* dl fg dt      */
-    --FGCthead : #ff7f24;  /* table head    */
-    --BGCthead : #000000;  /* table head    */
-    --FGCtbody : #87cefa;  /* table body    */
+    --FGCtitle  : #ff4500;  /* #+TITLE:      */
+    --FGCstart1 : #4B99D2;  /* *             */
+    --FGCstart2 : #00ffff;  /* **            */
+    --FGCstart3 : #ff4500;  /* ***           */
+    --FGCstart4 : #98fb98;  /* ****          */
+    --FGCstart5 : #b0c4de;  /* *****         */
+    --FGCstart6 : #7fffd4;  /* ******        */
+    --FGCstart7 : #db2e24;  /* *******       */
+    --FGCstart8 : #ff4500;  /* ********      */
+    --FGCtext   : #ffffff;
+    --FGCemph   : #ffffff;  /* 4B99D2        */
+    --FGCtcode  : #bfbfff;  /* code          */
+    --FGCbcode  : #b3b3b3;  /* block code    */
+    --FGCtcomm  : #ff4500;  /* command       */
+    --FGCfile   : #eedd82;  /* file          */
+    --FGCmath   : #98fb98;  /* math          */
+    --FGClink   : #00ffff;  /* link          */
+    --BGClinkh  : #556b2f;  /* link bg hover */
+    --FGClinkh  : #ffffff;  /* link fg hover */
+    --FGCbquot  : #a5b1fe;  /* blockquote    */
+    --FGCaquot  : #a5b1fe;  /* author quote  */
+    --FGCdtabout: #6fb336;  /* about title   */
+    --FGCfigure : #ffffff;  /* about title   */
+    --BGCdt     : #b3b3b3;  /* dl bg dt      */
+    --FGCdt     : #ffffff;  /* dl fg dt      */
+    --FGCthead  : #ff7f24;  /* table head    */
+    --BGCthead  : #000000;  /* table head    */
+    --FGCtbody  : #87cefa;  /* table body    */
 }
 
 @font-face { font-family: text;           src: local('sans-serif'          );                     }
@@ -114,28 +118,28 @@ h9.subtitle { color: var( --FGCtitle  ); font-size: 1.0em; font-family: heatline
 { color: var( --FGCtitle  ); font-size: .6em; list-style: none; padding-left: 0.0em }
 /* **       */
 #toc #toc-contents a.h2
-{ color: var( --FGCstart1 ); font-size: .6em; list-style: none; padding-left: 0.2em }
+{ color: var( --FGCstart1 ); font-size: .6em; list-style: none; padding-left: 0.3em }
 /* ***      */
 #toc #toc-contents a.h3
-{ color: var( --FGCstart2 ); font-size: .6em; list-style: none; padding-left: 0.4em }
+{ color: var( --FGCstart2 ); font-size: .6em; list-style: none; padding-left: 0.6em }
 /* ****     */
 #toc #toc-contents a.h4
-{ color: var( --FGCstart3 ); font-size: .6em; list-style: none; padding-left: 0.6em }
+{ color: var( --FGCstart3 ); font-size: .6em; list-style: none; padding-left: 0.9em }
 /* *****    */
 #toc #toc-contents a.h5
-{ color: var( --FGCstart4 ); font-size: .6em; list-style: none; padding-left: 0.8em }
+{ color: var( --FGCstart4 ); font-size: .6em; list-style: none; padding-left: 1.2em }
 /* ******   */
 #toc #toc-contents a.h6
-{ color: var( --FGCstart5 ); font-size: .6em; list-style: none; padding-left: 1.0em }
+{ color: var( --FGCstart5 ); font-size: .6em; list-style: none; padding-left: 1.5em }
 /* *******  */
 #toc #toc-contents a.h7
-{ color: var( --FGCstart6 ); font-size: .6em; list-style: none; padding-left: 1.2em }
+{ color: var( --FGCstart6 ); font-size: .6em; list-style: none; padding-left: 1.8em }
 
 #toc #toc-contents a.h8
-{ color: var( --FGCstart7 ); font-size: .6em; list-style: none; padding-left: 1.4em }
+{ color: var( --FGCstart7 ); font-size: .6em; list-style: none; padding-left: 2.1em }
 
 #toc #toc-contents a.h9
-{ color: var( --FGCstart9 ); font-size: .6em; list-style: none; padding-left: 1.6em }
+{ color: var( --FGCstart9 ); font-size: .6em; list-style: none; padding-left: 2.4em }
 
 
 /* ############### FONT STYLE */
@@ -194,17 +198,19 @@ table tbody tr td { }
 .italic { font-family: text_italic; }
 .center { text-align: center; justify-content: center; }
 
-.figure .title { color: white; font-size: 1.2em; font-weight: 600; font-family: heatline; }
+.figure .title { color: var( --FGCfigure ); font-size: 1.2em; font-weight: 600; font-family: heatline; }
 
 /* ABOUT */
 .about { width: 100%; display: inline-flex; flex-flow: row nowrap; flex-direction: row;  }
 .about div.about-dt { order: 1; padding-left: 1em;
-                      color: #6fb336; font-size: 1.2em; font-weight: 800; text-align: center; }
+                      color: var( --FGCdtabout ); font-size: 1.2em; font-weight: 800; text-align: center; }
 
 .about div.about-dd { order: 2; padding-left: 1em; font-family: description_dd;  overflow: auto; }
 
 /* Blockquote */
-blockquote { font-family: text_verse; color: #a5b1fe; }
+blockquote { font-family: text_verse; color: var( --FGCbquot ); }
+div.quote-author { }
+div.quote-author p { text-align: right; padding-right: 2%; color: var( --FGCaquot ); }
 
 /* CODE */
 pre.code,
