@@ -38,7 +38,7 @@ func main(){
       continue
     }
 
-    outputBytes := []byte( biskana.MakeHtml( string(inputBytes), outputBaseName ) )
+    outputBytes := []byte( biskana.Export( string(inputBytes), biskana.HTML ) )
 
     _, err = outputFile.Write( outputBytes )
     if err != nil {
