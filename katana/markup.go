@@ -5,10 +5,17 @@ import (
 )
 
 const (
-  MarkupNil = iota
+  MarkupNil byte = iota
   MarkupEsc
   MarkupErr
-  MarkupTxt
+  MarkupHeadline
+  MarkupTitle
+  MarkupList
+  MarkupDialog
+  MarkupComment
+  MarkupAbout
+  MarkupCode
+  MarkupText
 )
 
 type Markup struct {
@@ -202,4 +209,9 @@ func MarkupParser( str string, label, operator byte ) (node Markup, i int, err e
   }
 
   return node, len( str ), nil
+}
+
+func StrToMark( str string ) (m Markup) {
+  m.Parse( str )
+  return
 }

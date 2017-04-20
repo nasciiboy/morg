@@ -59,6 +59,7 @@ func getText( doc *DocNode, str string ) int {
       init += width
     case HeadlineNode, CommentNode, EmptyNode :
       mark.Parse( text.Linelize(str[:init]) )
+      mark.Type = MarkupText
       doc.AddNode( Text{ Mark: mark } )
 
       return init
@@ -67,6 +68,7 @@ func getText( doc *DocNode, str string ) int {
   }
 
   mark.Parse( text.Linelize( str ) )
+  mark.Type = MarkupText
   doc.AddNode( Text{ Mark: mark } )
 
   return len(str)
@@ -189,8 +191,8 @@ func getHeadline( toc *DocNode, str string ) int {
   width        += wBody
   sHead         = text.Linelize( text.SpaceSwap( re.GetCatch( 2 ) + " " +  sBody, " " ) )
 
-  data, _, _   := MarkupParser( sHead, MarkupNil, 0 )
-  toc.AddNode( Headline{ data, hLevel } )
+  mark, _, _   := MarkupParser( sHead, MarkupHeadline, 0 )
+  toc.AddNode( Headline{ Mark: mark, Level: hLevel } )
 
   return  width
 }

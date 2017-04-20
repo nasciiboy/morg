@@ -6,18 +6,44 @@ import (
   "path"
   "strings"
   "io/ioutil"
+
   "github.com/nasciiboy/morg/biskana"
+  "github.com/nasciiboy/morg/nirvana"
 )
 
 const suffix = ".morg"
 
 func main(){
-  if len(os.Args) == 1 {
-    fmt.Fprintf( os.Stderr, "morg: morg file-A file-B ...\n" )
+  if len(os.Args) < 2 {
+    fmt.Fprintf( os.Stderr, "morg: morg command file-A file-B ...\n" )
     os.Exit( 1 )
   }
 
-  for _, inputFileName := range os.Args[1:] {
+  switch os.Args[1] {
+  case "export": toBiskana( os.Args[2:] )
+  case "tui"   : toKatana ( os.Args[2:] )
+    default:
+    fmt.Fprintf( os.Stderr, "command: %s no found\n", os.Args[1] )
+    fmt.Fprintf( os.Stderr, "available commands: \"export\" and \"tui\"\n" )
+
+    os.Exit( 1 )
+  }
+}
+
+func toKatana( files []string ){
+  for _, inputFileName := range files {
+    inputBytes, err := ioutil.ReadFile( inputFileName )
+    if err != nil {
+      fmt.Fprintf( os.Stderr, "morg: Couldn't open '%s', error: %v\n", inputFileName, err )
+      continue
+    }
+
+    tui.Show( string(inputBytes) )
+  }
+}
+
+func toBiskana( files []string ){
+  for _, inputFileName := range files {
     inputBytes, err := ioutil.ReadFile( inputFileName )
     if err != nil {
       fmt.Fprintf( os.Stderr, "morg: Couldn't open '%s', error: %v\n", inputFileName, err )
