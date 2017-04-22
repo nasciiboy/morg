@@ -133,10 +133,10 @@ o con un `echo`
 echo "hola morg" > ejemplo.morg
 ```
 
-y exportamos a html, que por el momento es lo unico que morg sabe hacer
+y exportamos a html
 
 ``` sh
-morg ejemplo.morg
+morg export ejemplo.morg
 ```
 
 listo, se genera un fichero de nombre `ejemplo.html` con nuestro documento.
@@ -221,7 +221,7 @@ por dividir el documento en secciones o encabezados
 
 La sintaxis de un encabezado es muy simple:
 
-``` org-mode
+```
 * Encabezado principal
 ** Segundo nivel
 *** 3er. nivel
@@ -301,7 +301,7 @@ que genera
 
 otros lenguajes de marcas ligeras utilizan marcas varias, el problema con este
 enfoque radica en naturaleza exotica de las marcas, que los limitan a dos o tres
-formas de resaltado, antes de recurrir a etiquetas html (blasfemia).
+formas de resaltado, antes de recurrir a etiquetas html (¡blasfemia!).
 
 luego de meditar por 15 dias, 10 noches, ver texinfo y realizar una
 investigacion con fondos provenientes del gobierno (nada extraordinario, solo un
@@ -363,8 +363,8 @@ cuando no se cumple la secuencia `@x()`, por ejemplo, `@(` se substituye por
 `(`, `@}` por `}`. (nota: dentro del texto o un comado `@` para que aparesca `@`
 hay que colocar `@@`)
 
-los comandos `@` pueden utilizarse en cualquier sitio, inclusive dentro de la
-configuracion del titulo, encabezados, tablas y demas, (solo no colocar en otros
+los comandos `@` pueden utilizarse en cualquier sitio, inclusive dentro del
+titulo del documento, encabezados, tablas y demas, (solo no colocar en otros
 comandos de configuracion que no sean `title` no contemplo esta sitiacion y no
 tiene sentido...
 
@@ -737,3 +737,51 @@ una tabla puede tener (o no) cuerpo o encabezado, pero las filas deben tener
 siempre el mismo numero de columnas, en el futuro se hara una tabla super
 dopada, de momento esto es lo que hay, por cierto, las tablas tienes soporte
 completo de comandos `@`
+
+
+## Exportar y visualizar
+
+Una ves instalado morg y contando con nuestro documento (de momento) podemos
+hacer 2 cosas:
+
+1. Exportar a html
+
+2. Visualizar en la terminal (caraceristica recien añadida con muchas carencias,
+   como la falta de visualizacion de tablas, imagenes, videos y otras cosas mas)
+
+
+Para lo primero el comondo a utilizar es
+
+```
+morg export mi-documento.morg
+```
+
+la extencion `.morg` no es necesaria, pero es una buena costumbre marcar de que
+va cada fichero
+
+Para visualizar el documento
+
+```
+morg tui mi-documento.morg
+```
+
+esto muestra el documento, dentro de la terminal, con algunos colores. Mencionar
+que una vez se ejecuta el comando, se utiliza la dimencion actual de la terminal
+y esta no se refresca en caso de cambio
+
+Para desplazarse dentro del documento
+
+```
+q                ==> quitar
+Home             ==> Inicio
+End              ==> Final
+PgUp             ==> Desplazarse una pagina hacia arriba
+PgDown           ==> Desplazarse una pagina hacia abajo
+Flecha arriba    ==> Subir
+Flecha abajo     ==> Bajar
+Flecha derecha   ==> Desplazamiento a la derecha
+Flecha izquierda ==> Desplazamiento a la izquierda
+```
+
+La libreria que se utiliza para manipular la terminal, esta muy, muy, muy verde
+en ocaciones aparecen artefactos, creo que al utilizar caracteres unicode
