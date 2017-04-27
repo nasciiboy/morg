@@ -48,8 +48,8 @@ type Options struct {
 
 type Doc struct {
   Toc         []DocNode
-  Title         string
-  Subtitle      string
+  Title         Markup
+  Subtitle      Markup
   Author      []string
   Translator  []string
   Mail          string

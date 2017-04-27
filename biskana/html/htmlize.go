@@ -23,12 +23,12 @@ func ToLink( link string ) string {
   return text.SpaceSwap( link, "-" )
 }
 
-func ToLabel( body, custom string, label byte ) string {
+func AtCommand( body, custom string, label byte ) string {
   switch label {
   case katana.MarkupNil, katana.MarkupEsc, katana.MarkupErr: return body
-  case katana.MarkupHeadline, katana.MarkupTitle, katana.MarkupList,
-       katana.MarkupDialog, katana.MarkupComment, katana.MarkupAbout,
-       katana.MarkupCode, katana.MarkupText: return body
+  case katana.MarkupHeadline, katana.MarkupTitle, katana.MarkupSubTitle,
+       katana.MarkupList, katana.MarkupDialog, katana.MarkupComment,
+       katana.MarkupAbout, katana.MarkupCode, katana.MarkupText: return body
   case '!' : return body
   case '"' : return "<q>" + body + "</q>"
   case '#' : return `<span class="path" >` + body + "</span>"
@@ -118,5 +118,5 @@ func ToLabel( body, custom string, label byte ) string {
   case '~' : return body
   }
 
-  return "[unknow-Label/]" + body + "[/unknow-Label]"
+  return body
 }

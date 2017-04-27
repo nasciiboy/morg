@@ -191,6 +191,10 @@ func getHeadline( toc *DocNode, str string ) int {
   width        += wBody
   sHead         = text.Linelize( text.SpaceSwap( re.GetCatch( 2 ) + " " +  sBody, " " ) )
 
+  if re.Match( sHead, "#?<:s*:<:>:s*>" ) > 0 {
+    sHead = re.RplCatch( "<>", 1 )
+  }
+
   mark, _, _   := MarkupParser( sHead, MarkupHeadline, 0 )
   toc.AddNode( Headline{ Mark: mark, Level: hLevel } )
 

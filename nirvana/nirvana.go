@@ -1,8 +1,7 @@
-package tui
+package nirvana
 
 import (
   "github.com/nasciiboy/tui"
-  // "fmt"
 )
 
 const suffix = ".morg"
@@ -14,14 +13,10 @@ func Show( doc string ){
 	}
   defer tui.Close()
 
+  wout.Echo = false
+
   pad := tui.NewPad( wout )
-
   pad.ParseMorg( doc )
-
-  //wout.Echo = false
-  //wout.Scroll = false
-  // pad.AddStr( fmt.Sprintf( "%d len \n%d Cursy\n%d cap", len(pad.Buffer), pad.CurY, cap(pad.Buffer) ))
-
   pad.Draw()
 
   for {

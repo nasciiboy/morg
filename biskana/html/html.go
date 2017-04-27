@@ -7,7 +7,6 @@ import (
 
   "github.com/nasciiboy/morg/katana"
   "github.com/nasciiboy/regexp3"
-  "github.com/nasciiboy/utils/text"
   "github.com/nasciiboy/pygments"
 )
 
@@ -17,11 +16,11 @@ const HtmlTemplate =
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="{{ .Lang }}" xml:lang="{{ .Lang }}" >
   <head>
-    <title>{{ ToText .Title }}</title>
+    <title>{{ UnFontify .Title }}</title>
     <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    {{ if .Subtitle      }}<meta name="subtitle"    content="{{ ToText .Subtitle }}" />{{ end }}
-    {{ range .Author     }}<meta name="author"      content="{{ ToText .         }}" />{{ end }}
-    {{ range .Translator }}<meta name="translator"  content="{{ ToText .         }}" />{{ end }}
+    {{ if hasSomething .Subtitle }}<meta name="subtitle"    content="{{ UnFontify .Subtitle }}" />{{ end }}
+    {{ range .Author     }}<meta name="author"      content="{{ .                }}" />{{ end }}
+    {{ range .Translator }}<meta name="translator"  content="{{ .                }}" />{{ end }}
     {{ if .Licence       }}<meta name="licence"     content="{{ .Licence         }}" />{{ end }}
     {{ if .Id            }}<meta name="id"          content="{{ .Id              }}" />{{ end }}
     {{ if .Date          }}<meta name="date"        content="{{ .Date            }}" />{{ end }}
@@ -39,6 +38,7 @@ const HtmlTemplate =
   </head>
   <body>
 
+
 {{ if .OptionsData.Toc }}
 <div id="toc">
   <p>index</p>
@@ -48,9 +48,7 @@ const HtmlTemplate =
 </div>
 {{ end }}
 
-{{ if .Title }}
-<h1>{{ ToMark .Title }}</h1>
-{{ end }}
+{{ if hasSomething .Title }}<h1>{{ Fontify .Title }}</h1>{{ end }}
 
 {{ ToBody .Toc .OptionsData }}
 
@@ -65,10 +63,11 @@ func MakeHtml( str string ) string {
   document.OptionsData.HShift = 1
 
 	t, err := template.New("HtmlTemplate").
-    Funcs(template.FuncMap{ "ToMark": ToMark }).
-    Funcs(template.FuncMap{ "ToText": ToText }).
-    Funcs(template.FuncMap{ "ToBody": ToBody }).
-    Funcs(template.FuncMap{ "ToToc" : ToToc  }).
+    Funcs(template.FuncMap{ "ToBody"       : ToBody }).
+    Funcs(template.FuncMap{ "ToToc"        : ToToc  }).
+    Funcs(template.FuncMap{ "Fontify"      : fontify  }).
+    Funcs(template.FuncMap{ "UnFontify"    : unfontify  }).
+    Funcs(template.FuncMap{ "hasSomething" : hasSomething  }).
     Parse(HtmlTemplate)
   if err != nil { panic( err ) }
 
@@ -86,6 +85,10 @@ func MakeHtmlBody( str string ) string {
   return ToBody( document.Toc, document.OptionsData )
 }
 
+func hasSomething( m katana.Markup ) bool {
+  return m.HasSomething()
+}
+
 func fontify( m katana.Markup ) (str string) {
   if len( m.Custom ) == 0 && len( m.Body ) == 0 {
     return ToSafeHtml( m.Data )
@@ -101,7 +104,6 @@ func fontify( m katana.Markup ) (str string) {
     body   += fontify( c )
   }
 
-
   if custom == "" {
     switch m.Type {
     case 'l', 'N', 'n', 't' :
@@ -109,21 +111,11 @@ func fontify( m katana.Markup ) (str string) {
     }
   }
 
-  return ToLabel( body, custom, m.Type )
+  return AtCommand( body, custom, m.Type )
 }
 
-func ToMark( str string ) string {
-  var markup katana.Markup
-  markup.Parse( str )
-
-  return fontify( markup )
-}
-
-func ToText( str string ) string {
-  var markup katana.Markup
-  markup.Parse( str )
-
-  return markup.String()
+func unfontify( m katana.Markup ) (str string) {
+  return m.String()
 }
 
 func ToToc( toc []katana.DocNode, options katana.Options ) (str string) {
@@ -131,8 +123,8 @@ func ToToc( toc []katana.DocNode, options katana.Options ) (str string) {
     full := h.Get()
     str += fmt.Sprintf( "<span class=\"toc\" ><a class=\"h%d\" href=\"#%s\" >%s</a></span>\n",
       full.N + options.HShift,
-      ToLink( ToSafeHtml( text.RmSpacesToTheSides( full.Mark.MakeCustom() ))),
-      text.RmSpacesToTheSides( fontify( full.Mark ) ) )
+      ToLink( ToSafeHtml( full.Mark.MakeCustom() )),
+      fontify( full.Mark ) )
   }
 
   return str
@@ -145,8 +137,8 @@ func ToBody( toc []katana.DocNode, options katana.Options ) (str string) {
     } else {
       str += fmt.Sprintf( "<h%d id=\"%s\" >%s</h%[1]d>\n",
       full.N + options.HShift,
-      ToLink( ToSafeHtml( text.RmSpacesToTheSides( full.Mark.MakeCustom() ))),
-      text.RmSpacesToTheSides( fontify( full.Mark ) ) )
+      ToLink( ToSafeHtml( full.Mark.MakeCustom() )),
+      fontify( full.Mark ) )
     }
 
     if len( h.Cont ) > 0 {

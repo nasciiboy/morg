@@ -97,19 +97,19 @@ func getSetupCommand( str string, docInfo *Doc ) int {
 
 func setSetupCommand( command, options, arg string, docInfo *Doc ){
   switch command {
-  case "title"      : docInfo.Title       = arg
-  case "style"      : docInfo.Style       = append( docInfo.Style, arg )
-  case "subtitle"   : docInfo.Subtitle    = arg
-  case "author"     : docInfo.Author      = append( docInfo.Author, arg )
-  case "translator" : docInfo.Translator  = append( docInfo.Translator, arg )
-  case "licence"    : docInfo.Licence     = arg
-  case "id"         : docInfo.Id          = arg
-  case "date"       : docInfo.Date        = arg
-  case "tags"       : docInfo.Tags        = arg
-  case "description": docInfo.Description = arg
-  case "mail"       : docInfo.Mail        = arg
-  case "options"    : docInfo.Options     = append( docInfo.Options, arg )
-  case "lang"       : docInfo.Lang        = arg
-  case "language"   : docInfo.Lang        = arg
+  case "title"      : docInfo.Title, _, _    = MarkupParser( arg, MarkupTitle, 0 )
+  case "style"      : docInfo.Style          = append( docInfo.Style, arg )
+  case "subtitle"   : docInfo.Subtitle, _, _ = MarkupParser( arg, MarkupSubTitle, 0 )
+  case "author"     : docInfo.Author         = append( docInfo.Author, arg )
+  case "translator" : docInfo.Translator     = append( docInfo.Translator, arg )
+  case "licence"    : docInfo.Licence        = arg
+  case "id"         : docInfo.Id             = arg
+  case "date"       : docInfo.Date           = arg
+  case "tags"       : docInfo.Tags           = arg
+  case "description": docInfo.Description    = arg
+  case "mail"       : docInfo.Mail           = arg
+  case "options"    : docInfo.Options        = append( docInfo.Options, arg )
+  case "lang"       : docInfo.Lang           = arg
+  case "language"   : docInfo.Lang           = arg
   }
 }

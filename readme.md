@@ -1083,7 +1083,7 @@ go get -u -v github.com/nasciiboy/morg
 Para exportar un documento a html
 
 ``` sh
-morg export mi-fichero.morg
+morg toHtml mi-fichero.morg
 ```
 
 Para visualizar un documento
@@ -1121,7 +1121,7 @@ sencilla
 *renderizador* (que hace realidad nuestras fantacias) de texto a texto
 
 `nirvana` (cofff, en un principio iba a ser `hana` (flor) pero lo olvide!)
-encargado de desplegar el documento de forma visual como TUI como GUI
+encargado de desplegar el documento de forma visual como TUI o como GUI
 
 `*ana` (aun no implementado) la base de datos donde se consulta si tenemos el
 documento de forma local o debe realizarce una peticion externa. Ademas debe

@@ -20,17 +20,23 @@ func main(){
   }
 
   switch os.Args[1] {
-  case "export": toBiskana( os.Args[2:] )
-  case "tui"   : toKatana ( os.Args[2:] )
-    default:
-    fmt.Fprintf( os.Stderr, "command: %s no found\n", os.Args[1] )
-    fmt.Fprintf( os.Stderr, "available commands: \"export\" and \"tui\"\n" )
-
+  case "tui"   : toNirvana ( os.Args[2:] )
+  case "toHtml": toBiskana( os.Args[2:], ".html", biskana.HTML )
+  case "toTxt" :
+    fmt.Println( "＼_(-_- 彡 -_-)_／☆･ ･ ･ ‥……━━●~*" )
+    toBiskana( os.Args[2:], ".txt" , biskana.TXT  )
+  case "help"  :
+    fmt.Printf( "Usage   : morg command file-A file-B ...\n\n" )
+    fmt.Printf( "Commands: \"tui\"    show file\n" )
+    fmt.Printf( "          \"ToHtml\" export file to Html\n" )
+  default:
+    fmt.Fprintf( os.Stderr, "Command: %s no found\n", os.Args[1] )
+    fmt.Fprintf( os.Stderr, "Available commands: \"ToHtml\" and \"tui\"\n" )
     os.Exit( 1 )
   }
 }
 
-func toKatana( files []string ){
+func toNirvana( files []string ){
   for _, inputFileName := range files {
     inputBytes, err := ioutil.ReadFile( inputFileName )
     if err != nil {
@@ -38,11 +44,11 @@ func toKatana( files []string ){
       continue
     }
 
-    tui.Show( string(inputBytes) )
+    nirvana.Show( string(inputBytes) )
   }
 }
 
-func toBiskana( files []string ){
+func toBiskana( files []string, outputPrefix string, to uint ){
   for _, inputFileName := range files {
     inputBytes, err := ioutil.ReadFile( inputFileName )
     if err != nil {
@@ -56,7 +62,7 @@ func toBiskana( files []string ){
       outputBaseName = strings.TrimSuffix( outputBaseName, suffix )
     }
 
-    outputFileName  := path.Join( pwd, outputBaseName + ".html" )
+    outputFileName  := path.Join( pwd, outputBaseName + outputPrefix )
 
     outputFile, err := os.Create( outputFileName )
     if err != nil {
@@ -64,7 +70,7 @@ func toBiskana( files []string ){
       continue
     }
 
-    outputBytes := []byte( biskana.Export( string(inputBytes), biskana.HTML ) )
+    outputBytes := []byte( biskana.Export( string(inputBytes), to ) )
 
     _, err = outputFile.Write( outputBytes )
     if err != nil {

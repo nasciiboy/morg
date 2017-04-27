@@ -10,6 +10,7 @@ const (
   MarkupErr
   MarkupHeadline
   MarkupTitle
+  MarkupSubTitle
   MarkupList
   MarkupDialog
   MarkupComment
@@ -24,6 +25,14 @@ type Markup struct {
 
 	Type      byte
   Data      string
+}
+
+func (m Markup) HasSomething() bool {
+  if len( m.Body ) != 0 || len(m.Body) != 0 || len(m.Custom) != 0 {
+    return true
+  }
+
+  return false
 }
 
 func (m Markup) String() (str string) {
@@ -73,7 +82,7 @@ func (m Markup) Rebuild() (str string) {
     return m.Data
   }
 
-  if m.Type > 10 {
+  if m.Type > 33 {
     str = "@" + string(m.Type) + "("
   }
 

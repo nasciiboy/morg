@@ -136,7 +136,7 @@ echo "hola morg" > ejemplo.morg
 y exportamos a html
 
 ``` sh
-morg export ejemplo.morg
+morg toHtml ejemplo.morg
 ```
 
 listo, se genera un fichero de nombre `ejemplo.html` con nuestro documento.
@@ -738,7 +738,6 @@ siempre el mismo numero de columnas, en el futuro se hara una tabla super
 dopada, de momento esto es lo que hay, por cierto, las tablas tienes soporte
 completo de comandos `@`
 
-
 ## Exportar y visualizar
 
 Una ves instalado morg y contando con nuestro documento (de momento) podemos
@@ -750,10 +749,10 @@ hacer 2 cosas:
    como la falta de visualizacion de tablas, imagenes, videos y otras cosas mas)
 
 
-Para lo primero el comondo a utilizar es
+Para lo primero el comando a utilizar es
 
 ```
-morg export mi-documento.morg
+morg toHtml mi-documento.morg
 ```
 
 la extencion `.morg` no es necesaria, pero es una buena costumbre marcar de que
