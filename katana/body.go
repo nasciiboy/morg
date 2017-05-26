@@ -273,11 +273,11 @@ func makeTableRow( doc *DocNode, str string ){
     var re regexp3.RE
     re.Match( line, ":|:b<:b:|>+#!" )
 
-    for i := 1; uint32(i) <= re.TotCatch(); i++ {
+    for i := 1; i <= re.TotCatch(); i++ {
       if i <= len( cells ) {
-        cells[i-1] += " " + re.GetCatch( uint32(i) )
+        cells[i-1] += " " + re.GetCatch( i )
       } else {
-        cells = append( cells, re.GetCatch( uint32(i) ) )
+        cells = append( cells, re.GetCatch( i ) )
       }
     }
   }

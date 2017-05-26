@@ -295,16 +295,6 @@ elemnentos del formato
      enim ad minim veniam.
 ```
 
-#### y si tengo una novela
-
-```
-> "Dialogo, Lorem ipsum dolor sit amet, consectetur adipiscing
-  elit, sed eiusmod tempor incidunt ut labore et dolore magna
-  aliqua. Ut enim ad minim veniam."
-```
-
-los dialogos tienen la mismas normas que una lista.
-
 #### definiciones
 
 ```
@@ -316,6 +306,50 @@ los dialogos tienen la mismas normas que una lista.
   adipiscing elit, sed eiusmod tempor incidunt ut labore et
   dolore magna aliqua. Ut enim ad minim veniam.
 ```
+
+#### y si tengo una novela
+##### Dialogos
+
+```
+> "Dialogo, Lorem ipsum dolor sit amet, consectetur adipiscing
+  elit, sed eiusmod tempor incidunt ut labore et dolore magna
+  aliqua. Ut enim ad minim veniam."
+```
+
+los dialogos tienen la mismas normas que una lista.
+
+mencionar que anque existen varias formas de solvertar el asunto para indicar
+a que personaje pertenece el dialogo, podria optarse por la siguiente sintaxis
+
+```
+> personaje A :: "Dialogo, Lorem ipsum dolor sit amet",
+
+> personaje B :: aliqua. Ut enim ad minim veniam."
+```
+
+##### "separadores"
+
+```
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor
+  incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+
+  > "Dialogo, Lorem ipsum dolor sit amet, consectetur adipiscing
+    elit, sed eiusmod tempor incidunt ut labore et dolore magna
+    aliqua. Ut enim ad minim veniam."
+
+  ....
+
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor
+  incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+```
+
+un separador representan esos cambios <em>abruptos</em> de escena argumental,
+que en papel son representados con una pagina en blanco o varios espacios
+vacios, sin cambiar de capitulo
+
+para indicar el separador se colocan cuatro puntos en una linea, sin ningun
+caracter distinto a ecepcion de espacios en blanco, este separador debe tener
+almenos una linea en blanco sobre y debajo del mismo
 
 #### about's
 
@@ -835,8 +869,7 @@ tambien hay lugar para imagenes y video
 Ya vimos que son los argumentos y el cuerpo, los `parametros` son modificadores
 para el comando, como podrian ser:
 
-- interpretar algun tipo de enfasis dentro de un
-  bloque de codigo
+- interpretar algun tipo de enfasis dentro de un bloque de codigo
 
 - agregar un identificador
 
@@ -847,6 +880,37 @@ para el comando, como podrian ser:
 Aunque los parametros pueden ser variados, deben ser pocos, uno, dos, maxime tres
 por comando de bloque. Remarcar que el formato no es para crear espectaculos
 visuales.
+
+existen varias corrientes sobre la forma en que se pueden presentar los
+<em>parametros</em>, por ejemplo: `cosa`, `bandera:valor`, `bandera=valor` y
+`-bandera valor`. Al respecto, propongo que los parametros tengan la sintaxis de
+una funcion, como la de la mayoria de lenguajes de programacion, es decir
+`bandera( valor )`, donde bandera, `especifica` el parametro que deseamos
+modificar/activar, y delimitado por parentecis el `valor` o valores a
+establecer, este podria ser una serie de valores separados por coma, donde en
+caso de precindir de ellos y aplicar el valor por defecto simpremente se dejaria
+los parentecis en blanco.
+
+Bueno, esto tiene un inconveniente, puesto que un comando de bloque, no deja de
+ser una <q>funcion</q> y ahora tendriamos mas funciones, sumado al echo de que
+para el poco instruido pudiese ser complicado... por otro lado no son funciones
+tal cual, son solo una sintaxis distinta para los parametros, tambien evitan
+cualquier anbiguedad respecto a la pertenencia de los valores y el alcance de
+estos, sumado al echo de poder realizar un propocesamiento de los valores como
+en un lenguaje de programacion, en fin, algo asi seria el aspecto para por
+ejemplo indicar que deseamos numerar las lineas en un bloque de codigo fuente en
+lenguaje C a partir con un indice que inicia en 42:
+
+```
+..src n(42) > c
+  #include <stdio.h> # esto es codigo en C
+
+  int main(){
+
+    printf("hola, que tal\n");
+    return 0;
+  }
+```
 
 algunos bloques propuestos
 
@@ -859,6 +923,7 @@ quote
 verse
 emph
 center
+tab
 bold
 italic
 src
@@ -885,11 +950,6 @@ id
 options
 lang/language
 ```
-
-a resaltar `options`, que sirve para especificar como ha de comportarse el
-traductor/visualisador del formato.  De este ultimo, al igual que en los
-parametros, aun no defino su estructura (las mas comunes son: `cosa`,
-`bandera:valor`, `bandera=valor` y `-bandera valor`)
 
 #### Tablas
 

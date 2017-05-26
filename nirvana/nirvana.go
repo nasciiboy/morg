@@ -4,8 +4,6 @@ import (
   "github.com/nasciiboy/tui"
 )
 
-const suffix = ".morg"
-
 func Show( doc string ){
   wout, err := tui.Init()
 	if err != nil {

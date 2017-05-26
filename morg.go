@@ -20,7 +20,7 @@ func main(){
   }
 
   switch os.Args[1] {
-  case "tui"   : toNirvana ( os.Args[2:] )
+  case "tui"   : toNirvana( os.Args[2:] )
   case "toHtml": toBiskana( os.Args[2:], ".html", biskana.HTML )
   case "toTxt" :
     fmt.Println( "＼_(-_- 彡 -_-)_／☆･ ･ ･ ‥……━━●~*" )

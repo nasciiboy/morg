@@ -11,8 +11,6 @@ const (
 )
 
 func Export( str string, to uint ) string {
-  if str == "" { return "" }
-
   switch to {
   case HTML: return html.MakeHtml( str )
   case TXT : return  txt.MakeTxt ( str )
@@ -22,8 +20,6 @@ func Export( str string, to uint ) string {
 }
 
 func ExportPartial( str string, to uint ) string {
-  if str == "" { return "" }
-
   switch to {
   case HTML: return html.MakeHtmlBody( str )
   case TXT : return  txt.MakeTxtBody ( str )
