@@ -68,7 +68,7 @@ func AtCommand( body, custom string, label byte ) string {
   case 'J' : return body
   case 'K' : return body // "keyword"
   case 'L' : return body // "label"
-  case 'M' : return body
+  case 'M' : return "\\(" + body + "\\)"
   case 'N' : return `<span class="defnote" id="` + ToLink(custom) + `" >` + body + "</span>"
   case 'O' : return body
   case 'P' : return body

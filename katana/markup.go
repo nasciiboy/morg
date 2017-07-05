@@ -23,12 +23,12 @@ type Markup struct {
   Body      []Markup
   Custom    []Markup
 
-	Type      byte
+  Type      byte
   Data      string
 }
 
 func (m Markup) HasSomething() bool {
-  if len( m.Body ) != 0 || len(m.Body) != 0 || len(m.Custom) != 0 {
+  if len( m.Data ) != 0 || len(m.Body) != 0 || len(m.Custom) != 0 {
     return true
   }
 
@@ -144,6 +144,8 @@ func MarckupTrigger( str string ) (Markup, int, error) {
   switch str[1] {
   case '(', ')', '[', ']', '{', '}', '@':
     return Markup{ Type: MarkupEsc, Data: str[1:2] }, 2, nil
+  case ' ':
+    return Markup{ Type: MarkupEsc, Data: str[0:2] }, 2, nil
   }
 
   switch len( str ) {

@@ -9,9 +9,14 @@ import (
 
   "github.com/nasciiboy/morg/biskana"
   "github.com/nasciiboy/morg/nirvana"
+  "github.com/nasciiboy/morg/porg"
 )
 
-const suffix = ".morg"
+const (
+  morgSuffix = ".morg"
+  porgSuffix = ".porg"
+  htmlSuffix = ".html"
+)
 
 func main(){
   if len(os.Args) < 2 {
@@ -21,10 +26,13 @@ func main(){
 
   switch os.Args[1] {
   case "tui"   : toNirvana( os.Args[2:] )
-  case "toHtml": toBiskana( os.Args[2:], ".html", biskana.HTML )
+  case "toHtml": toBiskana( os.Args[2:], htmlSuffix, biskana.HTML )
   case "toTxt" :
     fmt.Println( "＼_(-_- 彡 -_-)_／☆･ ･ ･ ‥……━━●~*" )
     toBiskana( os.Args[2:], ".txt" , biskana.TXT  )
+  case "unPorg" :
+    fmt.Println( "＼_(-_- 彡 -_-)_／☆･ ･ ･ ‥……━━●~*" )
+    toUnPorg( os.Args[2:] )
   case "help"  :
     fmt.Printf( "Usage   : morg command file-A file-B ...\n\n" )
     fmt.Printf( "Commands: \"tui\"    show file\n" )
@@ -48,6 +56,29 @@ func toNirvana( files []string ){
   }
 }
 
+func toUnPorg( files []string ){
+  for _, inputFileName := range files {
+    inputBytes, err := ioutil.ReadFile( inputFileName )
+    if err != nil {
+      fmt.Fprintf( os.Stderr, "morg: Couldn't open '%s', error: %v\n", inputFileName, err )
+      continue
+    }
+
+    pwd, _          := os.Getwd()
+    outputBaseName  := path.Base( inputFileName )
+    if strings.HasSuffix( outputBaseName, porgSuffix ) {
+      outputBaseName = strings.TrimSuffix( outputBaseName, porgSuffix )
+    }
+
+    outputFileName := path.Join( pwd, outputBaseName + morgSuffix )
+    outputBytes    := []byte( porg.UnPorg( string(inputBytes) ) )
+    err             = ioutil.WriteFile( outputFileName, outputBytes, 0666 )
+    if err != nil {
+      fmt.Fprintf( os.Stderr, "morg: %v\n", err )
+    }
+  }
+}
+
 func toBiskana( files []string, outputPrefix string, to uint ){
   for _, inputFileName := range files {
     inputBytes, err := ioutil.ReadFile( inputFileName )
@@ -58,26 +89,15 @@ func toBiskana( files []string, outputPrefix string, to uint ){
 
     pwd, _          := os.Getwd()
     outputBaseName  := path.Base( inputFileName )
-    if strings.HasSuffix( outputBaseName, suffix ) {
-      outputBaseName = strings.TrimSuffix( outputBaseName, suffix )
+    if strings.HasSuffix( outputBaseName, morgSuffix ) {
+      outputBaseName = strings.TrimSuffix( outputBaseName, morgSuffix )
     }
 
-    outputFileName  := path.Join( pwd, outputBaseName + outputPrefix )
-
-    outputFile, err := os.Create( outputFileName )
+    outputFileName := path.Join( pwd, outputBaseName + htmlSuffix )
+    outputBytes    := []byte( biskana.Export( string(inputBytes), to ) )
+    err             = ioutil.WriteFile( outputFileName, outputBytes, 0666 )
     if err != nil {
-      fmt.Fprintf( os.Stderr, "morg: Couldn't create '%s', error: %v\n", outputFileName, err )
-      continue
+      fmt.Fprintf( os.Stderr, "morg: %v\n", err )
     }
-
-    outputBytes := []byte( biskana.Export( string(inputBytes), to ) )
-
-    _, err = outputFile.Write( outputBytes )
-    if err != nil {
-      fmt.Fprintf( os.Stderr, "morg: Couldn't write '%s', error: %v\n", outputFileName, err )
-      continue
-    }
-
-    outputFile.Close()
   }
 }

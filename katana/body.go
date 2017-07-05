@@ -3,6 +3,7 @@ package katana
 import (
   "strings"
   "fmt"
+  "bufio"
 
   "github.com/nasciiboy/regexp3"
   "github.com/nasciiboy/utils/text"
@@ -63,6 +64,9 @@ func getText( doc *DocNode, str string ) int {
       doc.AddNode( Text{ Mark: mark } )
 
       return init
+    case SeparatorNode:
+      doc.AddNode( Separator{} )
+      init += width
     default      : init += width
     }
   }
@@ -307,7 +311,7 @@ func getCommand( doc *DocNode, str string ) int {
 
   switch command {
   case "title", "subtitle", "author", "translator", "lang", "language", "licence",
-       "date", "tags", "mail", "description", "id", "style", "options":
+       "date", "tags", "mail", "description", "id", "style", "options", "copy", "cover", "genre":
     _, width    = text.DragTextByIndent( str[init:], indentLevel )
     return init + width
   case "figure", "img", "video", "ignore":
@@ -317,14 +321,15 @@ func getCommand( doc *DocNode, str string ) int {
     init       += width
 
     fallthrough
-  case "center", "bold", "emph", "italic", "cols":
+  case "center", "bold", "emph", "verse", "tab", "italic", "cols":
     body, width = getBodyCommand( str[init:], closePattern, indentLevel )
     init       += width
-  case "src", "example", "pre", "diagram", "art", "quote":
+  case "src", "srci", "example", "pre", "pret", "math", "diagram", "art", "quote":
     body, width = getBodyCommand( str[init:], closePattern, indentLevel )
     init       += width
 
     body = text.RmIndent( body, indentLevel )
+  default: return init
   }
 
   doc.Add( makeCommand( command, params, args, body ) )
@@ -378,11 +383,15 @@ func makeCommand( command, params, arg, body string ) (node DocNode) {
     walkMorg( &node, body )
   case "quote":
     node = makeCommandQuote( command, params, body )
-  case "src", "example", "pre", "diagram", "art":
+  case "src","example", "pre", "math", "diagram", "art":
     node.Node = Command{ Comm: command, Params: params, Arg: arg, Body: body }
-  case "center", "bold", "emph", "italic":
+  case "srci":
+    node = makeCommandSrci( arg, params, body )
+  case "center", "bold", "verse", "emph", "tab", "italic":
     node.Node = Command{ Comm: command, Params: params }
     walkMorg( &node, body )
+  case "pret":
+    node = makeCommandPret( command, params, body )
   }
 
   return
@@ -439,6 +448,99 @@ func makeCommandQuote( command, params, body string ) (node DocNode) {
     } else {
       init += getText( &node, body[init:] )
     }
+  }
+
+  return
+}
+
+func makeCommandSrci( lang, params, body string ) (node DocNode) {
+  node.Node = Command{ Comm: "srci", Arg: lang, Params: params }
+  var re regexp3.RE
+  for init := 0; init < len(body); {
+    if re.MatchBool( body[init:], "#^[>] " ) {
+      init += srciGetCode( &node, body[ init: ] )
+    } else {
+      init += srciGetText( &node, body[ init: ] )
+    }
+  }
+
+  return
+}
+
+func srciGetCode( node *DocNode, str string ) (i int) {
+  var re regexp3.RE
+  var mark Markup
+  scanner := bufio.NewScanner( strings.NewReader( str ) )
+  scanner.Split( bufio.ScanLines )
+  if scanner.Scan() {
+    line := scanner.Text()
+    if re.MatchBool( line, "#^[>] " ) {
+      if re.MatchBool( line, "#$<:b+\\:b*>" ){
+        mark.Data = line[2:re.GpsCatch(1)] + "\n"
+        i = len( line ) + 1
+
+        scanner.Scan()
+        line = scanner.Text()
+        for re.MatchBool( line, "#$<:b+\\:b*>" ) {
+          if len( line ) >= 2 && line[:2] == "  " {
+            mark.Data += line[2:re.GpsCatch(1)] + "\n"
+          } else {
+            mark.Data += line[:re.GpsCatch(1)] + "\n"
+          }
+
+          i += len( line ) + 1
+          scanner.Scan()
+          line = scanner.Text()
+        }
+        if len( line ) >= 2 && line[:2] == "  " {
+          mark.Data += line[2:]
+        } else {
+          mark.Data += line
+        }
+      } else {
+        mark.Data = line[2:]
+        i = len( line ) + 1
+      }
+
+      node.AddNode( Text{ Mark: mark, TextType: TextCode } )
+    }
+  }
+
+  return
+}
+
+func srciGetText( node *DocNode, str string ) (i int) {
+  var re regexp3.RE
+  var mark Markup
+  scanner := bufio.NewScanner( strings.NewReader( str ) )
+  scanner.Split( bufio.ScanLines )
+  split := ""
+  for scanner.Scan() {
+    line := scanner.Text()
+    if re.MatchBool( line, "#^[>] " ) {
+      node.AddNode( Text{ Mark: mark, TextType: TextSimple } )
+      return
+    }
+
+    mark.Data += split + line
+    split = "\n"
+    i += len( line ) + 1
+  }
+
+  node.AddNode( Text{ Mark: mark, TextType: TextSimple } )
+  return len( str )
+}
+
+func makeCommandPret( command, params, body string ) (node DocNode) {
+  node.Node = Command{ Comm: command, Params: params }
+
+  scanner := bufio.NewScanner( strings.NewReader( body ) )
+  scanner.Split( bufio.ScanLines )
+
+  for scanner.Scan() {
+    mark := Markup{}
+    mark.Parse( text.Linelize( scanner.Text() ) )
+    node.AddNode( Text{ Mark: mark } )
   }
 
   return

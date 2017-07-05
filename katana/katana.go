@@ -15,6 +15,7 @@ const (
   ListElementNode
   AboutNode
   TextNode
+  SeparatorNode
   CommentNode
 )
 
@@ -43,6 +44,7 @@ type Options struct {
   Toc           bool
   Highlight     bool
   Pygments      bool
+  Mathjax       bool
   HShift        int
 }
 
@@ -54,6 +56,7 @@ type Doc struct {
   Translator  []string
   Mail          string
   Licence       string
+  Copy          string
   Id            string
   Style       []string
   Date          string
@@ -115,6 +118,7 @@ func (d *DocNode) GetLast() *DocNode {
 const (
   TextSimple = iota
   TextQuoteAuthor
+  TextCode
 )
 
 type Text struct {
@@ -163,6 +167,9 @@ type Table struct {
   Cols int
 }
 
+type Separator struct {
+}
+
 const (
   TableHead = iota
   TableBody
@@ -188,6 +195,7 @@ func (l ListElement ) Type() int { return ListElementNode  }
 func (t Table       ) Type() int { return TableNode        }
 func (t TableRow    ) Type() int { return TableRowNode     }
 func (t TableCell   ) Type() int { return TableCellNode    }
+func (s Separator   ) Type() int { return SeparatorNode    }
 
 func (h Headline    ) Get() FullData { return FullData{ Mark: h.Mark, N: h.Level } }
 func (t Text        ) Get() FullData { return FullData{ Mark: t.Mark, N: t.TextType } }
@@ -198,6 +206,7 @@ func (a About       ) Get() FullData { return FullData{ Mark: a.Mark } }
 func (t Table       ) Get() FullData { return FullData{ N: t.Rows, N2: t.Cols } }
 func (t TableRow    ) Get() FullData { return FullData{ N: t.Kind } }
 func (t TableCell   ) Get() FullData { return FullData{ Mark: t.Mark, N: t.Wide, N2: t.Length } }
+func (t Separator   ) Get() FullData { return FullData{} }
 
 func whoIsThere( line string ) int {
   var re regexp3.RE
@@ -210,6 +219,7 @@ func whoIsThere( line string ) int {
   } else if re.Match( line, "#^:b*:>:b+:S"                  ) > 0 { return ListNode
   } else if re.Match( line, "#^:b*::{2}:b+:S"               ) > 0 { return AboutNode
   } else if re.Match( line, "#^:b*:.:.:b*[:w:-:_]+[^:>]*:>" ) > 0 { return CommandNode
+  } else if re.Match( line, "#^$:b*:.{4}:b*"                ) > 0 { return SeparatorNode
   } else                                                          { return TextNode
   }
 }

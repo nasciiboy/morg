@@ -31,6 +31,7 @@ func TestExport( t *testing.T ) {
     "31_multiline-table-cels",
     // "31_complex-table",
     "40_basic-cols",
+    // "73_code-html",
 	}
 
   doBodyTestsReference( t, files )

@@ -27,6 +27,10 @@ func parseOptions( docInfo Doc ) Doc {
     docInfo.OptionsData.Pygments  = true
   }
 
+  if searchOption( docInfo.Options, "mathjax" ) {
+    docInfo.OptionsData.Mathjax   = true
+  }
+
   return docInfo
 }
 
@@ -67,7 +71,7 @@ func isSetup( str string ) bool {
 
   switch re.GetCatch( 1 ) {
   case "title", "subtitle", "author", "translator", "lang", "language", "licence",
-       "date", "tags", "mail", "description", "id", "style", "options":
+       "date", "tags", "mail", "description", "id", "style", "options", "copy", "genre", "cover":
     return true
   }
 
@@ -108,6 +112,7 @@ func setSetupCommand( command, options, arg string, docInfo *Doc ){
   case "tags"       : docInfo.Tags           = arg
   case "description": docInfo.Description    = arg
   case "mail"       : docInfo.Mail           = arg
+  case "copy"       : docInfo.Copy           = arg
   case "options"    : docInfo.Options        = append( docInfo.Options, arg )
   case "lang"       : docInfo.Lang           = arg
   case "language"   : docInfo.Lang           = arg

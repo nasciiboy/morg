@@ -35,6 +35,11 @@ const HtmlTemplate =
     <script src="highlight/highlight.pack.js" ></script>
     <script>hljs.initHighlightingOnLoad();</script>
     {{ end }}
+    {{ if .OptionsData.Mathjax }}
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    {{ end }}
   </head>
   <body>
 
@@ -152,7 +157,7 @@ func ToBody( toc []katana.DocNode, options katana.Options ) (str string) {
 }
 
 func walkContent( doc []katana.DocNode, options katana.Options ) (str string) {
-  for _, c := range( doc ) {
+  for _, c := range doc {
     full := c.Get()
     switch c.Type() {
     case katana.EmptyNode     :
@@ -295,15 +300,22 @@ func makeTableRow( Type int, cells []katana.DocNode ) (str string) {
 func makeCommand( data katana.FullData, cont []katana.DocNode, options katana.Options ) string {
   switch data.Comm {
   case "src"    : return makeCommandSrc   ( data, options )
+  case "srci"   : return makeCommandSrci  ( data, cont, options )
   case "figure" : return makeCommandFigure( data, cont, options )
   case "cols"   : return makeCommandCols  ( data, cont, options )
   case "img"    : return makeCommandImg   ( data, cont, options )
   case "video"  : return makeCommandVideo ( data, cont, options )
   case "quote"  : return makeCommandQuote ( data, cont, options )
-  case "example", "pre", "diagram", "art":
+  case "example", "pre":
     return makeCommandPre( data, options )
-  case "center", "bold", "emph", "italic":
+  case "diagram", "art":
+    return makeCommandArt( data, options )
+  case "center", "bold", "emph", "verse", "tab", "italic":
     return makeCommandFont( data, cont, options )
+  case "pret":
+    return makeCommandPret( data, cont, options )
+  case "math":
+    return makeCommandMath( data, cont, options )
   }
 
   return ""
@@ -324,10 +336,39 @@ simple:
   return
 }
 
+func makeCommandSrci( comm katana.FullData, body []katana.DocNode, options katana.Options ) (str string) {
+  str += fmt.Sprintf( "<pre class=\"srci\" ><code class=\"%s\">", comm.Arg )
+
+  for _, c := range( body ) {
+    d := c.Get()
+
+    if d.N == katana.TextCode {
+      str += makeSrciCode( d.Mark.Data, comm.Arg, options )
+    } else {
+      str += "<span class=\"srci-text\">" + ToSafeHtml( d.Mark.Data ) + "</span>\n"
+    }
+  }
+
+  str += "</code></pre>\n"
+  return
+}
+
+func makeSrciCode( code, lang string, options katana.Options ) string {
+  if options.Pygments {
+    pygCode, make := pygments.HighlightNoWrap( code, lang, "html", "utf-8" )
+
+    if make == false { return ToSafeHtml( code ) + "\n" }
+    return pygCode
+  }
+
+  return ToSafeHtml( code ) + "\n"
+}
+
 func makeCommandPre( comm katana.FullData, options katana.Options ) (str string) {
+  str += fmt.Sprintf( "<div class=\"%s-block\" >\n", comm.Comm )
   str += fmt.Sprintf( "<pre class=\"%s\" >", comm.Comm )
   str += ToSafeHtml( comm.Data )
-  str += "</pre>\n"
+  str += "</pre></div>\n"
   return
 }
 
@@ -395,6 +436,22 @@ func makeCommandFont( comm katana.FullData, body []katana.DocNode, options katan
   return
 }
 
+func makeCommandMath( comm katana.FullData, body []katana.DocNode, options katana.Options ) (str string) {
+  str += "<div class=\"mathjax\" >\n"
+  str += "$$" + comm.Data + "$$"
+  str += "</div>\n"
+  return
+}
+
+func makeCommandArt( comm katana.FullData, options katana.Options ) (str string) {
+  str += fmt.Sprintf( "<div class=\"%s-block\" >\n", comm.Comm )
+  str += fmt.Sprintf( "<pre class=\"%s\" >", comm.Comm )
+  str += ToSafeHtml( comm.Data )
+  str += "</pre>\n"
+  str += "</div>\n"
+  return
+}
+
 func makeCommandQuote( comm katana.FullData, body []katana.DocNode, options katana.Options ) (str string) {
   str += "<blockquote>\n"
 
@@ -415,5 +472,18 @@ func makeCommandQuote( comm katana.FullData, body []katana.DocNode, options kata
   }
 
   str += "</blockquote>\n"
+  return
+}
+
+func makeCommandPret( comm katana.FullData, body []katana.DocNode, options katana.Options ) (str string) {
+  str += "<div class=\"pret\" >\n"
+
+  for _, c := range( body ) {
+    nodeData := c.Get()
+    str += fontify( nodeData.Mark );
+    str += "<br>\n";
+  }
+
+  str += "</div>\n"
   return
 }
