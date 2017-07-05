@@ -497,6 +497,7 @@ func srciGetCode( node *DocNode, str string ) (i int) {
         } else {
           mark.Data += line
         }
+        i += len( line ) + 1
       } else {
         mark.Data = line[2:]
         i = len( line ) + 1
