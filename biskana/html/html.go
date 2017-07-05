@@ -339,6 +339,21 @@ simple:
 func makeCommandSrci( comm katana.FullData, body []katana.DocNode, options katana.Options ) (str string) {
   str += fmt.Sprintf( "<pre class=\"srci\" ><code class=\"%s\">", comm.Arg )
 
+  if comm.Arg == "sh" || comm.Arg == "bash" {
+    for _, c := range( body ) {
+      d := c.Get()
+
+      if d.N == katana.TextCode {
+        str += "<span class=\"prompt\">$ </span>" + makeSrciCode( d.Mark.Data, comm.Arg, options )
+      } else {
+        str += "<span class=\"srci-text\">" + ToSafeHtml( d.Mark.Data ) + "</span>\n"
+      }
+    }
+
+    str += "</code></pre>\n"
+    return
+  }
+
   for _, c := range( body ) {
     d := c.Get()
 
