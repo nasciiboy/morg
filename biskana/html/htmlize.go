@@ -107,7 +107,7 @@ func AtCommand( body, custom string, label byte ) string {
   case 'q' : return "<q>" + body + "</q>"
   case 'r' : return body // ref
   case 's' : return body
-  case 't' : return `<span id="` + custom + `" >` + body + "</span>"
+  case 't' : return `<span id="` + ToLink( ToSafeHtml( custom ) ) + `" >` + body + "</span>"
   case 'u' : return "<u>" + body + "</u>"
   case 'v' : return `<code class="verbatim" >` + body + "</code>"
   case 'w' : return body
