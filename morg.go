@@ -93,7 +93,7 @@ func toBiskana( files []string, outputPrefix string, to uint ){
       outputBaseName = strings.TrimSuffix( outputBaseName, morgSuffix )
     }
 
-    outputFileName := path.Join( pwd, outputBaseName + htmlSuffix )
+    outputFileName := path.Join( pwd, outputBaseName + outputPrefix )
     outputBytes    := []byte( biskana.Export( string(inputBytes), to ) )
     err             = ioutil.WriteFile( outputFileName, outputBytes, 0666 )
     if err != nil {
