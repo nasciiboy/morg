@@ -3,7 +3,7 @@ package katana
 import (
   "strings"
 
-  "github.com/nasciiboy/regexp3"
+  "github.com/nasciiboy/regexp4"
   "github.com/nasciiboy/utils/text"
 
 )
@@ -35,7 +35,7 @@ func parseOptions( docInfo Doc ) Doc {
 }
 
 func searchOption( str []string, keyword string ) bool {
-  var re regexp3.RE
+  var re regexp4.RE
 
   for _, s := range( str ) {
     if re.Match( s, keyword ) > 0 {
@@ -64,7 +64,7 @@ func setupHunter( str string ) (setup Doc, w int) {
 }
 
 func isSetup( str string ) bool {
-  var re regexp3.RE
+  var re regexp4.RE
   if  re.Match( str, "#^:.:.:b*<[:w:-_]+>:b*([^:>]*):>" ) == 0 {
     return false
   }
@@ -82,7 +82,7 @@ func getSetupCommand( str string, docInfo *Doc ) int {
   line, width := text.GetLine( str )
   init        := width
 
-  var re regexp3.RE
+  var re regexp4.RE
   re.Match( line, "#^:.:.:b*<[:w:-_]+>:b*<[^:>]*>:>:b*<.*>" )
 
   command := strings.ToLower( re.GetCatch( 1 ) )

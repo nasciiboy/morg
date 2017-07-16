@@ -1,7 +1,7 @@
 package katana
 
 import (
-  "github.com/nasciiboy/regexp3"
+  "github.com/nasciiboy/regexp4"
 )
 
 const (
@@ -209,7 +209,7 @@ func (t TableCell   ) Get() FullData { return FullData{ Mark: t.Mark, N: t.Wide,
 func (t Separator   ) Get() FullData { return FullData{} }
 
 func whoIsThere( line string ) int {
-  var re regexp3.RE
+  var re regexp4.RE
   if len(line) == 0                                               { return EmptyNode
   } else if re.Match( line, "#^$:s+"                        ) > 0 { return EmptyNode
   } else if re.Match( line, "#^:@(:s)"                      ) > 0 { return CommentNode
@@ -225,7 +225,7 @@ func whoIsThere( line string ) int {
 }
 
 func whatListIsThere( list string ) int {
-  var re regexp3.RE
+  var re regexp4.RE
 
   if        re.Match( list, "#^:b*:>:b+:S"            ) > 0 { return ListDialogNode
   } else if re.Match( list, "#^:b*-:b+<:S>"           ) > 0 {

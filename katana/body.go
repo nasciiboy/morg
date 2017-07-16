@@ -5,7 +5,7 @@ import (
   "fmt"
   "bufio"
 
-  "github.com/nasciiboy/regexp3"
+  "github.com/nasciiboy/regexp4"
   "github.com/nasciiboy/utils/text"
 )
 
@@ -112,7 +112,7 @@ func makeNodeList( sHead, sBody string, listType int ) (node DocNode) {
 
   switch listType {
   case ListMdefNode, ListPdefNode:
-    var re regexp3.RE
+    var re regexp4.RE
     re.Match( sHead, "#^:b*(-|:+):b+<:S>" )
     sHead = sHead[ re.GpsCatch( 1 ): ]
 
@@ -134,7 +134,7 @@ func makeNodeList( sHead, sBody string, listType int ) (node DocNode) {
 }
 
 func rmListPrefix( list string, listType int ) (text, prefix string) {
-  var re regexp3.RE
+  var re regexp4.RE
 
   switch listType {
   case ListMinusNode, ListPlusNode :
@@ -167,7 +167,7 @@ func getAbout( doc *DocNode, str string ) int {
   width       := wHead + wBody
   head        := str[:width]
 
-  var re regexp3.RE
+  var re regexp4.RE
   re.Match( str, "#^<:b*::{2}:b+>" )
   head = head[ re.LenCatch( 1 ): ]
 
@@ -186,7 +186,7 @@ func getAbout( doc *DocNode, str string ) int {
 func getHeadline( toc *DocNode, str string ) int {
   sHead, width := text.GetLine( str )
 
-  var re regexp3.RE
+  var re regexp4.RE
   re.Match( sHead, "#^<:*+>:b+<.+>" )
 
   hLevel       := len( re.GetCatch( 1 ) )
@@ -238,7 +238,7 @@ func makeTable( table *DocNode, str string ){
 }
 
 func getTableHeader( str string ) (string, int) {
-  var re regexp3.RE
+  var re regexp4.RE
   if re.Match( str, "#?\n<:b*:|(=+:|)+:b*\n*>" ) > 0 {
     return str[:re.GpsCatch( 1 )], re.GpsCatch( 1 ) + re.LenCatch( 1 )
   }
@@ -247,7 +247,7 @@ func getTableHeader( str string ) (string, int) {
 }
 
 func getTableRow( str string ) (string, int) {
-  var re regexp3.RE
+  var re regexp4.RE
   if re.Match( str, "#?\n<:b*:|(-+:|)+:b*\n*>" ) > 0 {
     return str[:re.GpsCatch( 1 )], re.GpsCatch( 1 ) + re.LenCatch( 1 )
   }
@@ -274,7 +274,7 @@ func makeTableRow( doc *DocNode, str string ){
   var cells []string
 
   for _, line := range( s ) {
-    var re regexp3.RE
+    var re regexp4.RE
     re.Match( line, ":|:b<:b:|>+#!" )
 
     for i := 1; i <= re.TotCatch(); i++ {
@@ -298,7 +298,7 @@ func getCommand( doc *DocNode, str string ) int {
   line, width  := text.GetLine( str )
   init         := width
 
-  var re regexp3.RE
+  var re regexp4.RE
   re.Match( line, "#^<:b*>:.:.:b*<[:w:-:_]+><[^:>]*>:>:b*<.*>" )
 
   indentLevel  := len(re.GetCatch( 1 )) + 2
@@ -338,7 +338,7 @@ func getCommand( doc *DocNode, str string ) int {
 }
 
 func getBodyCommand( str, closePattern string, indentLevel int ) (body string, w int) {
-  var re regexp3.RE
+  var re regexp4.RE
 
   for init, width, line := 0, 0, ""; len(str[init:]) > 0; {
     line, width = text.GetLine( str[init:] )
@@ -411,7 +411,7 @@ func makeCommandCols( command, params, arg, body string ) (node DocNode) {
 
 func getCols( str string ) (result []string) {
   init, width, last, line := 0, 0, 0, "";
-  var re regexp3.RE
+  var re regexp4.RE
   for init < len(str) {
     line, width = text.GetLine( str[init:] )
 
@@ -433,7 +433,7 @@ func getCols( str string ) (result []string) {
 func makeCommandQuote( command, params, body string ) (node DocNode) {
   node.Node = Command{ Comm: command, Params: params }
   init, width, line := 0, 0, "";
-  var re regexp3.RE
+  var re regexp4.RE
   for init < len(body) {
     line, width = text.GetLine( body[init:] )
     if whoIsThere( line ) == EmptyNode {
@@ -455,9 +455,9 @@ func makeCommandQuote( command, params, body string ) (node DocNode) {
 
 func makeCommandSrci( lang, params, body string ) (node DocNode) {
   node.Node = Command{ Comm: "srci", Arg: lang, Params: params }
-  var re regexp3.RE
+  var re regexp4.RE
   for init := 0; init < len(body); {
-    if re.MatchBool( body[init:], "#^[>] " ) {
+    if re.Find( body[init:], "#^[>] " ) {
       init += srciGetCode( &node, body[ init: ] )
     } else {
       init += srciGetText( &node, body[ init: ] )
@@ -468,20 +468,20 @@ func makeCommandSrci( lang, params, body string ) (node DocNode) {
 }
 
 func srciGetCode( node *DocNode, str string ) (i int) {
-  var re regexp3.RE
+  var re regexp4.RE
   var mark Markup
   scanner := bufio.NewScanner( strings.NewReader( str ) )
   scanner.Split( bufio.ScanLines )
   if scanner.Scan() {
     line := scanner.Text()
-    if re.MatchBool( line, "#^[>] " ) {
-      if re.MatchBool( line, "#$<:b+\\:b*>" ){
+    if re.Find( line, "#^[>] " ) {
+      if re.Find( line, "#$<:b+\\:b*>" ){
         mark.Data = line[2:re.GpsCatch(1)] + "\n"
         i = len( line ) + 1
 
         scanner.Scan()
         line = scanner.Text()
-        for re.MatchBool( line, "#$<:b+\\:b*>" ) {
+        for re.Find( line, "#$<:b+\\:b*>" ) {
           if len( line ) >= 2 && line[:2] == "  " {
             mark.Data += line[2:re.GpsCatch(1)] + "\n"
           } else {
@@ -511,14 +511,14 @@ func srciGetCode( node *DocNode, str string ) (i int) {
 }
 
 func srciGetText( node *DocNode, str string ) (i int) {
-  var re regexp3.RE
+  var re regexp4.RE
   var mark Markup
   scanner := bufio.NewScanner( strings.NewReader( str ) )
   scanner.Split( bufio.ScanLines )
   split := ""
   for scanner.Scan() {
     line := scanner.Text()
-    if re.MatchBool( line, "#^[>] " ) {
+    if re.Find( line, "#^[>] " ) {
       node.AddNode( Text{ Mark: mark, TextType: TextSimple } )
       return
     }
@@ -548,7 +548,7 @@ func makeCommandPret( command, params, body string ) (node DocNode) {
 }
 
 func dragAllTextByIndent( str string, indent int ) (string, int) {
-  var re regexp3.RE
+  var re regexp4.RE
   strIndent := fmt.Sprintf( "#^:b{%d,}:S", indent )
 
   for init, width, line := 0, 0, ""; init < len(str); {

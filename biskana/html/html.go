@@ -6,7 +6,7 @@ import (
   "fmt"
 
   "github.com/nasciiboy/morg/katana"
-  "github.com/nasciiboy/regexp3"
+  "github.com/nasciiboy/regexp4"
   "github.com/nasciiboy/pygments"
 )
 
@@ -431,7 +431,7 @@ func makeCommandVideo( comm katana.FullData, body []katana.DocNode, options kata
   str += "<video controls >\n"
   str += "<source src=\"" + comm.Arg + "\""
 
-  var re regexp3.RE
+  var re regexp4.RE
   if re.Match( comm.Arg, "#$:.<ogg|mp4>" ) > 0 {
     str +=  " type=\"video/" + re.GetCatch( 1 ) + "\""
   }
