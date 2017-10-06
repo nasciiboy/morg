@@ -1,28 +1,25 @@
 package biskana
 
 import (
+  "github.com/nasciiboy/morg/katana"
   "github.com/nasciiboy/morg/biskana/html"
-  "github.com/nasciiboy/morg/biskana/txt"
 )
 
 const (
   HTML uint = iota
-  TXT
 )
 
-func Export( str string, to uint ) string {
+func Export( doc *katana.Doc, to uint ) string {
   switch to {
-  case HTML: return html.MakeHtml( str )
-  case TXT : return  txt.MakeTxt ( str )
+  case HTML: return html.MakeHtml( doc )
   }
 
   return ""
 }
 
-func ExportPartial( str string, to uint ) string {
+func ExportPartial( doc *katana.Doc, to uint ) string {
   switch to {
-  case HTML: return html.MakeHtmlBody( str )
-  case TXT : return  txt.MakeTxtBody ( str )
+  case HTML: return html.MakeHtmlBody( doc )
   }
 
   return ""

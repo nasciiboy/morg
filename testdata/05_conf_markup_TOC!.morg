@@ -1,0 +1,25 @@
+..title       > @b(こんにちは) @e(世界)
+..subtitle    > && simple morg @i(markup) @%c(sub4title)
+..lang        > jp
+..tags        > 零, 一, 二, "三 & 四", 五, "サピエンナム。"
+..tags        > "other tag"
+..options     > toc fancyCode
+..tags        > "torgo the last"
+
+**** 04
+*** 03
+** 02 custom <> wano rano
+   lano cano pano kano
+
+* 1 Suspendisse potenti
+  Nulla posuere <> eno
+** 1.2 one-@e(two)
+
+*** 1.2.1 (A) @i(one-tree) Aliquam feugiat tellus ut neque.
+    vulputate Curabitur vestibulum lorem.  In id erat non orci commodo lobortis.
+**** 1.2.1.1
+
+
+*** 1.2.2 (B) Curabitur lacinia pulvinar nibh<>one-tree-two
+
+* 2 two

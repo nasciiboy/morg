@@ -1,0 +1,30 @@
+
+..img > img/a.png
+
+..img > img/b.png
+
+  hello img
+
+..img > img/c.png
+
+..img > /home/kuroneko/img/a.jpg
+..img > /home/kuroneko/img/a.gif
+
+  krone nerotor uo konet @b(urotoce)
+
+..figure > kuroneko
+
+  a simple krakatoa
+
+  ..img  > krakatoa.png
+
+
+..video > rat.fail.ogg
+
+  a rat.fail video
+
+..figure > kuropedia
+
+  ..audio > kuropedia.mp3
+  ..video > kuropedia.mkv
+  ..img   > kuropedia.svg

@@ -1,0 +1,14 @@
+..title    > @b(こんにちは) @e(世界)
+..subtitle > && simple morg @i(markup) @%c(sub4title)
+..lang     > jp
+..tags     > 零, 一, 二, "三 & 四", 五, "サピエンナム。"
+..tags     > "other tag"
+..description >
+  Aliquam erat volutpat.  Nunc eleifend leo vitae magna.  In id erat non orci
+  commodo lobortis.  Proin neque massa, cursus ut, gravida ut, lobortis eget,
+  lacus.  Sed diam.  Praesent fermentum tempor tellus.  Nullam tempus.  Mauris
+  ac felis vel velit tristique imperdiet.  Donec at pede.  Etiam vel neque nec
+  dui dignissim bibendum.  Vivamus id enim.  Phasellus neque orci, porta a,
+  aliquet quis, semper a, massa.  Phasellus purus.  Pellentesque tristique
+  imperdiet tortor.  Nam euismod tellus id erat.
+..tags     > "the last tag"

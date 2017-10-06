@@ -1,0 +1,79 @@
+
+..cols >
+
+  01 hola mundo
+  ccol uou aoteuhoa u aontuhoa
+<>
+
+  02 col dos
+  cols
+<>
+
+  03 tete ene ene en ene ne en enene ene ene ne ne
+  te ere r
+  u tohuou
+  tet t et et et etetetetetetete te te tete  te et et e te te
+<>
+
+  04 col tree
+
+
+..cols >
+  @b(Lorem ipsum) es el texto que se usa habitualmente en @e(diseño gráfico) en
+  demostraciones de @e(tipografías) o de @e(borradores) de diseño para probar el
+  diseño visual antes de insertar el texto final.
+
+<>
+
+  A pesar de estar extraído de ese escrito, el texto usado habitualmente@^([cita
+  requerida]) es:
+
+<>
+
+  Existen múltiples variantes del texto original, algunas casi sin parecido con
+  él.
+
+  Estas versiones incluyen letras adicionales que no son comunes en latín (como
+  la @i(k), @i(w) y @i(z)) o palabras sin sentido como @i(zzril), @i(takimata) y
+  @i(gubeergren) que intentan hacer la distribución aún más parecida al inglés.
+
+
+..cols >
+
+  ..src > sh
+    $ ./chat &
+    $ ./netcat3
+    You are 127.0.0.1:64208
+    127.0.0.1:64211 has arrived
+    Hi!
+    127.0.0.1:64208: Hi!
+
+    127.0.0.1:64211: Hi yourself.
+    ^C
+  < src..
+
+  ..src > sh
+    $ ./netcat3
+    You are 127.0.0.1:64216
+
+    127.0.0.1:64211: Welcome.
+
+    127.0.0.1:64211 has left
+  < src..
+
+<>
+
+  ..src > sh
+    $ ./netcat3
+    You are 127.0.0.1:64211
+    127.0.0.1:64208: Hi!
+    Hi yourself.
+    127.0.0.1:64211: Hi yourself.
+
+    127.0.0.1:64208 has left
+
+    127.0.0.1:64216 has arrived
+    Welcome.
+    127.0.0.1:64211: Welcome.
+    ^C
+  < src..

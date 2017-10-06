@@ -1,242 +1,133 @@
 package katana
 
 import (
+  "fmt"
+  "bytes"
+
   "github.com/nasciiboy/regexp4"
+  "github.com/nasciiboy/txt"
 )
-
-const (
-  EmptyNode = iota
-  CommandNode
-  HeadlineNode
-  TableNode
-  TableRowNode
-  TableCellNode
-  ListNode
-  ListElementNode
-  AboutNode
-  TextNode
-  SeparatorNode
-  CommentNode
-)
-
-type FullData struct {
-  Comm    string
-  Params  string
-  Arg     string
-  Data    string
-  Mark    Markup
-  Type    int
-  N       int
-  N2      int
-}
-
-type Node interface {
-  Type() int
-  Get () FullData
-}
-
-type DocNode struct {
-  Node
-  Cont []DocNode
-}
-
-type Options struct {
-  Toc           bool
-  Highlight     bool
-  Pygments      bool
-  Mathjax       bool
-  HShift        int
-}
 
 type Doc struct {
   Toc         []DocNode
+
   Title         Markup
   Subtitle      Markup
+  Lang          string
+  Licence       string
+  Date          string
+  ID            string
+  Description   string
   Author      []string
   Translator  []string
-  Mail          string
-  Licence       string
-  Copy          string
-  Id            string
+  Source      []string
   Style       []string
-  Date          string
-  Tags          string
-  Description   string
-  Lang          string
-  Options     []string
-  OptionsData   Options
+  Tags        []string
+  HShift        int
+  BoolOptions   map[string]bool      // as ==> someOption || someOption()
+  TextOptions   map[string]string    // as ==> someOption("text")
+  NumbOptions   map[string]int       // as ==> someOption( numb )
+  MultOptions   map[string][]Arg     // as ==> someOption( numb, "text", float, bool, ident, ... )
+  MoreConfigs   map[string][]string  // as ==> ..whatever > whatever
 }
 
-func (d *Doc) Parse( str string ){
-  var i int
-  *d, i = GetSetup( str )
-  d.Toc = GetToc  ( str[i:] )
+type doc struct {
+  Doc
+  toc DocNode
+  *Scanner
 }
 
-func (d *DocNode) AddNode( n Node ) {
-  d.Cont = append( d.Cont, DocNode{ n, nil } )
-}
-
-func (d *DocNode) AddNodeToLast( n Node ) {
-  last := len( d.Cont )
-
-  if last > 0 {
-    last--
-    d.Cont[ last ].AddNode( n )
-  } else {
-    d.AddNode( n )
+func Parse( name, src string ) (d *Doc, errs string) {
+  doc, buff   := new(doc), new(bytes.Buffer)
+  doc.Scanner  = new(Scanner).NewSrc( src )
+  doc.Scanner.CustomError = func (s *Scanner, msg string){
+    fmt.Fprintf( buff, "katana:%s: %s\n", s.Pos(), msg )
   }
+  doc.Scanner.Name = name
+  doc.BoolOptions  = make( map[string]bool     )
+  doc.TextOptions  = make( map[string]string   )
+  doc.NumbOptions  = make( map[string]int      )
+  doc.MultOptions  = make( map[string][]Arg    )
+  doc.MoreConfigs  = make( map[string][]string )
+  buff.Grow( 4096 )
+  doc.Scanner.Init()
+  doc.SetupHunter()
+  doc.GetToc()
+
+  return &doc.Doc, buff.String()
 }
 
-func (d *DocNode) Add( n DocNode ) {
-  d.Cont = append( d.Cont, n )
+func (d *doc) cloneStats() *doc {
+  nd := new(doc)
+  nd.Title        = d.Title
+  nd.Subtitle     = d.Subtitle
+  nd.Lang         = d.Lang
+  nd.Licence      = d.Licence
+  nd.Date         = d.Date
+  nd.ID           = d.ID
+  nd.Description  = d.Description
+  nd.Author       = d.Author
+  nd.Translator   = d.Translator
+  nd.Source       = d.Source
+  nd.Style        = d.Style
+  nd.Tags         = d.Tags
+  nd.HShift       = d.HShift
+  nd.BoolOptions  = d.BoolOptions
+  nd.TextOptions  = d.TextOptions
+  nd.NumbOptions  = d.NumbOptions
+  nd.MultOptions  = d.MultOptions
+  nd.MoreConfigs  = d.MoreConfigs
+  nd.Scanner      = d.Scanner
+
+  return nd
 }
 
-func (d *DocNode) AddToLast( n DocNode ) {
-  last := len( d.Cont )
-
-  if last > 0 {
-    last--
-    d.Cont[ last ].Add( n )
-  } else {
-    d.Add( n )
-  }
+func (d *doc) swapScanner( s *Scanner ) *doc {
+  d.Scanner = s
+  return d
 }
 
-func (d *DocNode) GetLast() *DocNode {
-  last := len( d.Cont )
-
-  if last == 0 {
-    d.AddNode( nil )
-    return &d.Cont[ 0 ]
-  }
-
-  last--
-  return &d.Cont[ last ]
-}
-
-const (
-  TextSimple = iota
-  TextQuoteAuthor
-  TextCode
-)
-
-type Text struct {
-  TextType int
-  Mark     Markup
-}
-
-type Headline struct {
-  Mark  Markup
-  Level int
-}
-
-const (
-  ListMinusNode = iota
-  ListPlusNode
-  ListNumNode
-  ListAlphaNode
-  ListMdefNode
-  ListPdefNode
-  ListDialogNode
-)
-
-type List struct {
-  ListType int
-}
-
-type ListElement struct {
-  Mark   Markup
-  Prefix string
-}
-
-type Command struct {
-  Comm   string
-  Params string
-  Arg    string
-  Mark   Markup
-  Body   string
-}
-
-type About struct {
-  Mark Markup
-}
-
-type Table struct {
-  Rows int
-  Cols int
-}
-
-type Separator struct {
-}
-
-const (
-  TableHead = iota
-  TableBody
-  TableFoot
-)
-
-type TableRow struct {
-  Kind int
-}
-
-type TableCell struct {
-  Mark   Markup
-  Wide   int
-  Length int
-}
-
-func (h Headline    ) Type() int { return HeadlineNode     }
-func (t Text        ) Type() int { return TextNode         }
-func (c Command     ) Type() int { return CommandNode      }
-func (a About       ) Type() int { return AboutNode        }
-func (l List        ) Type() int { return ListNode         }
-func (l ListElement ) Type() int { return ListElementNode  }
-func (t Table       ) Type() int { return TableNode        }
-func (t TableRow    ) Type() int { return TableRowNode     }
-func (t TableCell   ) Type() int { return TableCellNode    }
-func (s Separator   ) Type() int { return SeparatorNode    }
-
-func (h Headline    ) Get() FullData { return FullData{ Mark: h.Mark, N: h.Level } }
-func (t Text        ) Get() FullData { return FullData{ Mark: t.Mark, N: t.TextType } }
-func (l List        ) Get() FullData { return FullData{ N: l.ListType } }
-func (l ListElement ) Get() FullData { return FullData{ Mark: l.Mark, Data: l.Prefix } }
-func (c Command     ) Get() FullData { return FullData{ Comm: c.Comm, Params: c.Params, Arg: c.Arg, Mark: c.Mark, Data: c.Body } }
-func (a About       ) Get() FullData { return FullData{ Mark: a.Mark } }
-func (t Table       ) Get() FullData { return FullData{ N: t.Rows, N2: t.Cols } }
-func (t TableRow    ) Get() FullData { return FullData{ N: t.Kind } }
-func (t TableCell   ) Get() FullData { return FullData{ Mark: t.Mark, N: t.Wide, N2: t.Length } }
-func (t Separator   ) Get() FullData { return FullData{} }
+var reComment   = regexp4.Compile( "#^$:b*:@(:b+.+|:s*)"               )
+var reHeadline  = regexp4.Compile( "#^:*+:b"                           )
+var reTable     = regexp4.Compile( "#^$:b*:|([^|]+:|)+:s*"             )
+var reList      = regexp4.Compile( "#^:b*(-|:+|:>|(:d+|:a+)[.)]):b+:S" )
+var reAbout     = regexp4.Compile( "#^:b*::{2}:b+:S"                   )
+var reCommand   = regexp4.Compile( "#^:b*:.:.:b*[:w:-:_:&]+[^:>\n]*:>" )
+var reSeparator = regexp4.Compile( "#^$:b*:.{4}:s*"                    )
 
 func whoIsThere( line string ) int {
-  var re regexp4.RE
-  if len(line) == 0                                               { return EmptyNode
-  } else if re.Match( line, "#^$:s+"                        ) > 0 { return EmptyNode
-  } else if re.Match( line, "#^:@(:s)"                      ) > 0 { return CommentNode
-  } else if re.Match( line, "#^:*+:b"                       ) > 0 { return HeadlineNode
-  } else if re.Match( line, "#^$:b*:|([^|]+:|)+:s*"         ) > 0 { return TableNode
-  } else if re.Match( line, "#^:b*(-|:+|(:d+|:a+)[.)]):b+:S") > 0 { return ListNode
-  } else if re.Match( line, "#^:b*:>:b+:S"                  ) > 0 { return ListNode
-  } else if re.Match( line, "#^:b*::{2}:b+:S"               ) > 0 { return AboutNode
-  } else if re.Match( line, "#^:b*:.:.:b*[:w:-:_]+[^:>]*:>" ) > 0 { return CommandNode
-  } else if re.Match( line, "#^$:b*:.{4}:b*"                ) > 0 { return SeparatorNode
-  } else                                                          { return TextNode
+  if len( line ) == 0 || txt.HasOnlySpaces( line ) { return NodeEmpty
+  } else if reComment  .Copy().FindString( line )  { return NodeComment
+  } else if reHeadline .Copy().FindString( line )  { return NodeHeadline
+  } else if reTable    .Copy().FindString( line )  { return NodeTable
+  } else if reList     .Copy().FindString( line )  { return NodeList
+  } else if reAbout    .Copy().FindString( line )  { return NodeAbout
+  } else if reCommand  .Copy().FindString( line )  { return NodeBlock
+  } else if reSeparator.Copy().FindString( line )  { return NodeSeparator
+  } else                                           { return NodeText
   }
 }
 
-func whatListIsThere( list string ) int {
-  var re regexp4.RE
+var reListPreMP  = regexp4.Compile( "#^:b*<-|:+>:b+<:S>" )
+var reListPosDef = regexp4.Compile( "#?:b::{2}"          )
+var reListNum    = regexp4.Compile( "#^:b*:d+[.)]:b+:S"  )
+var reListAlpha  = regexp4.Compile( "#^:b*:a+[.)]:b+:S"  )
+var reListDialog = regexp4.Compile( "#^:b*:>:b+:S"       )
 
-  if        re.Match( list, "#^:b*:>:b+:S"            ) > 0 { return ListDialogNode
-  } else if re.Match( list, "#^:b*-:b+<:S>"           ) > 0 {
-    if re.Match( list[re.GpsCatch( 1 ):], "#?:b::{2}" ) > 0 { return ListMdefNode  }
-                                                              return ListMinusNode
-  } else if re.Match( list, "#^:b*:+:b+<:S>"          ) > 0 {
-    if re.Match( list[re.GpsCatch( 1 ):], "#?:b::{2}" ) > 0 { return ListPdefNode  }
-                                                              return ListPlusNode
-  } else if re.Match( list, "#^:b*:d+[.)]:b+:S"       ) > 0 { return ListNumNode
-  } else if re.Match( list, "#^:b*:a+[.)]:b+:S"       ) > 0 { return ListAlphaNode
+func whatListIsThere( line string ) int {
+  re := reListPreMP.Copy()
+  if re.FindString( line ) {
+    if reListPosDef.Copy().FindString( line[re.GpsCatch( 2 ):] ) {
+      if re.GetCatch( 1 ) == "-" { return NodeListMDef }
+      return  NodeListPDef
+    }
+
+    if re.GetCatch( 1 ) == "-" { return NodeListMinus }
+    return NodeListPlus
+  } else if reListNum   .Copy().FindString( line ) { return NodeListNum
+  } else if reListAlpha .Copy().FindString( line ) { return NodeListAlpha
+  } else if reListDialog.Copy().FindString( line ) { return NodeListDialog
   }
 
-  return EmptyNode
+  return NodeEmpty
 }

@@ -27,6 +27,7 @@ con ella.
 <blockquote>
 <em>seccion pendiente</em> llena de palabras con muchas letras, donde se
 describe el trayecto de los sistemas para documentar informacion
+<!-- http://www.danielallington.net/2016/09/the-latex-fetish/ -->
 </blockquote>
 
 Con lo anterior llegamos a la siguente conclucion, <em>tener libros impresos
@@ -428,31 +429,31 @@ marcas que los caracteres ascii algo estaremos haciendo mal.
 Algunas propuestas:
 
 ```
-- A :: acronym      - a :: abbr       - 0 ::            - : :: def
-- B ::              - b :: bold       - 1 ::            - ; ::
-- C :: smallCaps    - c :: code       - 2 ::            - = ::
-- D ::              - d :: data       - 3 ::            - ? ::
-- E :: error        - e :: emph       - 4 ::            - @ :: escape
-- F :: func         - f :: file       - 5 ::            - ` ::
-- G ::              - g ::            - 6 ::            - ' :: ‘samp’
-- H ::              - h ::            - 7 ::            - " :: “quote”
-- I ::              - i :: italic     - 8 ::            - # :: path
-- J ::              - j ::            - 9 ::
-- K :: keyword      - k :: kbd        - ^ :: sup
-- L :: label        - l :: link       - _ :: sub
-- M ::              - m :: math       - \ ::
-- N :: defnote      - n :: note       - | ::
-- O :: option       - o ::            - * ::
-- P ::              - p ::            - + ::
-- Q ::              - q :: quote      - , ::
-- R :: result       - r :: ref        - - :: —exp—
-- S ::              - s :: strike     - . ::
-- T :: radiotarget  - t :: target     - / ::
-- U ::              - u :: underline  - % :: (parentesis)
-- V :: var          - v :: verbatim   - & :: symbol
-- W :: warnig       - w ::            - $ :: command
-- X ::              - x ::            - ~ ::
-- Y ::              - y ::            - ! ::
+- A :: acronym      - a :: abbr           - 0 ::            - : :: def
+- B ::              - b :: bold           - 1 ::            - = ::
+- C :: smallCaps    - c :: code           - 2 ::            - ? ::
+- D ::              - d ::                - 3 ::            - @ :: escape
+- E :: error        - e :: emph           - 4 ::            - ` ::
+- F :: func         - f :: file           - 5 ::            - ' :: ‘samp’
+- G ::              - g ::                - 6 ::            - " :: “quote”
+- H ::              - h ::                - 7 ::            - # :: path
+- I ::              - i :: italic         - 8 ::
+- J ::              - j ::                - 9 ::
+- K :: keyword      - k :: kbd            - ^ :: sup
+- L ::              - l :: link           - _ :: sub
+- M :: Math         - m :: math (label)   - \ ::
+- N :: --> note     - n :: note -->       - | ::
+- O :: option       - o ::                - * ::
+- P ::              - p ::                - + ::
+- Q ::              - q :: quote (label)  - - :: —exp—
+- R :: result       - r :: ref            - . ::
+- S ::              - s :: strike         - / ::
+- T :: radiotarget  - t :: target         - % :: (parentesis)
+- U ::              - u :: underline      - & :: symbol
+- V :: var          - v :: verbatim       - $ :: command
+- W ::              - w ::                - ~ ::
+- X ::              - x ::                - ! :: warning
+- Y ::              - y ::
 - Z ::              - z ::
 ```
 

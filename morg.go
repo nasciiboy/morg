@@ -7,6 +7,7 @@ import (
   "strings"
   "io/ioutil"
 
+  "github.com/nasciiboy/morg/katana"
   "github.com/nasciiboy/morg/biskana"
   "github.com/nasciiboy/morg/nirvana"
   "github.com/nasciiboy/morg/porg"
@@ -27,16 +28,13 @@ func main(){
   switch os.Args[1] {
   case "tui"   : toNirvana( os.Args[2:] )
   case "toHtml": toBiskana( os.Args[2:], htmlSuffix, biskana.HTML )
-  case "toTxt" :
-    fmt.Println( "＼_(-_- 彡 -_-)_／☆･ ･ ･ ‥……━━●~*" )
-    toBiskana( os.Args[2:], ".txt" , biskana.TXT  )
   case "unPorg" :
-    fmt.Println( "＼_(-_- 彡 -_-)_／☆･ ･ ･ ‥……━━●~*" )
     toUnPorg( os.Args[2:] )
   case "help"  :
     fmt.Printf( "Usage   : morg command file-A file-B ...\n\n" )
     fmt.Printf( "Commands: \"tui\"    show file\n" )
     fmt.Printf( "          \"ToHtml\" export file to Html\n" )
+    fmt.Printf( "          \"unPorg\" convert \"file.porg\" to \"file.morg\"\n" )
   default:
     fmt.Fprintf( os.Stderr, "Command: %s no found\n", os.Args[1] )
     fmt.Fprintf( os.Stderr, "Available commands: \"ToHtml\" and \"tui\"\n" )
@@ -52,7 +50,10 @@ func toNirvana( files []string ){
       continue
     }
 
-    nirvana.Show( string(inputBytes) )
+    doc, errs      := katana.Parse( path.Base( inputFileName ), string(inputBytes) )
+    if errs != "" { fmt.Fprintf( os.Stderr, "morg:%s", errs ) }
+
+    nirvana.Show( doc )
   }
 }
 
@@ -94,7 +95,10 @@ func toBiskana( files []string, outputPrefix string, to uint ){
     }
 
     outputFileName := path.Join( pwd, outputBaseName + outputPrefix )
-    outputBytes    := []byte( biskana.Export( string(inputBytes), to ) )
+    doc, errs      := katana.Parse( outputBaseName, string(inputBytes) )
+    if errs != "" { fmt.Fprintf( os.Stderr, "morg:%s", errs ) }
+
+    outputBytes    := []byte( biskana.Export( doc, to ) )
     err             = ioutil.WriteFile( outputFileName, outputBytes, 0666 )
     if err != nil {
       fmt.Fprintf( os.Stderr, "morg: %v\n", err )

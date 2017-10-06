@@ -1,0 +1,33 @@
+..title > figure
+
+..figure > @e(08_basic)
+  @b(Çomand)
+
+..figure > 01 Lorem ipsum es el texto que se usa habitualmente en diseño gráfico en
+  demostraciones de tipografías o de borradores de diseño para probar el diseño
+  visual antes de insertar el texto final.
+
+..figure > 02 Lorem ipsum es el texto que se usa habitualmente en diseño gráfico en
+  demostraciones de tipografías o de borradores de diseño para probar el diseño
+
+  @b(b1) visual antes de insertar el texto final.
+
+..figure > 03 Lorem ipsum es el texto que se usa habitualmente en diseño gráfico en
+demostraciones de tipografías o de borradores de diseño para probar el diseño
+
+  simple visual antes de insertar el texto final.
+
+..figure > 04 Lorem ipsum es el texto que se usa habitualmente en diseño gráfico en
+
+
+  @e(b2) demostraciones de tipografías o de borradores de diseño para probar el diseño
+
+** hey
+
+..figure > 05 Lorem ipsum es el texto que se usa habitualmente en diseño gráfico en
+
+
+  @k(b3) demostraciones de tipografías o de borradores de diseño para probar el diseño
+< figure..
+
+** another hey

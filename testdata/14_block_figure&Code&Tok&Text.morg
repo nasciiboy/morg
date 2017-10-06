@@ -1,0 +1,54 @@
+..title   > @"bi(awesome) @e(morg)
+..options > fancyCode( "dracula" ) toc
+
+Nullam eu ante vel
+est convallis dignissim.
+
+Fusce suscipit, wisi nec facilisis
+
+** facilisis <> est dui
+
+..src n > c
+  #include <stdio.h>              /* incluye información acerca de la biblioteca estándar */
+
+  main(){                         /* define una función llamada main
+                                     que no recibe valores de argumentos */
+                                  /* las proposiciones de main están encerradas entre llaves */
+    printf( "hola, mundo\n" );    /* main llama a la función printf de biblioteca estándar
+                                     para escribir esta secuencia de caracteres;
+                                     \n representa el carácter nueva línea */
+  }
+< src..
+
+..figure > @e(Go) @c(Code)
+
+  simple & madao
+
+  ..src > go
+    package main
+
+    import "fmt"
+
+    func main() {
+      fmt.Println("Hello, 世界")
+    }
+  < src..
+
+  and text in figure
+
+@"b(hey listen)
+
+* one
+
+  ..figure > hey listen
+
+    ..code > sh
+      echo "hey listen"
+
+  one text
+
+one text
+
+..figure > @q(the empty space)
+
+  figure

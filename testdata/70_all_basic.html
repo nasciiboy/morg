@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" />
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es" >
+<head>
+  <title>Recursive Regexp Raptor</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="subtitle" content="La Guia Para Construir Un Motor Regexp" />
+  <meta name="author" content="nasciiboy" />
+  <meta name="licence" content="GNU FDL v1.3" />
+  <meta name="date" content="2016" />
+  <meta name="keywords" content="regex,regexp,c-prog,algorithm" />
+  <link rel="stylesheet" type="text/css" href="worg-data/worg.css" />
+</head>
+
+<body>
+<div id="toc">
+  <p>index</p>
+  <div id="toc-contents">
+  <ul>
+  <li><a class="h2" href="#fights-are-welcome" ><em>fights</em> are <b>welcome</b></a></li>
+    <ul>
+    <li><a class="h3" href="#a-sub-headline" >a sub headline</a></li>
+      <ul>
+      <li><a class="h4" href="#third-Hedline" >third Hedline</a></li>
+      </ul>
+    </ul>
+  <li><a class="h2" href="#another-headline" >another headline</a></li>
+    <ul>
+    <li><a class="h3" href="#last-headline" >last headline</a></li>
+    </ul>
+  <li><a class="h2" href="#or-no" >or no</a></li>
+  </ul>
+  </div>
+</div>
+
+<h1>Recursive Regexp Raptor</h1>
+<div class="hBody-1" >
+<blockquote>
+<p>hello morg</p>
+</blockquote>
+</div>
+<h2 id="fights-are-welcome" ><em>fights</em> are <b>welcome</b></h2>
+<div class="hBody-2" >
+<dl>
+<dt>morg</dt>
+<dd>
+<p><em>simple</em>, <b>full</b> and <i>fun</i> <kbd>markup</kbd> <code>language</code></p>
+</dd>
+</dl>
+</div>
+<h3 id="a-sub-headline" >a sub headline</h3>
+<div class="hBody-3" >
+<div class="about" >
+<div class="about-dt" >warning</div>
+<div class="about-dd" >
+<p>a simple multi line warning</p>
+</div>
+</div>
+<pre class="srci" ><code class="sh" ><span class="in" ><span class="prompt" >&gt; </span><span class="nb">export</span> <span class="nv">GOPATH</span><span class="o">=</span><span class="nv">$HOME</span>/gobook        <span class="c1"># choose workspace directory
+</span><span class="c1"></span></span><span class="in" ><span class="prompt" >&gt; </span>go get gopl.io/ch1/helloworld     <span class="c1"># fetch, build, install
+</span><span class="c1"></span></span><span class="in" ><span class="prompt" >&gt; </span><span class="nv">$GOPATH</span>/bin/helloworld            <span class="c1"># run
+</span><span class="c1"></span></span><span class="out" >Hello, 世界
+</span></code></pre>
+<div class="pre-block" >
+<pre class="pre" >hey listen
+  hey listen
+    hey listen
+</pre>
+</div>
+</div>
+<h4 id="third-Hedline" >third Hedline</h4>
+<div class="hBody-4" >
+<div class="example-block" >
+<pre class="example" >hey listen
+  hey listen
+    hey listen
+</pre>
+</div>
+<pre class="code" ><code class="chroma" ><span class="n">printf</span><span class="p">(</span> <span class="sa"></span><span class="s">&#34;hello morg&#34;</span> <span class="p">)</span>
+</code></pre>
+<p>simple text</p>
+<table>
+<thead>
+<tr><th>table headline</th><th>hey</th></tr>
+</thead>
+<tbody>
+<tr><td>row <b>1</b> width <b>bold mark</b></td><td><code>col</code> 2 <em>of my text table</em></td></tr>
+<tr><td>row <em>2</em> width <em>emph mark</em></td><td><code>col</code> 2 <em>of my text table</em></td></tr>
+<tr><td>row <span class="math" >3</span> width <span class="math" >math mark</span></td><td><code>col</code> 2 <em>of my text table</em></td></tr>
+<tr><td>row <span class="file" >4</span> width <span class="file" >file mark</span></td><td><code>col</code> 2 <em>of my text table</em></td></tr>
+<tr><td>row <i>5</i> width <span class="file" >i mark</span></td><td><code>col</code> 2 <em>of my text table</em></td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="another-headline" >another headline</h2>
+<div class="hBody-2" >
+<ul>
+<li>
+<p>list 1st</p>
+</li>
+<li>
+<p>list 2st</p>
+<div class="about" >
+<div class="about-dt" >about</div>
+<div class="about-dd" >
+<ul>
+<li>
+<p>inner about list</p>
+</li>
+</ul>
+<ul>
+<li>
+<p>other inner about list</p>
+</li>
+</ul>
+<pre class="code" ><code class="chroma" ><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+
+<span class="kd">func</span> <span class="nx">main</span><span class="p">(){</span>
+  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span> <span class="s">&#34;hello inner about src block&#34;</span> <span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+</div>
+<pre class="code" ><code class="chroma" ><span class="nb">echo</span> <span class="s2">&#34;hello morg
+</span><span class="s2"></span></code></pre>
+</li>
+<li>
+<p>list 3st</p>
+</li>
+</ul>
+<p>simple text</p>
+</div>
+<h3 id="last-headline" >last headline</h3>
+<div class="hBody-3" >
+<div class="emph" >
+<p>simple emph block</p>
+<div class="bold" >
+<p>simple inner bold block</p>
+</div>
+</div>
+</div>
+<h2 id="or-no" >or no</h2>
+<div class="hBody-2" >
+<div class="about" >
+<div class="about-dt" >Recursive Regexp Raptor <b>Licence:</b> GNU GPL v3 </div>
+<div class="about-dd" >
+<div class="figure" >
+<h1 class="figure">Code</h1>
+<pre class="code" ><code class="chroma" ><span class="cp">#include</span> <span class="cpf">&#34;regexp3.h&#34;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&#34;charUtils.h&#34;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="cp">#define TRUE                 1
+</span><span class="cp">#define FALSE                0
+</span><span class="cp"></span>
+<span class="k">struct</span> <span class="n">CATch</span> <span class="p">{</span>
+  <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">ptr</span><span class="p">[</span> <span class="n">MAX_CATCHS</span> <span class="p">];</span>
+  <span class="kt">int</span>   <span class="n">len</span><span class="p">[</span> <span class="n">MAX_CATCHS</span> <span class="p">];</span>
+  <span class="kt">int</span>   <span class="n">id</span> <span class="p">[</span> <span class="n">MAX_CATCHS</span> <span class="p">];</span>
+  <span class="kt">int</span>   <span class="n">idx</span><span class="p">;</span>
+  <span class="kt">int</span>   <span class="n">index</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">static</span> <span class="n">Catch</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">tracker</span><span class="p">(</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RE</span> <span class="o">*</span><span class="n">track</span> <span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">len</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="k">return</span> <span class="n">FALSE</span><span class="p">;</span>
+
+  <span class="k">switch</span><span class="p">(</span> <span class="o">*</span><span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="p">){</span>
+  <span class="k">case</span> <span class="sa"></span><span class="sc">&#39;:&#39;</span><span class="o">:</span> <span class="n">cutByLen</span> <span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">META</span>  <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="k">case</span> <span class="sa"></span><span class="sc">&#39;.&#39;</span><span class="o">:</span> <span class="n">cutByLen</span> <span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">POINT</span> <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="k">case</span> <span class="sa"></span><span class="sc">&#39;@&#39;</span><span class="o">:</span> <span class="n">cutByLen</span> <span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span>
+                      <span class="n">countCharDigits</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">),</span>
+                                     <span class="n">BACKREF</span> <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="k">case</span> <span class="sa"></span><span class="sc">&#39;(&#39;</span><span class="o">:</span> <span class="n">cutByType</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span>  <span class="n">GROUP</span>   <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="k">case</span> <span class="sa"></span><span class="sc">&#39;&lt;&#39;</span><span class="o">:</span> <span class="n">cutByType</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span>  <span class="n">HOOK</span>    <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="k">case</span> <span class="sa"></span><span class="sc">&#39;[&#39;</span><span class="o">:</span> <span class="n">cutByType</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span>  <span class="n">SET</span>     <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="k">default</span> <span class="o">:</span> <span class="n">cutSimple</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span>           <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">getLoops</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span> <span class="p">);</span>
+  <span class="n">getMods</span> <span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span> <span class="p">);</span>
+  <span class="k">return</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+</div>
+</div>
+<pre class="srci" ><code class="sh" ><span class="in" ><span class="prompt" >$ </span><span class="nb">echo</span> <span class="s2">&#34;hola mundo&#34;</span>
+</span><span class="out" >hola mundo
+</span></code></pre>
+<p>last text</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+
+..srci > sh
+  > echo "hello morg"
+  hello morg
+  > ls -F --color=auto ~
+  Downloads/   morg.jpg     p/                     VG/
+  apt/         fonos@       nasciiboy.github.io/   PrOg/
+  4k@          a.txt        go/                    nconf/
+
+..srci > sh
+  > echo "hello morg
+  ^ morge
+  ^ mirgo"
+  whoamy
+  > echo "hello morg
+  ^ morge
+  ^ mirgo"
+  whoareyou
+
+..srci > c
+
+
+< srci..
+
+..srci n > c
+  > #include <stdio.h>              /* incluye información acerca de la biblioteca estándar */
+  ^
+  ^ main(){                         /* define una función llamada main
+  ^                                    que no recibe valores de argumentos */
+  ^                                 /* las proposiciones de main están encerradas entre llaves */
+  ^   printf( "hola, mundo\n" );    /* main llama a la función printf de biblioteca estándar
+  ^                                    para escribir esta secuencia de caracteres;
+  ^                                    \n representa el carácter nueva línea */
+  ^ }
+  hola, code
+  hola, srci
+  hola, kana
+
+< srci..
+
+  ..srci n(-5) > go
+    package main
+
+    import "fmt"
+
+    func main() {
+      fmt.Println("Hello, 世界")
+    }
+  < srci..
+
+    ..srci n(55) > lisp
+      > (defun our-copy-tree (tr)
+      ^   (if (atom tr)
+      ^       tr
+      ^     (cons (our-copy-tree (car tr))
+      ^           (our-copy-tree (cdr tr)))))
+      (const (our-copy-tree) )
+
+    < srci..

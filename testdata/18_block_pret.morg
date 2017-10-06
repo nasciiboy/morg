@@ -1,0 +1,26 @@
+
+..pret >
+  @b(Phasellus) lacus.
+
+  Lorem ipsum @e(dolor) sit amet, consectetuer adipiscing elit.
+
+  @c(Donec) hendrerit tempor tellus.
+
+..pret >
+
+  Donec pretium posuere tellus.
+
+< pret..
+
+..pret >
+
+  @c(Proin quam nisl, tincidunt et, mattis eget, convallis nec, purus.
+  Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+  Nulla posuere.
+
+  Donec vitae dolor.)
+  @b(Nullam tristique diam non turpis.
+  Cras placerat accumsan nulla.
+
+  Nullam rutrum.
+  Nam vestibulum accumsan nisl.)

@@ -1,504 +1,456 @@
 package html
 
 import (
-  "text/template"
   "bytes"
   "fmt"
+  "strconv"
 
   "github.com/nasciiboy/morg/katana"
-  "github.com/nasciiboy/regexp4"
-  "github.com/nasciiboy/pygments"
+  "github.com/nasciiboy/txt"
 )
 
-const HtmlTemplate =
-`<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ .Lang }}" xml:lang="{{ .Lang }}" >
-  <head>
-    <title>{{ UnFontify .Title }}</title>
-    <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    {{ if hasSomething .Subtitle }}<meta name="subtitle"    content="{{ UnFontify .Subtitle }}" />{{ end }}
-    {{ range .Author     }}<meta name="author"      content="{{ .                }}" />{{ end }}
-    {{ range .Translator }}<meta name="translator"  content="{{ .                }}" />{{ end }}
-    {{ if .Licence       }}<meta name="licence"     content="{{ .Licence         }}" />{{ end }}
-    {{ if .Id            }}<meta name="id"          content="{{ .Id              }}" />{{ end }}
-    {{ if .Date          }}<meta name="date"        content="{{ .Date            }}" />{{ end }}
-    {{ if .Tags          }}<meta name="tags"        content="{{ .Tags            }}" />{{ end }}
-    {{ if .Description   }}<meta name="description" content="{{ .Description     }}" />{{ end }}
-    {{ if .Mail          }}<meta name="mail"        content="{{ .Mail            }}" />{{ end }}
+func MakeHtml( doc *katana.Doc ) string {
+  w := new( bytes.Buffer )
+  w.Grow( 65536 )
 
-    {{ range .Style    }}<link rel="stylesheet" type="text/css" href="{{ . }}" />{{ end }}
+  w.WriteString( `<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" />
+<html xmlns="http://www.w3.org/1999/xhtml" ` )
 
-    {{ if .OptionsData.Highlight }}
-    <link rel="stylesheet" href="highlight/styles/atelier-forest-dark.css" />
-    <script src="highlight/highlight.pack.js" ></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-    {{ end }}
-    {{ if .OptionsData.Mathjax }}
-    <script type="text/javascript" async
-      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>
-    {{ end }}
-  </head>
-  <body>
-
-
-{{ if .OptionsData.Toc }}
-<div id="toc">
-  <p>index</p>
-  <div id="toc-contents">
-  {{ ToToc .Toc .OptionsData }}
-  </div>
-</div>
-{{ end }}
-
-{{ if hasSomething .Title }}<h1>{{ Fontify .Title }}</h1>{{ end }}
-
-{{ ToBody .Toc .OptionsData }}
-
-  </body>
-</html>
-`
-
-func MakeHtml( str string ) string {
-  var document katana.Doc
-  document.Parse( str )
-
-  document.OptionsData.HShift = 1
-
-	t, err := template.New("HtmlTemplate").
-    Funcs(template.FuncMap{ "ToBody"       : ToBody }).
-    Funcs(template.FuncMap{ "ToToc"        : ToToc  }).
-    Funcs(template.FuncMap{ "Fontify"      : fontify  }).
-    Funcs(template.FuncMap{ "UnFontify"    : unfontify  }).
-    Funcs(template.FuncMap{ "hasSomething" : hasSomething  }).
-    Parse(HtmlTemplate)
-  if err != nil { panic( err ) }
-
-  out := bytes.Buffer{}
-  err = t.Execute( &out, document);
-  if err != nil { panic( err ) }
-
-  return out.String()
-}
-
-func MakeHtmlBody( str string ) string {
-  var document katana.Doc
-  document.Parse( str )
-
-  return ToBody( document.Toc, document.OptionsData )
-}
-
-func hasSomething( m katana.Markup ) bool {
-  return m.HasSomething()
-}
-
-func fontify( m katana.Markup ) (str string) {
-  if len( m.Custom ) == 0 && len( m.Body ) == 0 {
-    return ToSafeHtml( m.Data )
+  if doc.Lang != "" {
+    w.WriteString( `lang="` + doc.Lang + `" xml:lang="` + doc.Lang + "\" >\n" )
+  } else {
+    w.WriteString( "lang=\"en\" xml:lang=\"en\" >\n" )
   }
 
-  var custom, body string
-
-  for _, c := range m.Custom {
-    custom += fontify( c )
+  w.WriteString ( "<head>\n" )
+  if doc.Title.HasSomething() { w.WriteString ( "  <title>" + UnFontify( doc.Title ) + "</title>\n" ) }
+  w.WriteString ( `  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />` + "\n" )
+  if doc.Subtitle.HasSomething() {
+    w.WriteString( `  <meta name="subtitle" content="` + UnFontify( doc.Subtitle ) + "\" />\n" )
   }
-
-  for _, c := range m.Body {
-    body   += fontify( c )
+  for _, author := range doc.Author {
+    w.WriteString( `  <meta name="author" content="` + ToSafeHtml( author ) + "\" />\n" )
   }
-
-  if custom == "" {
-    switch m.Type {
-    case 'l', 'N', 'n', 't' :
-      custom = ToSafeHtml( m.MakeCustom() )
+  for _, translator := range doc.Translator {
+    w.WriteString( `  <meta name="translator" content="` + ToSafeHtml( translator ) + "\" />\n" )
+  }
+  for _, source := range doc.Source {
+    w.WriteString( `  <meta name="source" content="` + ToSafeHtml( source ) + "\" />\n" )
+  }
+  if doc.Licence != "" {
+    w.WriteString( `  <meta name="licence" content="` + ToSafeHtml( doc.Licence ) + "\" />\n" )
+  }
+  if doc.ID != "" {
+    w.WriteString( `  <meta name="id" content="` + ToSafeHtml( doc.ID ) + "\" />\n" )
+  }
+  if doc.Date != "" {
+    w.WriteString( `  <meta name="date" content="` + ToSafeHtml( doc.Date ) + "\" />\n" )
+  }
+  if len( doc.Tags ) != 0 {
+    w.WriteString( `  <meta name="keywords" content="` + ToSafeHtml( doc.Tags[ 0 ] ) )
+    for _, tag := range doc.Tags[ 1: ] {
+      w.WriteString( "," + ToSafeHtml( tag ) )
     }
+    w.WriteString( "\" />\n" )
+  }
+  if doc.Description != "" {
+    w.WriteString( `  <meta name="description" content="` + ToSafeHtml( doc.Description ) + "\" />\n" )
+  }
+  for _, style := range doc.Style {
+    w.WriteString( `  <link rel="stylesheet" type="text/css" href="` + ToSafeHtml( style ) + "\" />\n" )
+  }
+  if doc.TextOptions[ "fancyCode" ] != "" { WriteStyle( w, doc.TextOptions[ "fancyCode" ] ) }
+
+  if doc.BoolOptions[ "mathJax" ] {
+    w.WriteString( `  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+  </script>` + "\n" )
   }
 
-  return AtCommand( body, custom, m.Type )
+  w.WriteString( "</head>\n\n<body>\n" )
+
+  doc.HShift = 1
+  if doc.BoolOptions[ "toc" ] { writeToc( w, doc ) }
+
+  if doc.Title.HasSomething() { w.WriteString( "<h1>" + Fontify( doc.Title ) + "</h1>\n" ) }
+
+  w.WriteString( MakeHtmlBody( doc ) )
+
+  w.WriteString( "</body>\n</html>\n" )
+
+  return w.String()
 }
 
-func unfontify( m katana.Markup ) (str string) {
-  return m.String()
-}
+func writeToc( w *bytes.Buffer, doc *katana.Doc ){
+  if len( doc.Toc ) <= 1 { return }
+  w.WriteString( "<div id=\"toc\">\n  <p>index</p>\n  <div id=\"toc-contents\">\n" )
 
-func ToToc( toc []katana.DocNode, options katana.Options ) (str string) {
-  for _, h := range( toc[1:] ) {
-    full := h.Get()
-    str += fmt.Sprintf( "<span class=\"toc\" ><a class=\"h%d\" href=\"#%s\" >%s</a></span>\n",
-      full.N + options.HShift,
-      ToLink( ToSafeHtml( full.Mark.MakeCustom() )),
-      fontify( full.Mark ) )
+  index := 1
+  var toToc func( level int )
+  toToc = func( level int ){
+    spcs := fmt.Sprintf( "%*.s", level * 2, "" )
+    fmt.Fprintf( w, "%s<ul>\n", spcs )
+
+    for run := true; run;  {
+      if index >= len( doc.Toc ) { break }
+      h := doc.Toc[index].Node.(katana.Headline)
+      if h.Level > level {
+        toToc( level + 1 )
+        continue
+      } else if h.Level < level { break }
+
+      if index++; index >= len( doc.Toc ) { run = false }
+      fmt.Fprintf( w,  "%s<li><a class=\"h%d\" href=\"#%s\" >%s</a></li>\n",
+        spcs, h.Level + doc.HShift, ToLink( ToSafeHtml( h.Mark.MakeLeft() )), Fontify( h.Mark ) )
+    }
+
+    fmt.Fprintf( w, "%s</ul>\n", spcs )
   }
 
-  return str
+  toToc( 1 )
+  w.WriteString( "  </div>\n</div>\n\n" )
 }
 
-func ToBody( toc []katana.DocNode, options katana.Options ) (str string) {
-  for _, h := range( toc ) {
-    full := h.Get()
-    if full.N == 0 {
+func MakeHtmlBody( doc *katana.Doc ) string {
+  w := new( bytes.Buffer )
+  w.Grow( 65536 )
+
+  makeHtmlBody( w, doc )
+
+  return w.String()
+}
+
+func makeHtmlBody( w *bytes.Buffer, doc *katana.Doc ){
+  for _, docNode := range doc.Toc {
+    headline := docNode.Node.(katana.Headline)
+    if headline.Level == 0 {
     } else {
-      str += fmt.Sprintf( "<h%d id=\"%s\" >%s</h%[1]d>\n",
-      full.N + options.HShift,
-      ToLink( ToSafeHtml( full.Mark.MakeCustom() )),
-      fontify( full.Mark ) )
+      fmt.Fprintf( w, "<h%d id=\"%s\" >%s</h%[1]d>\n",
+        headline.Level + doc.HShift, ToLink( ToSafeHtml( headline.Mark.MakeLeft() )), Fontify( headline.Mark ) )
     }
 
-    if len( h.Cont ) > 0 {
-      str += fmt.Sprintf( "<div class=\"hBody-%d\" >\n", full.N + options.HShift )
-      str += walkContent( h.Cont, options )
-      str += "</div>\n"
+    if len( docNode.Cont ) > 0 {
+      fmt.Fprintf( w, "<div class=\"hBody-%d\" >\n", headline.Level + doc.HShift )
+      walkContent( w, docNode.Cont, doc )
+      w.WriteString( "</div>\n" )
     }
   }
-
-  return str
 }
 
-func walkContent( doc []katana.DocNode, options katana.Options ) (str string) {
-  for _, c := range doc {
-    full := c.Get()
-    switch c.Type() {
-    case katana.EmptyNode     :
-    case katana.CommentNode   :
-    case katana.CommandNode   : str += makeCommand( full, c.Cont, options )
-    case katana.HeadlineNode  :
-    case katana.TableNode     : str += makeTable  ( full, c.Cont, options )
-    case katana.ListNode      : str += makeList   ( full, c.Cont, options )
-    case katana.AboutNode     : str += makeAbout  ( full, c.Cont, options )
-    case katana.TextNode      :
-      str += "<p>"
-      str += fontify( full.Mark )
-      str += "</p>\n"
+// func makeHtmlBody( w *bytes.Buffer, doc *katana.Doc ){
+//   out := make( []*bytes.Buffer, len(doc.Toc) )
+
+//   done := make(chan struct{})
+//   for n, sec := range doc.Toc {
+//     go func( i int, docNode katana.DocNode ){
+//       out[i] = new(bytes.Buffer)
+//       w := out[i]
+//       w.Grow( 4096 )
+
+//       headline := docNode.Node.(katana.Headline)
+//       if headline.Level == 0 {
+//       } else {
+//         fmt.Fprintf( w, "<h%d id=\"%s\" >%s</h%[1]d>\n",
+//           headline.Level + doc.HShift, ToLink( ToSafeHtml( headline.Mark.MakeLeft() )), Fontify( headline.Mark ) )
+//       }
+
+//       if len( docNode.Cont ) > 0 {
+//         fmt.Fprintf( w, "<div class=\"hBody-%d\" >\n", headline.Level + doc.HShift )
+//         walkContent( w, docNode.Cont, doc )
+//         w.WriteString( "</div>\n" )
+//       }
+
+//       done <- struct{}{}
+//     }( n, sec )
+//   }
+
+//   for range doc.Toc { <-done }
+//   for _, sw := range out {
+//     w.ReadFrom( sw )
+//   }
+// }
+
+func walkContent( w *bytes.Buffer, cont []katana.DocNode, doc *katana.Doc ) {
+  for _, docNode := range cont {
+    switch docNode.NodeType() {
+    case katana.NodeEmpty     :
+    case katana.NodeComment   :
+    case katana.NodeTable     : makeTable  ( w, docNode.Node.(katana.Table   ), docNode.Cont, doc )
+    case katana.NodeList      : makeList   ( w, docNode.Node.(katana.List    ), docNode.Cont, doc )
+    case katana.NodeAbout     : makeAbout  ( w, docNode.Node.(katana.About   ), docNode.Cont, doc )
+    case katana.NodeCode      : makeCode   ( w, docNode.Node.(katana.Code    ), doc.BoolOptions[ "fancyCode" ], doc )
+    case katana.NodeSrci      : makeSrci   ( w, docNode.Node.(katana.Srci    ), doc.BoolOptions[ "fancyCode" ], doc )
+    case katana.NodeFigure    : makeFigure ( w, docNode.Node.(katana.Figure  ), docNode.Cont, doc )
+    case katana.NodeMedia     : makeMedia  ( w, docNode.Node.(katana.Media   ), docNode.Cont, doc )
+    case katana.NodeWrap      : makeWrap   ( w, docNode.Node.(katana.Wrap    ), docNode.Cont, doc )
+    case katana.NodeColumns   : makeColumns( w, docNode.Node.(katana.Columns ), docNode.Cont, doc )
+    case katana.NodePret      : makePret   ( w, docNode.Node.(katana.Pret    ), doc )
+    case katana.NodeBrick     : makeBrick  ( w, docNode.Node.(katana.Brick   ), doc )
+    case katana.NodeQuote     : makeQuote  ( w, docNode.Node.(katana.Quote   ), doc )
+    case katana.NodeText      :
+      w.WriteString( "<p>" )
+      w.WriteString( Fontify( docNode.Node.(katana.Markup) ) )
+      w.WriteString( "</p>\n" )
     }
   }
-
-  return str
 }
 
-func makeAbout( data katana.FullData, cont []katana.DocNode, options katana.Options ) (str string) {
-  str += "<div class=\"about\" >\n"
-  str += "<div class=\"about-dt\" >" + fontify( data.Mark ) + "</div>\n"
-  str += "<div class=\"about-dd\" >\n"
-  str += walkContent( cont, options )
-  str += "</div>\n"
-  str += "</div>\n"
+func makeAbout( w *bytes.Buffer, about katana.About, cont []katana.DocNode, doc *katana.Doc ) {
+  w.WriteString( "<div class=\"about\" >\n" )
+  fmt.Fprintf( w, "<div class=\"about-dt\" >%s</div>\n", Fontify( about.Mark ) )
+  if len( cont ) > 0 {
+    w.WriteString( "<div class=\"about-dd\" >\n" )
+    walkContent( w, cont, doc )
+    w.WriteString( "</div>\n" )
+  }
+  w.WriteString( "</div>\n" )
+}
+
+func makeList( w *bytes.Buffer, list katana.List, cont []katana.DocNode, doc *katana.Doc ){
+  switch list.ListType {
+  case katana.NodeListMinus, katana.NodeListPlus:
+    w.WriteString( "<ul>\n" )
+    makeListNodes( w, cont, doc )
+    w.WriteString( "</ul>\n" )
+  case katana.NodeListNum:
+    w.WriteString( "<ol class=\"num\" >\n" )
+    makeListNodes( w, cont, doc )
+    w.WriteString( "</ol>\n" )
+  case katana.NodeListAlpha:
+    w.WriteString( "<ol class=\"alpha\" >\n" )
+    makeListNodes( w, cont, doc )
+    w.WriteString( "</ol>\n" )
+  case katana.NodeListMDef, katana.NodeListPDef:
+    w.WriteString( "<dl>\n" )
+    makeDlListNodes( w, cont, doc )
+    w.WriteString( "</dl>\n" )
+  case katana.NodeListDialog:
+    w.WriteString( "<ul class=\"dialog\" >\n" )
+    makeListNodes( w, cont, doc )
+    w.WriteString( "</ul>\n" )
+  }
+}
+
+func makeListNodes( w *bytes.Buffer, cont []katana.DocNode, doc *katana.Doc ){
+  for _, element := range cont {
+    w.WriteString( "<li>\n" )
+    walkContent( w, element.Cont, doc )
+    w.WriteString( "</li>\n" )
+  }
 
   return
 }
 
-func makeList( data katana.FullData, cont []katana.DocNode, options katana.Options ) (str string) {
-  switch data.N {
-  case katana.ListMinusNode, katana.ListPlusNode :
-    str += "<ul>\n"
-    str += makeListNodes( cont, options )
-    str += "</ul>\n"
-  case katana.ListNumNode,   katana.ListAlphaNode:
-    str += "<ol>\n"
-    str += makeListNodes( cont, options )
-    str += "</ol>\n"
-  case katana.ListMdefNode,  katana.ListPdefNode :
-    str += "<dl>\n"
-    str += makeDlListNodes( cont, options )
-    str += "</dl>\n"
-  case katana.ListDialogNode:
-    str += "<ul class=\"dialog\" >\n"
-    str += makeListNodes( cont, options )
-    str += "</ul>\n"
-  }
-
-  return
-}
-
-func makeListNodes( cont []katana.DocNode, options katana.Options ) (str string) {
+func makeDlListNodes( w *bytes.Buffer, cont []katana.DocNode, doc *katana.Doc ){
   for _, element := range( cont ) {
-    str += "<li>\n"
-    str += walkContent( element.Cont, options )
-    str += "</li>\n"
-  }
+    fmt.Fprintf( w, "<dt>%s</dt>\n", Fontify( element.Node.(katana.ListElement).Mark ) )
 
-  return
+    w.WriteString( "<dd>\n" )
+    walkContent( w, element.Cont, doc )
+    w.WriteString( "</dd>\n" )
+  }
 }
 
-func makeDlListNodes( cont []katana.DocNode, options katana.Options ) (str string) {
-  for _, element := range( cont ) {
-    full := element.Get()
-
-    str += "<dt>"
-    str += fontify( full.Mark )
-    str += "</dt>\n"
-
-    str += "<dd>\n"
-    str += walkContent( element.Cont, options )
-    str += "</dd>\n"
-  }
-
-  return
-}
-
-func makeTable( data katana.FullData, rows []katana.DocNode, options katana.Options ) (str string) {
-  str += "<table>\n"
-
-  for i, row := range( rows ) {
-    d := row.Get()
+func makeTable( w *bytes.Buffer, table katana.Table, cont []katana.DocNode, doc *katana.Doc ) {
+  w.WriteString( "<table>\n" )
+  i := 0
+  for ;i < len( cont ); i++ {
+    d := cont[i].Node.(katana.TableRow)
 
     if i == 0  {
-      if d.N == katana.TableHead {
-        str += "<thead>\n"
+      if d.Type == katana.TableHead {
+        w.WriteString( "<thead>\n" )
       } else { break }
     }
 
-    if i > 0 && d.N != katana.TableHead {
-      str += "</thead>\n"
-      rows = rows[i:]
+    if d.Type != katana.TableHead {
+      w.WriteString( "</thead>\n" )
       break
     }
 
-    str += makeTableRow( d.N, row.Cont )
+    makeTableRow( w, d.Type, cont[i].Cont, doc )
   }
 
-  if len( rows ) > 0 {
-    str += "<tbody>\n"
-
-    for _, row := range( rows ) {
-      d := row.Get()
-      str += makeTableRow( d.N, row.Cont )
+  if i < len( cont ) {
+    w.WriteString( "<tbody>\n" )
+    for _, row := range cont[i:] {
+      d := row.Node.(katana.TableRow)
+      makeTableRow( w, d.Type, row.Cont, doc )
     }
-
-    str += "</tbody>\n"
+    w.WriteString( "</tbody>\n" )
   }
 
-  str += "</table>\n"
-  return
+  w.WriteString( "</table>\n" )
 }
 
-func makeTableRow( Type int, cells []katana.DocNode ) (str string) {
-  str += "<tr>"
-
-  for _, cell := range( cells ) {
+func makeTableRow( w *bytes.Buffer, Type int, cells []katana.DocNode, doc *katana.Doc ){
+  w.WriteString( "<tr>" )
+  for _, cell := range cells {
     switch Type {
-    case katana.TableHead: str += "<th>"
-    case katana.TableBody: str += "<td>"
-    case katana.TableFoot: str += "<td>"
-    }
-
-    data := cell.Get()
-    str += fontify( data.Mark )
-
-    switch Type {
-    case katana.TableHead: str += "</th>"
-    case katana.TableBody: str += "</td>"
-    case katana.TableFoot: str += "</td>"
+    case katana.TableHead: fmt.Fprintf( w, "<th>%s</th>", Fontify( cell.Node.(katana.TableCell).Mark ) )
+    case katana.TableBody: fmt.Fprintf( w, "<td>%s</td>", Fontify( cell.Node.(katana.TableCell).Mark ) )
+    case katana.TableFoot: fmt.Fprintf( w, "<td>%s</td>", Fontify( cell.Node.(katana.TableCell).Mark ) )
     }
   }
-
-  str += "</tr>\n"
-  return
+  w.WriteString( "</tr>\n" )
 }
 
-func makeCommand( data katana.FullData, cont []katana.DocNode, options katana.Options ) string {
-  switch data.Comm {
-  case "src"    : return makeCommandSrc   ( data, options )
-  case "srci"   : return makeCommandSrci  ( data, cont, options )
-  case "figure" : return makeCommandFigure( data, cont, options )
-  case "cols"   : return makeCommandCols  ( data, cont, options )
-  case "img"    : return makeCommandImg   ( data, cont, options )
-  case "video"  : return makeCommandVideo ( data, cont, options )
-  case "quote"  : return makeCommandQuote ( data, cont, options )
-  case "example", "pre":
-    return makeCommandPre( data, options )
-  case "diagram", "art":
-    return makeCommandArt( data, options )
-  case "center", "bold", "emph", "verse", "tab", "italic":
-    return makeCommandFont( data, cont, options )
-  case "pret":
-    return makeCommandPret( data, cont, options )
-  case "math":
-    return makeCommandMath( data, cont, options )
-  }
-
-  return ""
-}
-
-func makeCommandSrc( comm katana.FullData, options katana.Options ) (str string) {
-  if options.Pygments {
-    pygCode, make := pygments.Highlight( comm.Data, comm.Arg, "html", "utf-8" )
-
-    if make == false { goto simple }
-    return pygCode
-  }
-
-simple:
-  str += fmt.Sprintf( "<pre class=\"code\" ><code class=\"%s\">", comm.Arg )
-  str += ToSafeHtml( comm.Data )
-  str += "</code></pre>\n"
-  return
-}
-
-func makeCommandSrci( comm katana.FullData, body []katana.DocNode, options katana.Options ) (str string) {
-  str += fmt.Sprintf( "<pre class=\"srci\" ><code class=\"%s\">", comm.Arg )
-
-  if comm.Arg == "sh" || comm.Arg == "bash" {
-    for _, c := range( body ) {
-      d := c.Get()
-
-      if d.N == katana.TextCode {
-        str += "<span class=\"prompt\">$ </span>" + makeSrciCode( d.Mark.Data, comm.Arg, options )
-      } else {
-        str += "<span class=\"srci-text\">" + ToSafeHtml( d.Mark.Data ) + "</span>\n"
-      }
-    }
-
-    str += "</code></pre>\n"
+func makeCode( w *bytes.Buffer, c katana.Code, fancyCode bool, doc *katana.Doc ) {
+  if fancyCode {
+    if c.Style == doc.TextOptions[ "fancyCode" ] { c.Style = "" }
+    FancyCode( w, c )
     return
   }
 
-  for _, c := range( body ) {
-    d := c.Get()
+  if c.Indexed {
+    nCode( w, c );
+    return
+  }
 
-    if d.N == katana.TextCode {
-      str += makeSrciCode( d.Mark.Data, comm.Arg, options )
+  fmt.Fprintf( w, "<pre class=\"code\" ><code class=\"%s\">%s</code></pre>\n", c.Lang, ToSafeHtml( c.Body )  )
+}
+
+func nCode( w *bytes.Buffer, c katana.Code ) {
+  fmt.Fprintf( w, "<pre class=\"code\" ><code class=\"%s\">", c.Lang  )
+
+  lines := txt.GetRawLines( c.Body )
+  width := len( strconv.Itoa( len( lines ) ) )
+  n     := c.IndexNum
+  if n < 0 && n + len( lines ) > 0 { width++ }
+  for _, line := range lines {
+    fmt.Fprintf( w, "<span class=\"index\" >%*d  </span>%s", width, n, ToSafeHtml( line ) )
+    n++
+  }
+
+  fmt.Fprintf( w, "<pre class=\"code\" ><code class=\"%s\">%s</code></pre>\n", c.Lang, ToSafeHtml( c.Body )  )
+}
+
+func makeSrci( w *bytes.Buffer, srci katana.Srci, fancyCode bool, doc *katana.Doc ) {
+  fmt.Fprintf( w, "<pre class=\"srci\" ><code class=\"%s\" >", srci.Lang  )
+  for _, binary := range srci.Body {
+    if binary.On {
+      if fancyCode {
+        style := srci.Style
+        if style == doc.TextOptions[ "fancyCode" ] { style = "" }
+        fmt.Fprintf( w, "<span class=\"in\" ><span class=\"prompt\" >%s</span>", ToSafeHtml( srci.Prompt ) )
+        FancySrci( w, binary.Str, srci.Lang, style )
+        fmt.Fprintf( w, "</span>" )
+      } else {
+        fmt.Fprintf( w, "<span class=\"in\" ><span class=\"prompt\" >%s</span>%s</span>", ToSafeHtml( srci.Prompt ), ToSafeHtml( binary.Str ) )
+      }
     } else {
-      str += "<span class=\"srci-text\">" + ToSafeHtml( d.Mark.Data ) + "</span>\n"
+      fmt.Fprintf( w, "<span class=\"out\" >%s</span>", ToSafeHtml( binary.Str ) )
     }
   }
 
-  str += "</code></pre>\n"
-  return
+  fmt.Fprintf( w, "</code></pre>\n" )
 }
 
-func makeSrciCode( code, lang string, options katana.Options ) string {
-  if options.Pygments {
-    pygCode, make := pygments.HighlightNoWrap( code, lang, "html", "utf-8" )
-
-    if make == false { return ToSafeHtml( code ) + "\n" }
-    return pygCode
+func makeBrick( w *bytes.Buffer, brick katana.Brick, doc *katana.Doc ){
+  switch brick.Type {
+  case "math"   : makeMath  ( w, brick, doc )
+  default:
+    fmt.Fprintf( w, "<div class=\"%s-block\" >\n", brick.Type )
+    fmt.Fprintf( w, "<pre class=\"%s\" >", brick.Type )
+    w.WriteString( ToSafeHtml( brick.Body ) )
+    w.WriteString( "</pre>\n</div>\n" )
   }
-
-  return ToSafeHtml( code ) + "\n"
 }
 
-func makeCommandPre( comm katana.FullData, options katana.Options ) (str string) {
-  str += fmt.Sprintf( "<div class=\"%s-block\" >\n", comm.Comm )
-  str += fmt.Sprintf( "<pre class=\"%s\" >", comm.Comm )
-  str += ToSafeHtml( comm.Data )
-  str += "</pre></div>\n"
-  return
+func makeMath( w *bytes.Buffer, brick katana.Brick, doc *katana.Doc ){
+  w.WriteString( "<div class=\"mathjax\" >\n$$" )
+  w.WriteString( txt.RmSpacesToTheSides( brick.Body ) )
+  w.WriteString( "$$\n</div>\n" )
 }
 
-func makeCommandFigure( comm katana.FullData, body []katana.DocNode, options katana.Options ) (str string) {
-  str += "<div class=\"figure\" >\n"
-  str += "<p class=\"title\">" + fontify( comm.Mark ) + "</p>\n"
-  str += walkContent( body, options )
-  str += "</div>\n"
-
-  return str
+func makeFigure( w *bytes.Buffer, fig katana.Figure, cont []katana.DocNode, doc *katana.Doc ) {
+  fmt.Fprintf( w, "<div class=\"figure\" >\n<h1 class=\"figure\">%s</h1>\n", Fontify( fig.Title ) )
+  walkContent( w, cont, doc )
+  fmt.Fprintf( w, "</div>\n" )
 }
 
-func makeCommandCols( comm katana.FullData, body []katana.DocNode, options katana.Options ) (str string) {
-  str += "<div class=\"cols\" style=\"width: 100%; display: inline-flex; flex-flow: row nowrap; flex-direction: row; \">\n"
+func makeColumns( w *bytes.Buffer, columns katana.Columns, cont []katana.DocNode, doc *katana.Doc ){
+  fmt.Fprintf( w, "<div class=\"cols\" style=\"width: 100%%; display: inline-flex; flex-flow: row nowrap; flex-direction: row; \">\n" )
 
   width := 100
-  if len(body) != 0 { width = 100 / len(body) }
-  for i, c := range( body ) {
-    str += "<div class=\"cols-element\" "
-    str += fmt.Sprintf( "style=\" order: %d; width: %d%%; \">\n", i + 1, width )
-    str += walkContent( c.Cont, options )
-    str += "</div>\n"
+  if len(cont) != 0 { width = 100 / len(cont) }
+  for i, c := range cont  {
+    fmt.Fprintf( w, "<div class=\"cols-element\" style=\" order: %d; width: %d%%; \">\n", i + 1, width )
+    walkContent( w, c.Cont, doc )
+    fmt.Fprintf( w, "</div>\n" )
   }
-  str += "</div>\n"
-
-  return
+  fmt.Fprintf( w, "</div>\n" )
 }
 
-func makeCommandImg( comm katana.FullData, body []katana.DocNode, options katana.Options ) (str string) {
-  str += "<figure>\n"
-  str += "<img src=\"" + comm.Arg + "\" />\n"
-
-  if len( body ) != 0 {
-    str += "<figcaption>\n"
-    str += walkContent( body, options )
-    str += "</figcaption>\n"
+func makeMedia( w *bytes.Buffer, media katana.Media, cont []katana.DocNode, doc *katana.Doc ){
+  switch media.Type {
+  case "img"   : makeImg( w, media, cont, doc )
+  case "video" : makeVideo( w, media, cont, doc )
+  case "audio" : makeAudio( w, media, cont, doc )
   }
-
-  str += "</figure>\n"
-  return
 }
 
-func makeCommandVideo( comm katana.FullData, body []katana.DocNode, options katana.Options ) (str string) {
-  str += "<div class=\"video\">\n"
-  str += "<video controls >\n"
-  str += "<source src=\"" + comm.Arg + "\""
+func makeImg( w *bytes.Buffer, media katana.Media, cont []katana.DocNode, doc *katana.Doc ){
+  fmt.Fprintf( w, "<figure>\n" )
+  fmt.Fprintf( w, "<img src=\"%s\" />\n", media.Src )
 
-  var re regexp4.RE
-  if re.Match( comm.Arg, "#$:.<ogg|mp4>" ) > 0 {
-    str +=  " type=\"video/" + re.GetCatch( 1 ) + "\""
+  if len( cont ) > 0 {
+    fmt.Fprintf( w, "<figcaption>\n" )
+    walkContent( w, cont, doc )
+    fmt.Fprintf( w, "</figcaption>\n" )
   }
 
-  str += " >\n"
-  str += "Your browser does not support HTML5 video\n"
-  str += "</video>\n"
-  str += walkContent( body, options )
-  str += "</div>\n"
-  return
+  fmt.Fprintf( w, "</figure>\n" )
 }
 
-func makeCommandFont( comm katana.FullData, body []katana.DocNode, options katana.Options ) (str string) {
-  str += "<div class=\"" + comm.Comm + "\" >\n"
-  str += walkContent( body, options )
-  str += "</div>\n"
-  return
+func makeVideo( w *bytes.Buffer, media katana.Media, cont []katana.DocNode, doc *katana.Doc ){
+  fmt.Fprintf( w, "<div class=\"video\">\n<video controls >\n" )
+  fmt.Fprintf( w, "<source src=\"%s\" type=\"video/%s\" >\n",  media.Src, media.Ext )
+  fmt.Fprintf( w, "Your browser does not support <em>.%s</em> video\n", media.Ext )
+  fmt.Fprintf( w, "</video>\n" )
+  walkContent( w, cont, doc )
+  fmt.Fprintf( w, "</div>\n" )
 }
 
-func makeCommandMath( comm katana.FullData, body []katana.DocNode, options katana.Options ) (str string) {
-  str += "<div class=\"mathjax\" >\n"
-  str += "$$" + comm.Data + "$$"
-  str += "</div>\n"
-  return
+func makeAudio( w *bytes.Buffer, media katana.Media, cont []katana.DocNode, doc *katana.Doc ){
+  fmt.Fprintf( w, "<div class=\"audio\">\n<audio controls>\n" )
+  if media.Ext == "mp3" {
+    fmt.Fprintf( w, "<source src=\"%s\" type=\"audio/mpeg\" >\n",  media.Src )
+  } else {
+    fmt.Fprintf( w, "<source src=\"%s\" type=\"audio/%s\" >\n",  media.Src, media.Ext )
+  }
+  fmt.Fprintf( w, "Your browser does not support <em>.%s</em> audio\n", media.Ext )
+  fmt.Fprintf( w, "</audio>\n" )
+  walkContent( w, cont, doc )
+  fmt.Fprintf( w, "</div>\n" )
 }
 
-func makeCommandArt( comm katana.FullData, options katana.Options ) (str string) {
-  str += fmt.Sprintf( "<div class=\"%s-block\" >\n", comm.Comm )
-  str += fmt.Sprintf( "<pre class=\"%s\" >", comm.Comm )
-  str += ToSafeHtml( comm.Data )
-  str += "</pre>\n"
-  str += "</div>\n"
-  return
+func makeWrap( w *bytes.Buffer, wrap katana.Wrap, cont []katana.DocNode, doc *katana.Doc ) {
+  fmt.Fprintf( w, "<div class=\"%s\" >\n", wrap.Type )
+  walkContent( w, cont, doc )
+  fmt.Fprintf( w, "</div>\n" )
 }
 
-func makeCommandQuote( comm katana.FullData, body []katana.DocNode, options katana.Options ) (str string) {
-  str += "<blockquote>\n"
+func makeQuote( w *bytes.Buffer, quote katana.Quote, doc *katana.Doc ){
+  w.WriteString( "<blockquote>\n" )
 
-  for _, c := range( body ) {
-    nodeData := c.Get()
-    switch nodeData.N {
-    case katana.TextQuoteAuthor:
-      str += "<div class=\"quote-author\" >\n"
-      str += "<p>";
-      str += fontify( nodeData.Mark )
-      str += "</p>\n";
-      str += "</div>\n"
-    case katana.TextSimple:
-      str += "<p>";
-      str += fontify( nodeData.Mark );
-      str += "</p>\n";
+  for _, mark := range quote.Quotex {
+    if mark.Type == 'q' {
+      mark.Type = 0
+      w.WriteString( "<div class=\"quote-author\" >\n<p>" )
+      w.WriteString( Fontify( mark  ) )
+      w.WriteString( "</p>\n</div>\n" )
+    } else {
+      w.WriteString( "<p>" )
+      w.WriteString( Fontify( mark ) )
+      w.WriteString( "</p>\n" )
     }
   }
 
-  str += "</blockquote>\n"
-  return
+  w.WriteString( "</blockquote>\n" )
 }
 
-func makeCommandPret( comm katana.FullData, body []katana.DocNode, options katana.Options ) (str string) {
-  str += "<div class=\"pret\" >\n"
-
-  for _, c := range( body ) {
-    nodeData := c.Get()
-    str += fontify( nodeData.Mark );
-    str += "<br>\n";
-  }
-
-  str += "</div>\n"
-  return
+func makePret( w *bytes.Buffer, pret katana.Pret, doc *katana.Doc ) {
+  fmt.Fprintf( w, "<div class=\"pret\" >\n%s</div>\n", txt.RmIndent( Fontify( pret.IndentMarkup ), pret.Indent ) )
 }

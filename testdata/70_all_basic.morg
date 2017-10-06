@@ -1,0 +1,147 @@
+..title    >  Recursive Regexp Raptor
+..subtitle >  La Guia Para Construir Un Motor Regexp
+..author   >  nasciiboy
+..language >  es
+..date     >  2016
+..tags     >  regex, regexp, "c-prog", algorithm
+..licence  >  GNU FDL v1.3
+..style    >  worg-data/worg.css
+..options  >  toc fancyCode
+
+..quote >
+  hello morg
+
+* @e(fights) are @b(welcome)
+
+  - morg :: @e(simple), @b(full) and @i(fun) @k(markup) @c(language)
+
+** a sub headline
+
+   :: warning :: a simple multi line
+      warning
+
+   ..srci > sh
+     > export GOPATH=$HOME/gobook        # choose workspace directory
+     > go get gopl.io/ch1/helloworld     # fetch, build, install
+     > $GOPATH/bin/helloworld            # run
+     Hello, 世界
+   < srci..
+
+   ..pre >
+     hey listen
+       hey listen
+         hey listen
+
+*** third Hedline
+
+    ..example >
+      hey listen
+        hey listen
+          hey listen
+
+
+    ..src > c
+      printf( "hello morg" )
+
+    simple text
+
+    | table headline                  | hey                             |
+    |=================================|=================================|
+    | row  @b(1) width @b(bold mark)  | @c(col) 2 @e(of my text table)  |
+    |---------------------------------|---------------------------------|
+    | row  @e(2) width @e(emph mark)  | @c(col) 2 @e(of my text table)  |
+    |---------------------------------|---------------------------------|
+    | row  @m(3) width @m(math mark)  | @c(col) 2 @e(of my text table)  |
+    |---------------------------------|---------------------------------|
+    | row  @f(4) width @f(file mark)  | @c(col) 2 @e(of my text table)  |
+    |---------------------------------|---------------------------------|
+    | row  @i(5) width @f(i mark)     | @c(col) 2 @e(of my text table)  |
+    |---------------------------------|---------------------------------|
+
+
+* another headline
+
+- list 1st
+- list 2st
+
+  :: about ::
+
+    - inner about list
+
+    + other inner about list
+
+    ..src > go
+      package main
+
+      import "fmt"
+
+      func main(){
+        fmt.Println( "hello inner about src block" )
+      }
+    < src..
+
+  ..src > sh
+    echo "hello morg
+
+- list 3st
+
+simple text
+
+** last headline
+
+   ..emph >
+     simple emph block
+
+     ..bold >
+       simple inner bold block
+
+* or no
+
+:: Recursive Regexp Raptor
+
+   @b(Licence:) GNU GPL v3
+
+   ::
+
+   ..figure > Code
+
+     ..src > c
+       #include "regexp3.h"
+       #include "charUtils.h"
+
+       #define TRUE                 1
+       #define FALSE                0
+
+       struct CATch {
+         const char *ptr[ MAX_CATCHS ];
+         int   len[ MAX_CATCHS ];
+         int   id [ MAX_CATCHS ];
+         int   idx;
+         int   index;
+       } static Catch;
+
+       static int tracker( struct RE *rexp, struct RE *track ){
+         if( rexp->len == 0 ) return FALSE;
+
+         switch( *rexp->ptr ){
+         case ':': cutByLen ( rexp, track, 2, META  ); break;
+         case '.': cutByLen ( rexp, track, 1, POINT ); break;
+         case '@': cutByLen ( rexp, track, 1 +
+                             countCharDigits( rexp->ptr + 1 ),
+                                            BACKREF ); break;
+         case '(': cutByType( rexp, track,  GROUP   ); break;
+         case '<': cutByType( rexp, track,  HOOK    ); break;
+         case '[': cutByType( rexp, track,  SET     ); break;
+         default : cutSimple( rexp, track           ); break;
+         }
+
+         getLoops( rexp, track );
+         getMods ( rexp, track );
+         return TRUE;
+       }
+
+..srci prompt( "$ " ) > sh
+  > echo "hola mundo"
+  hola mundo
+
+last text

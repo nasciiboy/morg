@@ -1,120 +1,100 @@
 package katana
 
 import (
-  "strings"
+  "strconv"
 
-  "github.com/nasciiboy/regexp4"
-  "github.com/nasciiboy/utils/text"
-
+  "github.com/nasciiboy/txt"
 )
 
-func GetSetup( str string ) (Doc, int)  {
-  setup, width := setupHunter( str )
-
-  return parseOptions( setup ), width
-}
-
-func parseOptions( docInfo Doc ) Doc {
-  if searchOption( docInfo.Options, "highlight" ) {
-    docInfo.OptionsData.Highlight = true
-  }
-
-  if searchOption( docInfo.Options, "toc" ) {
-    docInfo.OptionsData.Toc       = true
-  }
-
-  if searchOption( docInfo.Options, "pygments" ) {
-    docInfo.OptionsData.Pygments  = true
-  }
-
-  if searchOption( docInfo.Options, "mathjax" ) {
-    docInfo.OptionsData.Mathjax   = true
-  }
-
-  return docInfo
-}
-
-func searchOption( str []string, keyword string ) bool {
-  var re regexp4.RE
-
-  for _, s := range( str ) {
-    if re.Match( s, keyword ) > 0 {
-      return true
-    }
-  }
-  return false
-}
-
-func setupHunter( str string ) (setup Doc, w int) {
-  for init, width, line := 0, 0, ""; init < len(str); {
-    line, width = text.GetLine( str[init:] )
-
-    switch whoIsThere( line ) {
-    case CommandNode:
-      if isSetup( line ) == false { return setup, init }
-
-      init += getSetupCommand( str[init:], &setup )
-    case HeadlineNode, TextNode , ListNode: return setup, init
-    case CommentNode , EmptyNode: init += width
-    default: return setup, init
+func (d *doc) SetupHunter() {
+  for d.Rune != EOF {
+    switch whoIsThere( d.Line ) {
+    case NodeBlock:
+      if block := d.GetBlock(); block != nil {
+        d.setSetupCommand( block )
+      } else { d.NextLine() }
+    case NodeComment: d.NextLine()
+    case NodeEmpty: return
+    default: return
     }
   }
 
-  return setup, len( str )
+  return
 }
 
-func isSetup( str string ) bool {
-  var re regexp4.RE
-  if  re.Match( str, "#^:.:.:b*<[:w:-_]+>:b*([^:>]*):>" ) == 0 {
-    return false
+func (d *doc) setSetupCommand( block *Block ){
+  switch block.Comm.Text {
+  case "title"      : d.Title          = block.Head.GetFancyMarkup()
+  case "subtitle"   : d.Subtitle       = block.Head.GetFancyMarkup()
+  case "author"     : d.Author         = append( d.Author, txt.RmSpacesToTheSides( block.Head.Text() ))
+  case "style"      : d.Style          = append( d.Style,  txt.RmSpacesToTheSides( block.Head.Text() ))
+  case "translator" : d.Translator     = append( d.Translator, txt.RmSpacesToTheSides( block.Head.Text() ))
+  case "source"     : d.Source         = append( d.Source, txt.RmSpacesToTheSides( block.Head.Text() ))
+  case "licence"    : d.Licence        = txt.RmSpacesToTheSides( block.Head.Text() )
+  case "id"         : d.ID             = txt.RmSpacesToTheSides( block.Head.Text() )
+  case "date"       : d.Date           = txt.RmSpacesToTheSides( block.Head.Text() )
+  case "tags"       : d.Tags           = append( d.Tags, block.Head.getTags()... )
+  case "options"    : d.setSetupOptions( block.Head.GetArgs() )
+  case "description": d.Description    = txt.Linelize( block.Head.Text() )
+  case "lang"       : d.Lang           = txt.RmSpacesToTheSides( block.Head.Text() )
+  case "language"   : d.Lang           = txt.RmSpacesToTheSides( block.Head.Text() )
+  default:
+    d.MoreConfigs[ block.Comm.Text ] = append( d.MoreConfigs[ block.Comm.Text ], block.Head.Text() )
   }
-
-  switch re.GetCatch( 1 ) {
-  case "title", "subtitle", "author", "translator", "lang", "language", "licence",
-       "date", "tags", "mail", "description", "id", "style", "options", "copy", "genre", "cover":
-    return true
-  }
-
-  return false
 }
 
-func getSetupCommand( str string, docInfo *Doc ) int {
-  line, width := text.GetLine( str )
-  init        := width
-
-  var re regexp4.RE
-  re.Match( line, "#^:.:.:b*<[:w:-_]+>:b*<[^:>]*>:>:b*<.*>" )
-
-  command := strings.ToLower( re.GetCatch( 1 ) )
-  options := re.GetCatch( 2 )
-  arg     := re.GetCatch( 3 )
-
-  var head string
-  head, width = text.DragTextByIndent( str[init:], 2 )
-  arg         = text.Linelize( text.SpaceSwap( arg + head, " ") )
-  init       += width
-
-  setSetupCommand( command, options, arg, docInfo )
-
-  return  init
+var defaultOpts = map[string][]Arg {
+  "mathJax"  : {{ "", String }},
+  "fancyCode": {{ "", String }},
+  "hShift"   : {{ "0", Int }},
+  "toc"      : {{ "true", Bool }},
 }
 
-func setSetupCommand( command, options, arg string, docInfo *Doc ){
-  switch command {
-  case "title"      : docInfo.Title, _, _    = MarkupParser( arg, MarkupTitle, 0 )
-  case "style"      : docInfo.Style          = append( docInfo.Style, arg )
-  case "subtitle"   : docInfo.Subtitle, _, _ = MarkupParser( arg, MarkupSubTitle, 0 )
-  case "author"     : docInfo.Author         = append( docInfo.Author, arg )
-  case "translator" : docInfo.Translator     = append( docInfo.Translator, arg )
-  case "licence"    : docInfo.Licence        = arg
-  case "id"         : docInfo.Id             = arg
-  case "date"       : docInfo.Date           = arg
-  case "tags"       : docInfo.Tags           = arg
-  case "description": docInfo.Description    = arg
-  case "mail"       : docInfo.Mail           = arg
-  case "copy"       : docInfo.Copy           = arg
-  case "options"    : docInfo.Options        = append( docInfo.Options, arg )
-  case "lang"       : docInfo.Lang           = arg
-  case "language"   : docInfo.Lang           = arg
+func (d *doc) setSetupOptions( args []ArgType ){
+  for _, opt := range args {
+    copt, cannon := d.syncOpt( opt, defaultOpts )
+    if !cannon {
+      d.MultOptions[ opt.Name ] = opt.Args
+      continue
+    }
+
+    switch copt.Name {
+    case "fancyCode":
+      d.BoolOptions["fancyCode"] = true
+      d.TextOptions["fancyCode"] = copt.Args[0].Data
+    case "hShif":
+      i64, _ := strconv.ParseInt( copt.Args[0].Data, 10, 8 )
+      d.HShift = int( i64 )
+    case "toc":
+      if copt.Args[ 0 ].Data == "true" {
+        d.BoolOptions[ "toc" ] = true
+      } else { d.BoolOptions[ "toc" ] = false }
+    case "mathJax":
+      d.BoolOptions[ "mathJax" ] = true
+    default:
+    }
   }
+}
+
+func (scan *Scanner) getTags() (tags []string) {
+  scan.Mode = ScanIdents | ScanFloats | ScanStrings | ScanRawStrings
+  for scan.Scan().Type != EOF {
+    switch scan.LastToken.Type {
+    case ScanIdent, ScanInt, ScanHexadecimal, ScanOctal, ScanFloat, ScanString, ScanRawString:
+      tags = append( tags, scan.LastToken.Text )
+    case ',', ';':
+      scan.Error( `Setup (Tags): empty tag` )
+      continue
+    default: scan.Error( `Setup (Tags): "` + scan.LastToken.Text + `" is not a valid tag` )
+    }
+
+    scan.Scan()
+    switch scan.LastToken.Type {
+    case ',', ';':
+    case EOF: return
+    default: scan.Error( `Setup (Tags): instert a "," or ";" between tags` )
+    }
+  }
+
+  return
 }

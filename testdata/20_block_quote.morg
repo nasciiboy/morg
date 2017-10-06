@@ -1,0 +1,41 @@
+
+..quote >
+  01-a simple quote, p1
+
+  01-b simple quote, p2
+
+..quote >
+  02-a simple quote, p1
+
+  02-b simple quote, p2
+
+  -- author
+
+..quote >
+  03 simple quote, p1
+
+  --simple author-1
+  --  @b(simple) @t(author)-@i(2)
+
+..quote >
+  04-a simple quote, p1
+
+  --simple author-1
+  04-b simple quote, p2
+
+  --@b(simple) @t(author)-@i(2)
+< quote..
+
+..quote >
+  05 morg is an libre marckup language that makes it easy to build
+  simple, reliable, and efficient documents.)
+
+  --hey
+< quote..
+
+..quote >
+  06 morg is an libre marckup language that makes it easy to build
+  simple, reliable, and efficient documents.)
+
+  --@b(hey)
+< quote..

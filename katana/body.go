@@ -1,233 +1,187 @@
 package katana
 
 import (
-  "strings"
   "fmt"
-  "bufio"
+  "strconv"
+  "strings"
 
+  "github.com/nasciiboy/txt"
   "github.com/nasciiboy/regexp4"
-  "github.com/nasciiboy/utils/text"
 )
 
-func GetToc( str string ) []DocNode {
-  var toc DocNode
-  toc.AddNode( Headline{ Level: 0 } )
-  init := walkMorg( toc.GetLast(), str )
+func (d *doc) GetToc(){
+  if d.Rune == EOF { return }
+  d.Toc = make( []DocNode, 0, 16 )
 
-  for width, line := 0, ""; init < len( str ); {
-    line, width = text.GetLine( str[init:] )
+  headline := DocNode{ Node: Headline{ Level: 0 } }
+  d.walkMorg( &headline )
+  d.Toc = append( d.Toc, headline )
 
-    if whoIsThere( line ) == HeadlineNode {
-      init += getHeadline( &toc, str[init:] )
-      init += walkMorg( toc.GetLast(), str[init:] )
-      continue
-    }
-
-    init += width
+  for d.Rune != EOF {
+    headline := d.getHeadline()
+    d.walkMorg( &headline )
+    d.Toc = append( d.Toc, headline )
   }
-
-  return toc.Cont
 }
 
-func walkMorg( doc *DocNode, str string ) int {
-  for init, width, line := 0, 0, ""; init < len(str); {
-    line, width = text.GetLine( str[init:] )
-
-    switch whoIsThere( line ) {
-    case HeadlineNode: return init
-    case TableNode   : init += getTable  ( doc, str[init:] )
-    case CommandNode : init += getCommand( doc, str[init:] )
-    case TextNode    : init += getText   ( doc, str[init:] )
-    case ListNode    : init += walkList  ( doc, str[init:] )
-    case AboutNode   : init += getAbout  ( doc, str[init:] )
-    case CommentNode : init += width
-    case EmptyNode   : init += width
-    default          : init += width
+func (d *doc) walkMorg( node *DocNode ){
+  for d.Rune != EOF {
+    switch whoIsThere( d.Line ) {
+    case NodeHeadline  : return
+    case NodeTable     : d.getTable  ( node )
+    case NodeBlock     : d.getBlock  ( node )
+    case NodeText      : d.getText   ( node )
+    case NodeList      : d.getList   ( node )
+    case NodeAbout     : d.getAbout  ( node )
+    case NodeSeparator : d.NextLine(); node.AddNode( Separator{} )
+    case NodeComment   : d.NextLine()
+    case NodeEmpty     : d.NextLine()
+    default            : d.NextLine()
     }
   }
-
-  return len( str )
 }
 
-func getText( doc *DocNode, str string ) int {
-  var mark Markup
+func (d *doc) getText( node *DocNode ){
+  mScan := d.Scanner.Copy()
+  d.NextLine()
 
-  for init, width, line := 0, 0, ""; len(str[init:]) > 0; {
-    line, width = text.GetLine( str[init:] )
-
-    switch whoIsThere( line ) {
-    case CommandNode, TextNode, ListNode:
-      init += width
-    case HeadlineNode, CommentNode, EmptyNode :
-      mark.Parse( text.Linelize(str[:init]) )
-      mark.Type = MarkupText
-      doc.AddNode( Text{ Mark: mark } )
-
-      return init
-    case SeparatorNode:
-      doc.AddNode( Separator{} )
-      init += width
-    default      : init += width
+  for run := true; run; {
+    switch whoIsThere( d.Line ) {
+    case NodeBlock, NodeText, NodeList, NodeSeparator:
+      d.NextLine()
+    case NodeHeadline, NodeComment, NodeEmpty:
+      run = false
+    default:
+      run = false
     }
   }
 
-  mark.Parse( text.Linelize( str ) )
-  mark.Type = MarkupText
-  doc.AddNode( Text{ Mark: mark } )
-
-  return len(str)
+  mScan.Src = d.PrevText()
+  node.AddNode( mScan.GetFancyMarkup() )
 }
 
-func walkList( doc *DocNode, str string ) int {
-  indentBase    := text.CountIndentSpaces( str )
-  indentLevel   := indentBase + 2
-  sHead, wHead  := dragListHeader( str, indentLevel  )
-  listType      := whatListIsThere( sHead )
-  sBody, wBody  := dragAllTextByIndent( str[wHead:], indentLevel )
-  init          := wHead + wBody
-
-  doc.AddNode( List{ ListType: listType } )
-  cListType := listType
+func (d *doc) getList( node *DocNode ){
+  indentBase  := txt.CountIndentSpaces( d.Line )
+  indentLevel := indentBase + 2
+  listType    := listHat( d.Text(), indentLevel )
+  list        := DocNode{ Node: List{ ListType: listType } }
 
   for {
-    doc.AddToLast( makeNodeList( sHead, sBody, cListType ) )
+    d.getListElement( &list, listType, indentLevel )
 
-    sHead, wHead  = dragListHeader( str[init:], indentLevel  )
-
-    cListType = whatListIsThere( sHead )
-    if whoIsThere( sHead ) != ListNode || cListType != listType || text.CountIndentSpaces( sHead ) < indentBase {
+    if whoIsThere( d.Line ) != NodeList || listType != listHat( d.Text(), indentLevel ) || txt.CountIndentSpaces( d.Line ) < indentBase {
       break
     }
-
-    sBody, wBody = dragAllTextByIndent( str[init + wHead:], indentLevel )
-    init += wHead + wBody
   }
 
-  return init
+  node.Add( list )
 }
 
-func makeNodeList( sHead, sBody string, listType int ) (node DocNode) {
-  listElement := ListElement{}
-  sHead, listElement.Prefix = rmListPrefix( sHead, listType )
+func listHat( str string, indentLevel int ) int {
+  list, _ := txt.DragLineAndTextByIndent( str, indentLevel )
+  return whatListIsThere( list )
+}
 
+var relip = regexp4.Compile( "#^<:b*<-|:+|:>|(:d+|:a+)[.)]>>" )
+var rede  = regexp4.Compile( "#?:b<::{2}><.?>" )
+
+func (d *doc) getListElement( node *DocNode, listType, indent int ){
+  list := d.Copy()
+  d.NextLine()
+  _, w := txt.DragAllTextByIndent( d.Text(), indent )
+  d.NinjaLenMoves( w )
+  list.Src = d.Src[ :d.RunePos ]
+
+  re := relip.Copy()
+  re.FindString( list.Text() )
+  prefix := re.GetCatch( 2 )
+  spaces := fmt.Sprintf( "%*s", re.LenCatch( 1 ), "" )
+  list.Src, list.RunePos, list.PrevRunePos, list.SrcPos = re.RplCatch( spaces, 1 ), 0,0,0
+  list.Line, list.getLine = "", true
+  list.Init()
+
+  listElement := DocNode{}
   switch listType {
-  case ListMdefNode, ListPdefNode:
-    var re regexp4.RE
-    re.Match( sHead, "#^:b*(-|:+):b+<:S>" )
-    sHead = sHead[ re.GpsCatch( 1 ): ]
+  case NodeListMDef, NodeListPDef:
+    head, _ := txt.DragTextByIndent( list.Text(), indent )
 
-    re.Match( sHead, "#?<:b::{2}><.?>" )
-    sBody = sHead[ re.GpsCatch( 2 ): ] + sBody
-    sHead = sHead[ :re.GpsCatch( 1 ) ]
+    if red := rede.Copy(); red.FindString( head ) {
+      mark := list.Copy()
+      mark.Src = list.Src[ :list.RunePos + red.GpsCatch(1) ]
 
-    mark := Markup{}
-    mark.Parse( text.Linelize( sHead )  )
-    listElement.Mark = mark
-
-    walkMorg( &node, sBody )
-  case ListMinusNode, ListPlusNode, ListNumNode, ListAlphaNode, ListDialogNode:
-    walkMorg( &node, sHead + "\n" + sBody )
+      list.NinjaLenMoves( red.GpsCatch(2) )
+      listElement.Node = ListElement{ Mark: mark.GetFancyMarkup(), Prefix: prefix }
+    } else {
+      listElement.Node = ListElement{ Prefix: prefix }
+    }
+    list.Line = txt.GetRawLine( list.Text() )
+  default: listElement.Node = ListElement{ Prefix: prefix }
   }
 
-  node.Node = listElement
+  d.cloneStats().swapScanner( list ).walkMorg( &listElement )
+  node.Add( listElement )
+}
+
+var rebout = regexp4.Compile( "#?:b<::{2}>" )
+
+func (d *doc) getAbout( node *DocNode ) {
+  indent := txt.CountInitSpaces( d.Line ) + 2
+  d.NinjaLenMoves( indent )
+  head := d.Copy()
+  d.NextLine()
+  _, w := txt.DragAllTextByIndent( d.Text(), indent )
+  d.NinjaLenMoves( w )
+  head.Src = d.Src[ :d.RunePos ]
+
+  about := DocNode{}
+  body := head.Copy()
+  if re := rebout.Copy(); re.FindString( body.Text() ) {
+    body.NinjaLenMoves( re.GpsCatch( 1 ) )
+    head.Src = body.Src[ :body.RunePos ]
+    body.NinjaMoves( 2 )
+    body.Line = txt.GetRawLine( body.Text() )
+    about.Node = About{ Mark: head.GetFancyMarkup() }
+  } else {
+    d.Error( "getAbout: empty body" )
+    return
+  }
+
+  d.cloneStats().swapScanner( body ).walkMorg( &about )
+  node.Add( about )
+}
+
+func (d *doc) getHeadline() (node DocNode) {
+  hLevel := txt.CountInitChars( d.Line )
+  d.NinjaMoves( hLevel )
+  mScan := d.Copy()
+  d.NextLine()
+  _, wBody := txt.DragTextByIndent( d.Src[d.RunePos:], hLevel + 1 )
+  d.NinjaLenMoves( wBody )
+  mScan.Src = d.Src[ : d.RunePos ]
+  node.Node = Headline{ Level: hLevel, Mark: mScan.GetFancyCustomMarkup( MarkupNil, 0 ) }
   return
 }
 
-func rmListPrefix( list string, listType int ) (text, prefix string) {
-  var re regexp4.RE
+func (d *doc) getTable( doc *DocNode ){
+  init, indentLevel := d.RunePos, txt.CountIndentSpaces( d.Line )
 
-  switch listType {
-  case ListMinusNode, ListPlusNode :
-    re.Match( list, "#^<:b*<-|:+>:b+>" )
-  case ListNumNode,   ListAlphaNode:
-    re.Match( list, "#^<:b*<:d+|:a+>[.)]:b+>" )
-  case ListMdefNode, ListPdefNode:
-    re.Match( list, "#^<:b*<-|:+>:b+>" )
-  case ListDialogNode: re.Match( list, "#^<:b*<:>>:b+>" )
+  for d.NextLine(); whoIsThere( d.Line ) == NodeTable && indentLevel == txt.CountIndentSpaces( d.Line ); d.NextLine() {
   }
 
-  text  = fmt.Sprintf( "%*s", re.LenCatch( 1 ), "" )
-  text += list[ re.LenCatch( 1 ):]
-  prefix = re.GetCatch( 2 )
+  strTable := txt.RmSpacesAtEnd( txt.RmIndent( d.Src[init:d.RunePos], indentLevel ) )
 
-  return
-}
-
-func dragListHeader( str string, indentLevel int ) (string, int) {
-  _, wHead    := text.GetLine( str )
-  _, wBody    := text.DragTextByIndent( str[wHead:], indentLevel )
-  width       := wHead + wBody
-
-  return str[:width], width
-}
-
-func getAbout( doc *DocNode, str string ) int {
-  _, wHead    := text.GetLine( str )
-  _, wBody    := dragAllTextByIndent( str[wHead:], text.CountIndentSpaces( str ) + 2 )
-  width       := wHead + wBody
-  head        := str[:width]
-
-  var re regexp4.RE
-  re.Match( str, "#^<:b*::{2}:b+>" )
-  head = head[ re.LenCatch( 1 ): ]
-
-  re.Match( head, "#?<:b::{2}><.?>" )
-  body := head[ re.GpsCatch( 2 ): ]
-  head  = text.Linelize( head[ :re.GpsCatch( 1 ) ] )
-
-  mark := Markup{}
-  mark.Parse( head )
-  doc.AddNode( About{ Mark: mark } )
-  walkMorg( doc.GetLast(), body )
-
-  return width
-}
-
-func getHeadline( toc *DocNode, str string ) int {
-  sHead, width := text.GetLine( str )
-
-  var re regexp4.RE
-  re.Match( sHead, "#^<:*+>:b+<.+>" )
-
-  hLevel       := len( re.GetCatch( 1 ) )
-  indentLevel  := hLevel + 1
-  sBody, wBody := text.DragTextByIndent( str[width:], indentLevel )
-  width        += wBody
-  sHead         = text.Linelize( text.SpaceSwap( re.GetCatch( 2 ) + " " +  sBody, " " ) )
-
-  if re.Match( sHead, "#?<:s*:<:>:s*>" ) > 0 {
-    sHead = re.RplCatch( "<>", 1 )
-  }
-
-  mark, _, _   := MarkupParser( sHead, MarkupHeadline, 0 )
-  toc.AddNode( Headline{ Mark: mark, Level: hLevel } )
-
-  return  width
-}
-
-func getTable( doc *DocNode, str string ) int {
-  line, width := text.GetLine( str )
-  init        := 0
-  indentLevel := text.CountIndentSpaces( line )
-  doc.AddNode( Table{} )
-
-  for whoIsThere( line ) == TableNode && indentLevel == text.CountIndentSpaces( line ) {
-    init += width
-    line, width = text.GetLine( str[init:] )
-  }
-
-  strTable := text.RmSpacesAtEnd( text.RmIndent( str[:init], indentLevel ) )
-  makeTable( doc.GetLast(), strTable )
-
-  return init
+  table := DocNode{ Node: Table{} }
+  makeTable( &table, strTable )
+  doc.Add( table )
 }
 
 func makeTable( table *DocNode, str string ){
   headerTable, width := getTableHeader( str )
 
   if width > 0 {
-    table.AddNode( TableRow{ Kind: TableHead } )
-    makeTableRow( table.GetLast(), headerTable )
+    tableRow := DocNode{ Node: TableRow{ Type: TableHead } }
+    makeTableRow( &tableRow, headerTable )
+    table.Add( tableRow )
   }
 
   bodyTable := str[width:]
@@ -237,18 +191,20 @@ func makeTable( table *DocNode, str string ){
   }
 }
 
+var rehe = regexp4.Compile( "#?\n<:b*:|(=+:|)+:b*\n*>" )
+
 func getTableHeader( str string ) (string, int) {
-  var re regexp4.RE
-  if re.Match( str, "#?\n<:b*:|(=+:|)+:b*\n*>" ) > 0 {
+  if re := rehe.Copy(); re.FindString( str ) {
     return str[:re.GpsCatch( 1 )], re.GpsCatch( 1 ) + re.LenCatch( 1 )
   }
 
   return "", 0
 }
 
+var rero = regexp4.Compile( "#?\n<:b*:|(-+:|)+:b*\n*>" )
+
 func getTableRow( str string ) (string, int) {
-  var re regexp4.RE
-  if re.Match( str, "#?\n<:b*:|(-+:|)+:b*\n*>" ) > 0 {
+  if re := rero.Copy(); re.FindString( str ) {
     return str[:re.GpsCatch( 1 )], re.GpsCatch( 1 ) + re.LenCatch( 1 )
   }
 
@@ -258,19 +214,21 @@ func getTableRow( str string ) (string, int) {
 func makeTableBody( table *DocNode, str string ){
   row, init := getTableRow( str )
   for init < len(str) {
-    table.AddNode( TableRow{ Kind: TableBody } )
-    makeTableRow( table.GetLast(), row )
+    tableRow := DocNode{ Node: TableRow{ Type: TableBody } }
+    makeTableRow( &tableRow, row )
+    table.Add( tableRow )
 
     irow, width := getTableRow( str[init:] )
     row,  init   = irow, init + width
   }
 
-  table.AddNode( TableRow{ Kind: TableBody } )
-  makeTableRow( table.GetLast(), row )
+  tableRow := DocNode{ Node: TableRow{ Type: TableBody } }
+  makeTableRow( &tableRow, row )
+  table.Add( tableRow )
 }
 
 func makeTableRow( doc *DocNode, str string ){
-  s := text.GetLines( str )
+  s := txt.GetLines( str )
   var cells []string
 
   for _, line := range( s ) {
@@ -286,285 +244,206 @@ func makeTableRow( doc *DocNode, str string ){
     }
   }
 
-  m := Markup{}
   for _, c := range( cells ) {
-    m.Parse( text.Linelize( text.SpaceSwap( c, " " ) ) )
+    m := new(Scanner).NewSrc( txt.Linelize( txt.SpaceSwap( c, " " ) ) ).QuietSplash().Init().GetMarkup()
+
     doc.AddNode( TableCell{ Mark: m } )
   }
 }
 
-
-func getCommand( doc *DocNode, str string ) int {
-  line, width  := text.GetLine( str )
-  init         := width
-
-  var re regexp4.RE
-  re.Match( line, "#^<:b*>:.:.:b*<[:w:-:_]+><[^:>]*>:>:b*<.*>" )
-
-  indentLevel  := len(re.GetCatch( 1 )) + 2
-  command      := strings.ToLower( re.GetCatch( 2 ) )
-  params       := re.GetCatch( 3 )
-  args         := re.GetCatch( 4 )
-  body         := ""
-
-  closePattern := fmt.Sprintf( "#^%s:< (%s)#*:.:.", re.GetCatch( 1 ), command )
-
-  switch command {
-  case "title", "subtitle", "author", "translator", "lang", "language", "licence",
-       "date", "tags", "mail", "description", "id", "style", "options", "copy", "cover", "genre":
-    _, width    = text.DragTextByIndent( str[init:], indentLevel )
-    return init + width
-  case "figure", "img", "video", "ignore":
-    var head string
-    head, width = text.DragTextByIndent( str[init:], indentLevel )
-    args        = text.Linelize( text.SpaceSwap( args + head, " ") )
-    init       += width
-
-    fallthrough
-  case "center", "bold", "emph", "verse", "tab", "italic", "cols":
-    body, width = getBodyCommand( str[init:], closePattern, indentLevel )
-    init       += width
-  case "src", "srci", "example", "pre", "pret", "math", "diagram", "art", "quote":
-    body, width = getBodyCommand( str[init:], closePattern, indentLevel )
-    init       += width
-
-    body = text.RmIndent( body, indentLevel )
-  default: return init
+func (d *doc) getBlock( node *DocNode ){
+  if block := d.GetBlock(); block != nil {
+    d.parseBlock( node, block )
+    return
   }
 
-  doc.Add( makeCommand( command, params, args, body ) )
-
-  return  init
+  d.NextLine()
 }
 
-func getBodyCommand( str, closePattern string, indentLevel int ) (body string, w int) {
-  var re regexp4.RE
+var suffix = regexp4.Compile( "#$:.<:w+>" )
 
-  for init, width, line := 0, 0, ""; len(str[init:]) > 0; {
-    line, width = text.GetLine( str[init:] )
-
-    switch whoIsThere( line ) {
-    case CommandNode, ListNode:
-      if indent := text.CountIndentSpaces( line ); indent < 2 || indent < indentLevel {
-        return text.RmSpacesAtEnd( str[:init] ), init
-      }
-
-      init += width
-    case TextNode:
-      if re.Match( line, closePattern ) > 0 {
-        return text.RmSpacesAtEnd( str[:init] ), init + width
-      } else if indent := text.CountIndentSpaces( line ); indent < 2 || indent < indentLevel {
-        return text.RmSpacesAtEnd( str[:init] ), init
-      }
-
-      init += width
-    case HeadlineNode, CommentNode:
-      return text.RmSpacesAtEnd( str[:init] ), init
-    case EmptyNode : init += width
-    default        : init += width
-    }
-  }
-
-  return str, len(str)
-}
-
-func makeCommand( command, params, arg, body string ) (node DocNode) {
-  switch command {
+func (d *doc) parseBlock( pNode *DocNode, b *Block ) {
+  var node DocNode
+  switch b.Comm.Text {
   case "figure":
-    mark := Markup{}
-    mark.Parse( arg )
-
-    node.Node = Command{ Comm: command, Params: params, Mark: mark }
-    walkMorg( &node, body )
-  case "cols":
-    node = makeCommandCols( command, params, arg, body )
-  case "img", "video":
-    node.Node = Command{ Comm: command, Params: params, Arg: arg }
-    walkMorg( &node, body )
-  case "quote":
-    node = makeCommandQuote( command, params, body )
-  case "src","example", "pre", "math", "diagram", "art":
-    node.Node = Command{ Comm: command, Params: params, Arg: arg, Body: body }
-  case "srci":
-    node = makeCommandSrci( arg, params, body )
+    node.Node = Figure{ Args: b.Args, Title: b.Head.GetFancyMarkup() }
+    if b.Body.Text() != "" {
+      d.cloneStats().swapScanner( &b.Body ).walkMorg( &node )
+    }
+  case "src", "code"          : node = d.makeCode( b )
+  case "srci"                 : node = d.makeSrci( b )
+  case "cols"                 : node = d.makeCols( b )
+  case "img", "video", "audio": node = d.makeMedia( b )
+  case "quote"                : node = d.makeQuote( b )
+  case "example", "pre", "math", "diagram", "art":
+    node.Node = Brick{
+      Type  : b.Comm.Text,
+      Head  : txt.RmSpacesToTheSides( b.Head.Text() ),
+      Body  : txt.RmIndent( b.Body.Text(), b.Indent ),
+      Args  : b.Args,
+    }
   case "center", "bold", "verse", "emph", "tab", "italic":
-    node.Node = Command{ Comm: command, Params: params }
-    walkMorg( &node, body )
-  case "pret":
-    node = makeCommandPret( command, params, body )
-  }
+    node.Node = Wrap{ Type: b.Comm.Text, Head: txt.RmSpacesToTheSides( b.Head.Text() ), Args: b.Args }
 
-  return
-}
-
-func makeCommandCols( command, params, arg, body string ) (node DocNode) {
-  node.Node = Command{ Comm: command, Params: params }
-  cols := getCols( body )
-
-  for _, col := range( cols ) {
-    node.AddNode( nil )
-    walkMorg( node.GetLast(), col )
-  }
-
-  return
-}
-
-func getCols( str string ) (result []string) {
-  init, width, last, line := 0, 0, 0, "";
-  var re regexp4.RE
-  for init < len(str) {
-    line, width = text.GetLine( str[init:] )
-
-    if re.Match( line, "#^$:b*:::::b*" ) > 0 {
-      result = append( result, str[last:init] )
-      last = init + width
+    if b.Body.Text() != "" {
+      d.cloneStats().swapScanner( &b.Body ).walkMorg( &node )
     }
-
-    init += width
+  case "pret": node.Node = Pret{ IndentMarkup: b.Body.GetMarkup(), Indent: b.Indent, Args: b.Args }
+  default: return
   }
 
-  if last < init {
-    result = append( result, str[last:init] )
-  }
-
-  return result
+  pNode.Add( node )
 }
 
-func makeCommandQuote( command, params, body string ) (node DocNode) {
-  node.Node = Command{ Comm: command, Params: params }
-  init, width, line := 0, 0, "";
-  var re regexp4.RE
-  for init < len(body) {
-    line, width = text.GetLine( body[init:] )
-    if whoIsThere( line ) == EmptyNode {
-      init += width
-    } else if re.Match( line, "#^--" ) > 0 {
-      init += width
-      t, w := text.DragTextByIndent( body[init:], 2 )
-      mark := Markup{}
-      mark.Parse( text.Linelize( line[2:] + " " + t ) )
-      node.AddNode( Text{ Mark: mark, TextType: TextQuoteAuthor } )
-      init += w
+func (d *doc) makeCols( b *Block ) (node DocNode) {
+  node.Node = Columns{ Head: txt.RmSpacesToTheSides( b.Head.Text() ), Args: b.Args }
+
+  current := DocNode{}
+  d.cloneStats().swapScanner( &b.Body ).walkMorg( &current )
+  node.Add( current )
+
+  for _, col := range b.Attach {
+    current = DocNode{}
+    d.cloneStats().swapScanner( col.Body ).walkMorg( &current )
+    node.Add( current )
+  }
+
+  return
+}
+
+func (d *doc) makeMedia( b *Block ) (node DocNode) {
+  media := Media{ Src: txt.RmSpacesToTheSides( b.Head.Text() ), Args: b.Args }
+  media.Type = b.Comm.Text
+  if re := suffix.Copy(); re.FindString( media.Src ) {
+    media.Ext = strings.ToLower( re.GetCatch( 1 ) )
+  } else {
+    d.Error( `parseBlock: media-src "` + media.Src + `" no have extension` )
+  }
+
+  node.Node = media
+  if b.Body.Text() != "" {
+    d.cloneStats().swapScanner( &b.Body ).walkMorg( &node )
+  }
+
+  return
+}
+
+var requ = regexp4.Compile( "#^:b*--" )
+
+func (d *doc) makeQuote( b *Block ) (node DocNode) {
+  quote, re := Quote{}, requ.Copy()
+  for b.Body.Rune != EOF {
+    if txt.HasOnlySpaces( b.Body.Line ){
+      b.Body.NextLine()
+      continue
+    } else if re.FindString( b.Body.Line ) {
+      b.Body.Scan() // '-'-
+      b.Body.Next() //  -'-'x'
+      quot := b.Body.Copy()
+      b.Body.NextLine()
+      _, width := txt.DragTextByIndent( b.Body.Src[ b.Body.RunePos: ], b.Indent + 2 )
+      b.Body.NinjaLenMoves( width )
+      quot.Src = b.Body.Src[ :b.Body.RunePos ]
+      m := quot.GetFancyMarkup()
+      m.Type = 'q'
+      quote.Quotex = append( quote.Quotex, m )
     } else {
-      init += getText( &node, body[init:] )
+      text := b.Body.Copy()
+      _, width := txt.DragTextByIndent( b.Body.Src[ b.Body.RunePos: ], b.Indent )
+      b.Body.NinjaLenMoves( width )
+      text.Src = b.Body.Src[ :b.Body.RunePos ]
+      quote.Quotex = append( quote.Quotex, text.GetFancyMarkup() )
     }
   }
 
+  node.Node = quote
   return
 }
 
-func makeCommandSrci( lang, params, body string ) (node DocNode) {
-  node.Node = Command{ Comm: "srci", Arg: lang, Params: params }
-  var re regexp4.RE
-  for init := 0; init < len(body); {
-    if re.Find( body[init:], "#^[>] " ) {
-      init += srciGetCode( &node, body[ init: ] )
+func (d *doc) makeCode( b *Block ) (node DocNode) {
+  var code Code
+  argNum, boolNum := b.Args[ "n" ]
+  if code.IndexNum = 1; boolNum {
+    code.Indexed   = true
+    code.IndexNum, _ = strconv.Atoi( argNum[0].Data )
+  }
+
+  argStyle, boolStyle := b.Args[ "style" ]
+  if code.Style = d.TextOptions[ "fancyCode" ]; boolStyle {
+    code.Style = argStyle[0].Data
+  }
+
+  code.Lang  = txt.RmSpacesToTheSides( b.Head.Text() )
+  code.Body  = txt.RmIndent( b.Body.Text(), b.Indent )
+  code.Args  = b.Args
+  code.SBody = b.Body
+  code.SBodyIndent = b.Indent
+
+  node.Node = code
+  return
+}
+
+func (d *doc) makeSrci( b *Block ) (node DocNode) {
+  var srci Srci
+  argNum, boolNum := b.Args[ "n" ]
+  if srci.IndexNum = 1; boolNum {
+    srci.Indexed   = true
+    srci.IndexNum, _ = strconv.Atoi( argNum[0].Data )
+  }
+
+  argStyle, boolStyle := b.Args[ "style" ]
+  if srci.Style = d.TextOptions[ "fancyCode" ]; boolStyle {
+    srci.Style = argStyle[0].Data
+  }
+
+  argPrompt, boolPrompt := b.Args[ "prompt" ]
+  if srci.Prompt = "> "; boolPrompt {
+    srci.Prompt = argPrompt[0].Data
+  }
+
+
+  srci.Lang  = txt.RmSpacesToTheSides( b.Head.Text() )
+  srci.Args  = b.Args
+
+  srci.Body = make( []BinariString, 0, 4 )
+  body := txt.RmIndent( b.Body.Text(), b.Indent )
+  scann := new(Scanner).NewSrc( body ).QuietSplash().Init()
+  for scann.Rune != EOF  {
+    if len( scann.Line ) >= 2 && scann.Line[:2] == "> " {
+      srci.Body = append( srci.Body, BinariString{  true, srciGetCode( scann ) } )
     } else {
-      init += srciGetText( &node, body[ init: ] )
+      srci.Body = append( srci.Body, BinariString{ false, srciGetText( scann ) } )
     }
   }
 
+  node.Node = srci
   return
 }
 
-func srciGetCode( node *DocNode, str string ) (i int) {
-  var re regexp4.RE
-  var mark Markup
-  scanner := bufio.NewScanner( strings.NewReader( str ) )
-  scanner.Split( bufio.ScanLines )
-  if scanner.Scan() {
-    line := scanner.Text()
-    if re.Find( line, "#^[>] " ) {
-      if re.Find( line, "#$<:b+\\:b*>" ){
-        mark.Data = line[2:re.GpsCatch(1)] + "\n"
-        i = len( line ) + 1
+func srciGetCode( s *Scanner ) string {
+  init := s.RunePos
+  for s.NextLine(); reni( s.Line ); s.NextLine() {}
 
-        scanner.Scan()
-        line = scanner.Text()
-        for re.Find( line, "#$<:b+\\:b*>" ) {
-          if len( line ) >= 2 && line[:2] == "  " {
-            mark.Data += line[2:re.GpsCatch(1)] + "\n"
-          } else {
-            mark.Data += line[:re.GpsCatch(1)] + "\n"
-          }
-
-          i += len( line ) + 1
-          scanner.Scan()
-          line = scanner.Text()
-        }
-        if len( line ) >= 2 && line[:2] == "  " {
-          mark.Data += line[2:]
-        } else {
-          mark.Data += line
-        }
-        i += len( line ) + 1
-      } else {
-        mark.Data = line[2:]
-        i = len( line ) + 1
-      }
-
-      node.AddNode( Text{ Mark: mark, TextType: TextCode } )
-    }
-  }
-
-  return
+  return txt.RmInitRect( s.Src[init:s.RunePos], 2 )
 }
 
-func srciGetText( node *DocNode, str string ) (i int) {
-  var re regexp4.RE
-  var mark Markup
-  scanner := bufio.NewScanner( strings.NewReader( str ) )
-  scanner.Split( bufio.ScanLines )
-  split := ""
-  for scanner.Scan() {
-    line := scanner.Text()
-    if re.Find( line, "#^[>] " ) {
-      node.AddNode( Text{ Mark: mark, TextType: TextSimple } )
-      return
-    }
-
-    mark.Data += split + line
-    split = "\n"
-    i += len( line ) + 1
+func reni( str string ) bool {
+  switch len( str ){
+  case 0: return false
+  case 1:
+    if str[0] == '^' { return true }
+  default:
+    if str[0] == '^' && txt.CountInitSpaces( str[1:] ) > 0 { return true }
   }
 
-  node.AddNode( Text{ Mark: mark, TextType: TextSimple } )
-  return len( str )
+  return false
 }
 
-func makeCommandPret( command, params, body string ) (node DocNode) {
-  node.Node = Command{ Comm: command, Params: params }
-
-  scanner := bufio.NewScanner( strings.NewReader( body ) )
-  scanner.Split( bufio.ScanLines )
-
-  for scanner.Scan() {
-    mark := Markup{}
-    mark.Parse( text.Linelize( scanner.Text() ) )
-    node.AddNode( Text{ Mark: mark } )
+func srciGetText( s *Scanner ) string {
+  init := s.RunePos
+  for ; s.Rune != EOF; s.NextLine() {
+    if len( s.Line ) >= 2 && s.Line[:2] == "> " { break }
   }
 
-  return
-}
-
-func dragAllTextByIndent( str string, indent int ) (string, int) {
-  var re regexp4.RE
-  strIndent := fmt.Sprintf( "#^:b{%d,}:S", indent )
-
-  for init, width, line := 0, 0, ""; init < len(str); {
-    line, width = text.GetLine( str[init:] )
-
-    if re.Match( line, strIndent ) == 0  {
-      switch whoIsThere( line ) {
-      case EmptyNode, CommentNode:
-        init += width
-        continue
-      default: return str[:init], init
-      }
-    }
-
-    init += width
-  }
-
-  return str, len(str)
+  return s.Src[ init:s.RunePos]
 }
