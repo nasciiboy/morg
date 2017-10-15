@@ -4,51 +4,82 @@
 
 que es **morg**?
 
-el nombre (provisional) de otro sistema de documentacion de marcas ligeras,
-basado en otros sistemas de documentacion (de marcas ligeras), que intenta
-dominar el mundo, transformar a la humanidad, terminar con el trabajo, la
-propiedad intelectual y forrar a su creador
+el nombre de otro sistema de documentacion de marcas ligeras, basado en otros
+sistemas de documentacion (de marcas ligeras)
 
 ## por que?
 
-Como toda creacion humana la informatica ha respondido a las necesidades de los
-presentes deacuerdo a los conocimientos y habilidades disponibles.
+tener libros impresos esta chulo, aunque poco practico e ineficiente es, si se
+compara con los formatos de documentacion electronicos, por ello surgieron las
+paginas man, los derivados de TeX, XML, la web y sobre ella la wikipedia. Sin
+embargo seguimos forjando informacion, pensando en imprimir en papel, con la
+consecuencia directa de que todos los formatos de documentacion surgidos despues
+del transistor son o demasiado complejos (XML, TeX, Texinfo, LaTeX) o tienen
+demasiadas carencias (markdow, ReStructuredText, mediaWiki, org-mode)
 
-Acaso al inicio alguien considero la necesidad de codificar informacion mas alla
-del conjunto de caracteres USAmericano (ASCII)? Claro que no, los humanos no somos tan
-inteligentes, y avanzamos a base de apaños, resolviendo unas pocas dificultades
-de vez en vez. Lamentablemente solo mirando en retrospectiva esto se torna
-evidente, y al hacerlo quedamos obligados a cuestionar nuestra realidad.
+Tomando en cuenta que como especie nuestro presente y futuro depende de la
+cantidad de conocimiento que poseemos, compartimos y utilizamos, es preocupante
+que aun no exista un formato apropiado para crear, conservar, traducir y
+distribuir nuestra literatura, por ello **es momento de forjar un sistema a la
+altura**, apenas mas complicado que ascii, e igual de valido que cualquier
+derivado de GML->SGML->XML->HTML o alguna variente de TeX
 
-En esta ocacion veamos en perspectiva al mas importante recurso de la humanidad
-<q>la informacion</q> y los medios a nuestro alcance para crearla e interactuar
-con ella.
+morg es una pequeña propuesta (aun en fase muy experimental (== inestable)) de como
+podria ser ese supuesto nuevo formato de documentacion universal, apto tanto
+para un simple blog personal, como poesia, novelas, o el mas complejo articulo
+cientifico
 
-<blockquote>
-<em>seccion pendiente</em> llena de palabras con muchas letras, donde se
-describe el trayecto de los sistemas para documentar informacion
-<!-- http://www.danielallington.net/2016/09/the-latex-fetish/ -->
-</blockquote>
+pero crear este nuevo sistema de documentacion no es el fin de la mision, solo
+establece el inicio de la ardua labor de preservar, expandir y difundir a todo
+habitante, estudiante y academico, toda la informacion habida y por haber, de
+forma libre, permanente y sin restricciones. Debemos crear una gran biblioteca
+con un formato en texto plano, explorable incluso con un sencillo editor de
+texto, o en sus formas mas elaboradas mediante una interfaz web o de linea
+e comandos, pero sin caer en los vicios y defectos del actual html, es decir,
+sin publicidad, drm, que este plenamente estandarizado y libre de censura
 
-Con lo anterior llegamos a la siguente conclucion, <em>tener libros impresos
-esta chulo, aunque poco practico e ineficiente es, si se compara con otros
-formatos de documentacion</em>, por ello surgieron las paginas man, los
-derivados de TeX, XML, la web y sobre ella la wikipedia. Sin embargo seguimos
-forjando informacion, pensando en imprimir en papel, con la consecuencia directa de
-que todos los formatos de documentacion surgidos despues del transistor son un
-dolor en el culo.
+(debajo, un arbol conceptual de la estructura de la libreria)
 
-Es momento de forjar un sistema a la altura, apenas mas complicado que ascii, e
-igual de valido que cualquier hijo vastardo de GML->SGML->XML->HTML o alguna
-variente de TeX.
+```
+origen
+   .
+   ├── recursos
+   │   ├── imgenes
+   │   ├── videos
+   │   ├── programas
+   │   ├── codigo
+   │   └── musica
+   ├── man
+   │   ├── 1
+   │   ├── 2
+   │   ...
+   │   └── N
+   ├── blog
+   │   ├── gnusr
+   │   ├── nasciiboy
+   │   ... cualquiera
+   │   └── emacsChan
+   ├── books
+   │   ├── scifi
+   │   ├── math
+   │   ...
+   │   └── ajedrez
+
+   ...
+
+   └── wikipedia
+```
+
+es un error, permitir que la informacion desaparesca, mas aun, dejar su custodia
+a entidades mesquinas que solo permiten el acceso a unos cuantos elegidos
 
 ## Como debe ser un sistema de documentacion ideal
-### **Inmediato**
+### Inmediato
 
 Debe estar disponible en todo momento. Las paginas man, fueron un gran acierto
 de nuestros ancestros. El problema? <code class="command" >cat</code> o <code
 class="command" >less</code> con una base de datos de documentos en texto
-plano serian igualmente eficientes. No tendriamos colores, pero a cambio
+plano serian igualmente eficientes. No habria colores, pero a cambio
 podriamos agregar nuevas paginas y/o secciones de forma mas elegante y rapida.
 
 ### Sencillo
@@ -63,7 +94,7 @@ mas feo, he initeligible que una pagina de manual en groff. Por ello GNU lanzo
 **info** que sin duda es mas util que man, ademas TexInfo es menos feo que
 groff.
 
-Entoces por que no utilizamos info (o para el caso latex) para escribir la
+Entoces por que no utilizamos info (o su hermano latex) para escribir la
 wikipedia?
 
 - Hay que leer un manual (en ingles) de muchas paginas para utilizarlo como es
@@ -74,6 +105,11 @@ wikipedia?
 - Una ves finalizado el documento hay que "compilar" para exportar a otros
   formatos mas manejables, es decir, pasar del fuente <span class="file" >.texi</span> a info, html, pdf,
   ... y si no compila te comes los mocos!
+
+pude que usted este influienciado por falsos mitos que rodean a los derivados de tex
+(info|latex) (ver [A](http://www.danielallington.net/2016/09/the-latex-fetish/)
+o [B](http://karl-voit.at/2017/08/26/latex-fetish/)), aun asi, nada impide hacer
+realidad las nobles metas que se proponen estos sistemas de composicion de textos
 
 ### Practico
 
@@ -123,65 +159,12 @@ Por alguna razon desconocida los sistemas de marcado ligero son comodos, sin
 embargo, el mayor error y provable razon de que existan tantos lenguajes de
 marcas ligeras es **no valerse por si mismos**, al mas minimo inconveniente se
 recurre a trozos de codigo html o latex, resultando en horrendos engendros
-<q><em>facilitadores</em></q> de estos.
+que lejos de hacerlos independientes, los vuelven <q><em>facilitadores</em></q>
+de estos ultimos
 
 El formato que creemos ha de ser tan agradable a la vista que incluso no
 requiera ninguna herramienta especial para su visualizacion y creacion, los mas
 intrepidos haran alarde de valerse solo con `less`, `more`, `cat` o mariposas.
-
-Ya esta tio, es bonito, sencillo y autosuficiente! algo mas? que tal un **Proyecto de
-<s>Complementacion</s> Documentacion Humana**, por que no crear un super
-repositorio (distribuido/federado) que contenga (al menos) toda obra escrita, ya
-sea un blog, un libro e incluso la wikipedia, todo con el mismo formato,
-separado en secciones elegibles y descargables a medida del disco duro, algo asi
-
-
-```
-origen
-   .
-   ├── recursos
-   │   ├── imgenes
-   │   ├── videos
-   │   ├── programas
-   │   ├── codigo
-   │   └── musica
-   ├── man
-   │   ├── 1
-   │   ├── 2
-   │   ...
-   │   └── N
-   ├── blog
-   │   ├── gnusr
-   │   ├── nasciiboy
-   │   ... cualquiera
-   │   └── emacsChan
-   ├── books
-   │   ├── scifi
-   │   ├── math
-   │   ...
-   │   └── ajedrez
-
-   ...
-
-   └── wikipedia
-```
-
-que, que ventajas traera esto?
-
-- librarse de DRMs, mierda script, cookies, sistemas de rastreo, publicidad
-
-- crear una <q>biblioteca</q> permanente, no mas errores 404
-
-- olvidar el exesivo tiempo de carga y recursos que consume un navegador, pues
-  seria substituido por tuis o guis enfocadas unica y exclusivamente para
-  interactuar con el formato... aunque claro, para quienes no puedan o quieran
-  despegarse de navegador, seguiran teniendo una version web
-
-
-es un error, permitir que la informacion desaparesca, mas aun, dejarla en custodia
-de entes que solo permiten el acceso a unos cuantos elegidos.
-
-Sobre la implementacion... solo hay ideas.
 
 ### sintaxis
 #### Estructura e indentacion
@@ -240,7 +223,7 @@ pueden colocarse de la forma
   muy muy extenso
 ```
 
-A deferencia de otros formatos de marcas ligeras, todos los encabezados generan
+A diferencia de otros formatos de marcas ligeras, todos los encabezados generan
 un identificador interno, al cual se puede hacer referencia dentro del
 documento. Tal identificador, se forja apartir del texto, substituyento los
 espacios en blanco por guiones (`-`)
@@ -253,7 +236,25 @@ dos o mas encabezados con el mismo nombre, se puede utilizar
 ```
 
 donde `<>` actua como separador entre el identificador personalizado y el texto
-que aparece como nombre del encabezado
+que aparece como nombre del encabezado, por ejemplo
+
+```
+* Seccion Uno
+
+  Sed eiusmod tempor incidunt ut labore et dolore magna aliqua.
+
+** Ejemplos seccion uno <> Ejemplos
+
+   ...
+
+* Seccion Dos
+
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+** Ejemplos seccion dos <> Ejemplos
+
+   ...
+```
 
 #### Listas
 
@@ -281,7 +282,7 @@ elemnentos del formato
 
 
 ```
-* nivel uno
+* Seccion uno
 
   1. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
      eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut
@@ -308,6 +309,19 @@ elemnentos del formato
   dolore magna aliqua. Ut enim ad minim veniam.
 ```
 
+se sigue la sintaxis de una lista y sin dejar lineas en blanco deben aparecen
+dos puntos seguidos (`::`) con al menos un espacio en blanco del lado izquierdo,
+la definicion puede aparecer a continuacion, en lineas distintas, pero debe
+mantener la indentacion
+
+```
+- elemento ::
+
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+  Dolore magna aliqua. Ut enim ad minim veniam.
+```
+
 #### y si tengo una novela
 ##### Dialogos
 
@@ -317,10 +331,8 @@ elemnentos del formato
   aliqua. Ut enim ad minim veniam."
 ```
 
-los dialogos tienen la mismas normas que una lista.
-
-mencionar que anque existen varias formas de solvertar el asunto para indicar
-a que personaje pertenece el dialogo, podria optarse por la siguiente sintaxis
+para indicar la pertenencia del dialogo a un personaje, podria optarse por la
+siguiente sintaxis
 
 ```
 > personaje A :: "Dialogo, Lorem ipsum dolor sit amet",
@@ -334,9 +346,9 @@ a que personaje pertenece el dialogo, podria optarse por la siguiente sintaxis
   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor
   incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
 
-  > "Dialogo, Lorem ipsum dolor sit amet, consectetur adipiscing
+  > "Dialogo, Lorem", ipsum dolor sit amet, consectetur adipiscing
     elit, sed eiusmod tempor incidunt ut labore et dolore magna
-    aliqua. Ut enim ad minim veniam."
+    aliqua. Ut enim ad minim veniam.
 
   ....
 
@@ -344,7 +356,7 @@ a que personaje pertenece el dialogo, podria optarse por la siguiente sintaxis
   incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
 ```
 
-un separador representan esos cambios <em>abruptos</em> de escena argumental,
+un separador indica esos cambios <em>abruptos</em> de escena argumental,
 que en papel son representados con una pagina en blanco o varios espacios
 vacios, sin cambiar de capitulo
 
@@ -372,7 +384,7 @@ propia
    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor
    incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
 
-:: ADVERTENCIA ADVERTENCIA ADVERTENCIA ADVERTENCIA
+:: PELIGRO-PELIGRO-PELIGRO-PELIGRO-PELIGRO-PELIGRO
 
    ::
 
@@ -482,14 +494,16 @@ antecede con `@`, por ejemplo:
 @b(1@). punto uno)
 ```
 
-al expandir la etiqueta `@)` se substituye por `)`, asi:
+al expandir `@)` se substituye por `)`, asi:
 
 
 ```
 <b>1). Punto uno</b>
 ```
 
-(nota: para que aparesca `@` hay que colocar `@@`)
+por lo general el unico aspecto donde seria incomodo utilizar el signo `@` seria
+dentro de las direcciones de correo, donbre habria que colocar `@@`, a mi
+parecer un precio razonable
 
 ##### comentarios
 
@@ -497,8 +511,8 @@ al expandir la etiqueta `@)` se substituye por `)`, asi:
 @ linea comentada
 ```
 
-una `@` al inicio de linea con almenos uno o mas espacios en blanco comenta la
-linea en cuestion
+una linea cuyo primer caracter visible sea `@` separada por almenos un espacio
+en blanco del texto, comenta la linea en cuestion
 
 #### mas alla del ASCII
 
@@ -506,7 +520,7 @@ preferiblemente se utilizara un sistema de codificacion <q>moderno</q> como
 UTF-8.
 
 Opcionalmente (y para no vernos en la necesidad de buscar un caracter
-complicado) se puede echar mano del <q>comando</q> `&`, por ejemplo
+complicado) se puede crear el <q>comando</q> `&`, por ejemplo
 
 ```
 @&{nombreGenericoDeCaracterComplicado}
@@ -517,15 +531,22 @@ sera reemplazado por `⇐`
 
 #### math
 
-para las formulas matematicas (inline) y ya que desconosco bastante en este
+para las formulas matematicas <q>en linea</q> ya que desconosco bastante en este
 tema, podriamos no reinventar la rueda y tomar las formulas Tex
 
 ```
-@m{\formula\Matematica\Tex}
+@M{\formula\Matematica\Tex}
 ```
 
-ultimamente he investigado un poco sobre el tema, quiza sea mejor opcion tomar
-la sintaxis que utiliza Libre Office Math o un recien llegado como AsciiMath
+(he investigado un poco sobre el tema, quiza sea mejor opcion tomar
+la sintaxis que utiliza Libre Office Math o un recien llegado como AsciiMath)
+
+adicionalmente, existira el comando `m` (`@m[cosas]`) para indicar que una seccion
+es/o supone ser una formula, de forma similar a como se utiliza un enfasis, pero
+con la diferencia, de no tener que invocar al "renderizador" de formulas
+matematicas, por ejemplo en lugar de utilizar `@M{H^2O_9}`, mediante caracteres
+unicode podria substituirse con `@m{H²O₉}`, con el beneficio adicional de tener un
+<em>texto fuente</em> com mayor legibilidad
 
 #### enlaces
 
@@ -533,7 +554,7 @@ la sintaxis que utiliza Libre Office Math o un recien llegado como AsciiMath
 @l{ruta}
 ```
 
-equivalente a
+equivale a
 
 ```
 <a href="ruta">ruta</a>
@@ -545,14 +566,15 @@ y
 @l{ruta<>descripcion}
 ```
 
-equivalente a
+es equivalente a
 
 ```
 <a href="ruta">descripcion</a>
 ```
 
-Como antes se menciono, todos los encabezados generan un indentificador interno
-apartir de su nombre, por ejemplo
+Ahora que conocemos los comandos `@` y la forma de crear enlaces, podemos
+profundizar en un tema antes mencionado: <b>los encabezados</b>, su forma de
+referenciarlos y ejemplos de lo que se produciria en una exportacion a html
 
 ```
 * encabezado
@@ -576,7 +598,7 @@ se traduce en html como
 <h1 id="encabezado-con-enfasis" ><b>encabezado</b> con <em>enfasis</em></h1>
 ```
 
-y un enlace dentro de un encabezado con enfasis
+(mas lejos y retorcido aun) un enlace dentro de un encabezado con enfasis
 
 ```
 * @l(http://fsf.org/<>@b(link-encabezado)) con @e(enfasis)
@@ -612,26 +634,22 @@ que se traduce en
 <a href="#encabezado" >lo que sea</a>
 ```
 
-(nota: en el futuro se planea presindir del signo `#` haciendo primero una
-busqueda en todas las referencias internas del documento. En caso de no encotrar
-coincidencias dejar la referencia tal cual)
+##### el mecanismo de los comandos `@`
 
-##### como funciona esta magia?
+todas los <q>comandos</q> `@` tienen la estructura `@x(izquierda<>derecha)`. Donde
+`izquierda` viene a ser contenido personalizado y opcional. Por su parte `derecha` es
+el contenido <i>por defecto</i> del comando. Finalmente `<>` actua a modo de separador entre ambos
 
-todas los <q>comandos</q> `@` tienen la estructura `@x(custom<>contenido)`. Donde
-`custom` es un parametro personalizado y opcional. Por su parte `contenido` es
-el contenido del comando. Finalmente `<>` actua a modo de separador entre ambos
-
-Cuando un comando, por ejemplo, un enlace requiere un `custom` y este no se ha
-especificado, se genera apartir del `contenido`, extrayendo las marcas especiales
+Cuando un comando, por ejemplo, un enlace requiere una `izquierda` y este no se ha
+especificado, se genera apartir de `derecha`, extrayendo las marcas especiales
 dejando unicamente el texto.
 
-Cuando el comando no requiere de un `custom` y este es proporcionado, el comando
+Cuando el comando no requiere `izquierda` y esta se proporciona, el comando
 o lo ignora o se utiliza como identificador o etiqueta segun sea el caso (nota:
-esto esta a consideracion y podria requerir sintaxis adicional)
+esto aun se encuentra en consideracion y podria requerir sintaxis adicional)
 
 Cuando el comando esta dentro de otro comando, el comando interno *pasa* su
-contenido al comando externo, por ejemplo:
+contenido en la `derecha` al comando externo, por ejemplo:
 
 ```
 @l(#encabezado<>lo que sea con @e(enfasis con @b(algo<>bold)))
@@ -667,25 +685,6 @@ genera
 <a href="bold" >lo que sea</a>
 ```
 
-tambien se pueden crear enlaces internos mediante el comando `t`
-
-```
-@t{target}
-@t{target<>descripcion}
-```
-
-y radio objetivos con
-
-```
-@T{radioTarget}
-@T{radioTarget,descripcion}
-```
-
-un *radio target* convierte en un enlace, a cualquier palabra que encaje con la
-descripcion del radio opjetivo (ignorando entre mayusculas y minusculas), el
-objetivo de todos los enlaces, es la declaracion misma del objetivo. Los bloques
-de codigo quedan exentos de este comportamiento
-
 #### notas
 
 ```
@@ -700,12 +699,14 @@ de codigo quedan exentos de este comportamiento
 #### comandos de bloque
 
 Los comandos `@` son para el contenido <q>en linea</q>, es decir, estan
-diseñados para ser incluidos dentro de parrafos de texto.
+diseñados para ser incluidos dentro de parrafos de texto (de hecho para prevenir
+errores, si estos no se cierran, se hace de forma automatica al llegar al final
+de cada parrafo, o cuando aparece un nuevo elemeto del lenguaje de marcas
 
-Por su parte los <q>comandos de bloque<q> se utilizan para afectar secciones
+Por su parte los <em>comandos de bloque</em> se utilizan para afectar secciones
 enteras, indicar acciones complejas o para contenido especializado, como pueden
 ser complejas equaciones matematicas o porciones de codigo fuente, sin
-preocuparse por <q>el significado de la sintaxis regular</q>
+preocuparse por el significado de la sintaxis regular
 
 La estructura basica de un comando de bloque es:
 
@@ -756,8 +757,8 @@ indentadas.
   contenido
 ```
 
-El contenido o *argumentos* abarcan hasta la aparicion de la primer linea en
-blanco o sin la indentacion apropiada.
+El contenido abarca hasta la aparicion de la primer linea en blanco o sin la
+indentacion apropiada.
 
 en este tipo de comandos se encuentran los de configuracion del documento
 
@@ -765,10 +766,6 @@ en este tipo de comandos se encuentran los de configuracion del documento
 ..title    > titulo del documento
   puede abarcar varias lineas, siempre con indentacion y sin lineas
   en blanco
-
-  esto queda fuera del comando titulo y de hecho "rompe" la seccion de
-  comandos de configuracion
-
 ..author   > nasciiboy
 ..mail     > nasciiboy@gmail.com
 ..style    > worg/worg.css
@@ -836,7 +833,7 @@ indentacion
 por ultimo, estan los bloques con *argumentos* de multiples lineas y *cuerpo*
 
 ```
-..figure > esto el titulo
+..figure > esto es el titulo
   de una mini seccion
 
   este es el contenido de la mini seccion
@@ -844,66 +841,72 @@ por ultimo, estan los bloques con *argumentos* de multiples lineas y *cuerpo*
 
 donde el *contenido* empieza luego de la primer linea en blanco.
 
-Como vez, todo depende del comando que se utilize, en terminos generales
-un comando tiene esta estructura
+Como vez, todo depende del comando que se utilize... este es el aspecto mas
+complejo del lenguaje de marcas ligeras que propongo y el como, que y cual
+funcion desempeña cada comando, es arbitrario y sujeto a una especificacion
+unilateral.
 
-```
-..comando parametros-especiales > argumentos
+dentro de estos, cada seccion puede tener un significado particular, interpretar
+o ignorar elementos como los comandos `@` y otras especificaciones, como
+alteracion del comportamiento de un comando, secciones adicionales del bloque,
+etc.
 
-  //
-  cuerpo
-  //
-```
+a continuacion veremos como seria la indicacion para modificar el comportamiento
+de un comando de bloque, <q><b>los parametros</b></q>
 
-tambien hay lugar para imagenes y video
-
-```
-..img parametros-especiales > direccion/a/mi/imagen.jpg
-
-  descripcion, contenido o lo que sea
-
-..video parametros-especiales > direccion/a/mi/video.mkv
-
-  descripcion, contenido o lo que sea
-```
-
-Ya vimos que son los argumentos y el cuerpo, los `parametros` son modificadores
-para el comando, como podrian ser:
-
-- interpretar algun tipo de enfasis dentro de un bloque de codigo
-
-- agregar un identificador
-
-- establecer la orientacion visual de los elementos
-
-- ...
+##### parametros
 
 Aunque los parametros pueden ser variados, deben ser pocos, uno, dos, maxime tres
 por comando de bloque. Remarcar que el formato no es para crear espectaculos
 visuales.
 
-existen varias corrientes sobre la forma en que se pueden presentar los
-<em>parametros</em>, por ejemplo: `cosa`, `bandera:valor`, `bandera=valor` y
-`-bandera valor`. Al respecto, propongo que los parametros tengan la sintaxis de
-una funcion, como la de la mayoria de lenguajes de programacion, es decir
-`bandera( valor )`, donde bandera, `especifica` el parametro que deseamos
-modificar/activar, y delimitado por parentecis el `valor` o valores a
-establecer, este podria ser una serie de valores separados por coma, donde en
-caso de precindir de ellos y aplicar el valor por defecto simpremente se dejaria
-los parentecis en blanco.
+en la mayoria de herramientas de linea de comandos un parametro tiene la
+sintaxis
 
-Bueno, esto tiene un inconveniente, puesto que un comando de bloque, no deja de
-ser una <q>funcion</q> y ahora tendriamos mas funciones, sumado al echo de que
-para el poco instruido pudiese ser complicado... por otro lado no son funciones
-tal cual, son solo una sintaxis distinta para los parametros, tambien evitan
-cualquier anbiguedad respecto a la pertenencia de los valores y el alcance de
-estos, sumado al echo de poder realizar un propocesamiento de los valores como
-en un lenguaje de programacion, en fin, algo asi seria el aspecto para por
-ejemplo indicar que deseamos numerar las lineas en un bloque de codigo fuente en
-lenguaje C a partir con un indice que inicia en 42:
+    --algo="cosa"
+
+o
+
+    -algo cosa
+
+bien?, para morg esto tiene la forma
+
+    algo
+
+o
+
+    algo()
+
+o
+
+    algo( cosa )
+
+o
+
+    algo( cosa-a, cosa-b, ... )
+
+una forma de entenderlo, es como una funcion que tiene valores establecidos por
+defecto, y segun el numero de parametros que se envien el resto se colocan de
+forma automatica, y en caso de que un parametro (o su numero) sea erroneo,
+las secciones erroneas se subtituyen con su valor por defecto.
+
+La diferencia radica en que no se trata de una funcion, sino del nombre de un
+parametro y sus valores!
+
+ahora, estos parametros aparecen dentro de los bloques, entre la declaracion del
+bloque y el simbolo `>`, quedando asi
 
 ```
-..src n(42) > c
+..bloque algo algo1() algoMas2( "cadena", 123, .21, `raw`, identificador )  >
+  cosas
+< bloque..
+```
+
+encontramos un ejemplo de uso dentro de los bloques de codigo fuente para
+indicar un tema especifico (en la exportacion), o numerar el contenido
+
+```
+..code n(10) style( "monokai" ) > c
   #include <stdio.h> # esto es codigo en C
 
   int main(){
@@ -911,48 +914,116 @@ lenguaje C a partir con un indice que inicia en 42:
     printf("hola, que tal\n");
     return 0;
   }
+< code..
 ```
 
-algunos bloques propuestos
+como es una cosa muy chula, tambien puede utilizarse para especificar opciones
+en la configuracion del documento
 
 ```
-block o custom // como bloques personalizables
-img
-video
-figure
-quote
-verse
-emph
-center
-tab
-bold
-italic
-src
-example/pre
-cols
-math
-diagram
+..options > fancyCode() toc
 ```
 
-para la configuracion del documento
+aqui se indicaria que deseamos resaltado de codigo sin especificar uno es
+particular, solo su resaltado o etiquetado en una exportacion, el segundo
+parametro `toc`, sirve para indicar que queremos que la exportacion incluya una
+tabla de contenidos
+
+##### ladrillos
+
+esta es otra caracteristica mas (y espero sea la ultima) que complica un poco
+mas nuestros bloques de codigo, sin embargo creo que su utilidad en ciertos
+bloques, como el codigo fuente (quiza el mas exigente), justifica su existencia
+
+Imagina que tienes un bloque de codigo fuente, y en algun momento lo deseas
+"ejecutar" y colocar la salida de su ejecucion dentro del documento, pues hay es
+donde aparecen los ladrillos
 
 ```
-title
-subtitle
-author
-translator
-mail
-licence
-style
-date
-tags
-description
-id
-options
-lang/language
+..code > sh
+  echo "hola, mundo"
+<>
+  hola, mundo
+< code..
 ```
 
-#### Tablas
+exacto, (de nuevo) el `<>` hace de separador, en este caso entre el contenido
+principal y los ladrillos... y en este podriamos indicar algurna cosa como por
+ejemplo
+
+```
+..code > sh
+  random
+<> ejecucion 1
+  1236
+<> ejecucion 2
+  47
+< code..
+```
+
+y asi sucesivamente.
+
+otro comando interesante seria `cols` para expresar que deseamos crear columnas,
+con su contenido
+
+```
+..cols >
+
+  este es el texto de la columna 1
+
+<>
+
+  este es el texto de la columna 2
+
+<>
+
+  contenido de la columna 3
+
+...
+```
+
+#### srci
+
+este es un comando de bloque complementario con el de codigo fuente donde se
+simula un prompt de algun lenguaje y su salida, sin hechar mano de los ladrillos
+
+```
+..srci > lenguaje
+  > (esto simularia ser (codigo)
+  ^   (en lisp (o algo)
+  ^            (por el estilo)))
+  esta seria la supuesta salida
+  que produce el codigo
+```
+
+La entrada o prompt de lenguaje inicia con `>` y cada linea inmediatamente
+despues que inicie con `^`, tambien se asume como parte de esta
+
+lo interesante de este bloque, es que con una sintaxis comun se puede
+simular la supuesta estrada de casi cualquier lenguaje!
+
+Para casos donde el lenguaje tenga mas de un promt, habria que utilizar un
+parametro adicional y supongo que diversos bloques, por ejemplo para simular una
+secion como usuario de a pie en bash y luego un logueo como root, seria
+
+```
+..srci prompt( "$ " ) > sh
+  > rm -rf /boot
+  permiso denegado
+  > su
+  password
+
+aqui con algun texto se alerta de los peligros de ser root y ejecutar
+comandos con poder ilimitado
+
+..srci prompt( "# " ) > sh
+  > whoami
+  root
+  > rm -rf /boot
+  error: lo siento su princesa se encuentra en otro castillo
+```
+
+#### tablas
 
 Sin duda un tema complejo, podria tenerse una tabla totalmente funcional con
 formulas y demas, pero para inciar:
@@ -977,84 +1048,10 @@ unir celdas es complicado podria tomarse en consideracion el numero exacto de
 caracteres para obtener esta informacion, o colocar un signo <q>invisible</q> de
 alineacion dentro la la tabla como `^`
 
-#### a considerar
-
-En algunos documentos se agrega un subtitulo en lugar de crear una subseccion
-para esto pobria ofreserse algo como:
-
-```
-* encabezado
-  @ subencabezado
-```
-
-donde una `@` al mismo nivel de indentacion del inicio del nombre del
-encabezado seguido por un espacio en blanco establece un subencabezado
-
-Otro asunto es poder concatenar varias definiciones
-
-```
-- A ::
-  B ::
-  C :: exadecimal
-```
-
-o de forma
-
-```
-- A :: B :: C :: exadecimal
-```
-
-Tambien proporcionar variables de substitucion
-
-```
-@V{variable definida en alguna parte}
-```
-
-En org-mode, existe una forma para colocar el resultado de ejecutar un bloque de
-codigo fuente. Es asi:
-
-```
-#+BEGIN_SRC elisp
-  (message "hola lisp")
-#+END_SRC
-
-#+RESULTS:
-: hola lisp
-```
-
-en morg podria ser
-
-```
-..src > elisp
-  (message "hola lisp")
-
->> hola lisp
-```
-
-o
-
-```
-..src > c
-  #include <stdio.h>
-
-  int main(){
-    printf( "Hola mundo\n" );
-    return 0;
-  }
-
-..result >
-  "Hola mundo"
-< src..
-```
-
-Otra duda surge y aunque antes se expuso como posibilidad, deberian poder
-concatenarse los comandos `@` de la forma `@abcd(cosas)`? o solo existir ordenes
-sencillas? si pueden concatenarse cuales? y en que orden de ejecucion?
-
 #### porg
 
 los ficheros `po` producidos con `gettext` se utilizan para traducir documentos
-de un lenguaje a otro, si gettext no muere en el intento... con morg podemos
+de un lenguaje a otro, siempre que gettext no muera en el intento... con morg podemos
 hacer algo mucho mas sencillo para traducir documentos
 
 imaginemos que tenemos este texto
@@ -1119,7 +1116,7 @@ el tabajo sera pan comido!
 incluso y fantaceando, podria haber ficheros para reemplazar rss (rorg) y que el
 navegador interprete directamente morg. Las fantacias no cuestan nada.
 
-### Un poco de accion
+### un poco de accion
 
 De momento, a modo de <q>prueba de concepto</q> existe **morg**, un programa
 (mal) desarrollado en golang, con el cual se puede exportar (con limitaciones)
@@ -1130,11 +1127,8 @@ vea [Como iniciar con morg](howto.md).
 De forma simplificada, para optener el programa
 
 ``` sh
-go get -v github.com/nasciiboy/morg
+go get github.com/nasciiboy/morg
 ```
-
-(desconosco la funcion de `-v`)
-
 si ya tenemos instalado morg, para actualizar
 
 ``` sh
@@ -1153,15 +1147,11 @@ Para visualizar un documento
 morg tui mi-fichero.morg
 ```
 
-funcionan varios de los comandos `@`, aunque el sistema
-`@x(identificador<>contenido)` extrae los datos perfectamente, ademas si un
-comando no cuenta con llave de cierre, el resaltado abarca hasta el final del
-parrafo y se cierra automaticamente
-
-El sistema para extraer el contenido de un comando de bloque tambien funciona de
-manera correcta, claro esta, solo para los casos definidos
-
 #### el codigo
+
+(mis habilidades como programador son pocas y limitadas, sin embargo, creo en el
+codigo como forma de expresion y transmision de conocimiento, si las siguientes
+metas resultan irreales lo puedo comprender, aunque no aceptar...)
 
 sin importar el lenguaje, el codigo debe ser elegante o almenos claro y
 sencillo, evintando dependencias inecesarias que dificulten su adaptacion a
@@ -1170,11 +1160,7 @@ buscara siempre ser una implementacion de referencia con toques didacticos en la
 que cualquier indicio de aparicion de cruft sera señal de refleccion y futura
 refactorizacion e incluso reescritura
 
-bueno, bueno, hasta ahora el codigo disponible <q>evoluciona</q> a base de
-prueba y errar, tengo poquisima experiencia/formacion, encima soy un recien
-llegado a go, en fin
-
-conceptualmente se planea dividir el programa en varias secciones, `katana` el
+conceptualmente se plano dividir el programa en varias secciones, `katana` el
 encargado de parcear el documento, para entregar una estructura de datos
 sencilla
 
@@ -1188,16 +1174,15 @@ encargado de desplegar el documento de forma visual como TUI o como GUI
 documento de forma local o debe realizarce una peticion externa. Ademas debe
 regresar el documento en el formato original
 
-El primer componente que surgio fue `biskana`, me gusto la broma(?), de hay, el
+El primer componente que programe fue `biskana`, de hay, el
 deseo de terminar los nombres en `ana`. Alguna propuesta interesante?
 
-Como cohesionador de todo, el propio `morg` (aun no me convence el nombre)
+Como cohesionador de todo, el propio `morg` (aun no me convence el nombre), se
+aceptan sujerencias!
 
 Por cierto `katana` hace uso de un motor de expresiones regulares elaborado
-desde cero llamado `regexp3` que por mera casualidad programe, este motor esta
-en desarrollo y en algun momento sera substituido por `regexp4`. Ambos utilizan
-la misma sintaxis y aunque esta limitado solo a exrpesiones regulares, capturas
-y pocas cosas mas. Lo utilizo por estas razones
+desde cero llamado `regexp4` que por mera casualidad tambien programe. Lo
+utilizo por estas razones
 
 1. funciona!
 
@@ -1206,93 +1191,65 @@ y pocas cosas mas. Lo utilizo por estas razones
 3. es sencillo y facil de modificar (por mi, almenos), ademas cuando surge un
    error se donde buscar
 
-4. puede port-arse con relativa facilidad a cualquier lenguaje (creo), el
+4. puede portarse con relativa facilidad a cualquier lenguaje (creo), el
    desarrollo original fue hecho en C. Cuando digo en C me refiero a solo C, sin
    recurrir a ninguna libreria, ni siquiera la libreria estandar. Su port a go
    no fue demasiado traumatico, encima se vio veneficiado por la orientacion a
    objetos
 
-
 #### porque Go
 
-por nada en especial... cuando empece a escribir el codigo hace cosa de un año
-en C mis habilidades no daban para mucho, no es que ahora sea un jodido guru,
+por nada en especial... cuando empece a escribir el codigo en C (en abril del 2016)
+mis habilidades no daban para mucho, no es que ahora sea un jodido guru,
 pero algo he aprendido, he? pero por que C? por velocidad y eficiencia, si vas a
-hacer un proyecto tan ambicioso, mal seria que fuese lagueado y demorara aun
-unos pocos segundos en mostrar el contenido.
+hacer un proyecto tan ambicioso, mal seria que fuese lagueado y demorara en
+exeso (mas de 5 segundos) para mostrar el contenido.
 
 Aun si el proyecto se escribiese en un lenguaje interpretado en algun momento
-deberia portarse a C o similar.
+deberia portarse a un lenguaje veloz (no mas de 6 veces inferior al rendimiento
+de C)
 
-podria haber elegido C++... pero me cruce con Go, no es un lenguage que proboque
-facinacion en mi, pero solo es 3 veces mas lento que C y tiene ideas muy
-interesantes. Por añadir creo que su tipado fuerte es un fastidio, al igual que
+podria haber elegido C++... pero me cruce con Go, que con el paso del tiempo ha
+llegado a probacar fascinacion en mi, es solo 3 veces mas lento que C y tiene ideas muy
+interesantes. Como unicas desventajas creo que su tipado fuerte es un fastidio, al igual que
 el estilo de codificacion, llaves forsosas para instrucciones simples y el no
 contar con punteros de verdad (al menos con un nivel de indireccion) obliga a
-hacer apaños impresionantes. Desde luego, como recien llegado a go y tras una
-ligera prueba del lenguaje este comentario puede ser una cagada, disculpad mi
-ignorancia.
+hacer algunos apaños.
 
-Por cierto, pygments, en un tremendo consumidor de tiempo, desconosco si es por
-estar escrito en python, o por la naturaleza compleja de su labor. Habra que
-reescribir una version mas veloz.
+Ademas de su eficiencia, a su fabor Go (con su rica libreria estandar) esta
+pensado para ser verdaderamente multiplataforma, es sencillo en su orientacion a
+objetos, claro y automatico con la gestion de dependencias y de lectura agradable
 
 #### primer ejemplo
 
-seria grosero no monstrar ni un poco, asi que aqui estan dos ejemplos con
-`morg` y el formato actual (exportacion a html)
-
-El primero es un libro (aun en proceso de escritura) sobre el motor de
-expresiones regulares Recursive Regexp
-Raptor [aqui](https://github.com/nasciiboy/raptor-book) el repo, el resultado
-es
-[este](https://github.com/nasciiboy/raptor-book/blob/master/raptor-book.html).
+seria grosero no monstrar ni un poco, asi que
+[aqui](https://github.com/nasciiboy/tgpl) encontran un ejemplo del formato
+actual, con exportacion a html + una muestra de porg
 
 Para ver el resultado en todo su esplendor, clona o baja una copia del repo y
 visualiza en el navegador el html.
 
-El segundo, es una colaboracion que estaba haciendo para traducir un manual de
-emacs. Por motivos varios no he terminado y necesita una seria correccion.
-
-<em>Por que poner algo tan vago?</em> en el se muestra el concepto de utilizar morg para
-traducir manuales de forma
-sencilla. [aqui](https://github.com/nasciiboy/emacs-lisp-intro-es) el repo, el
-resultado (no muy bueno por no actualizar el formato)
-es
-[este](https://github.com/nasciiboy/emacs-lisp-intro-es/blob/master/emacs-lisp-intro_es.html) y
-el fichero protagonista, el
-*.porg*
-[aqui](https://github.com/nasciiboy/emacs-lisp-intro-es/blob/master/emacs-lisp-intro_es.porg)
-
-
 ### zen
 
-Extenso, esto es ya, momento y pausa, el codigo no es elegante, apenas soy un
-programador al inicio de su travesia y recien llegado a golang. Antes de empezar
-a programar, modificar o agregar funciones debe establece una especificacion
-para el formato y de ser posible un consenso global.
+Extenso, esto es ya, un programador al inicio de su travesia soy y antes de
+empezar a programar, modificar o agregar funciones deberia establece una
+especificacion para el formato.
 
-Mas tarde, como calentamiento hacer un exportador robusto y luego sus
-componentes. De camino integrarlo en algunos cms (como hugo), Darle soporte en
-nuestros editores favoritos, al tiempo de otorgarle facilidas de autocompletado y
-resaltado.
-
-Luego establecer una estructura capaz de mantenerse por cuenta propia y/o por
-la coperacion desinteresado de empresas y gobiernos, absorver todo el contenido
-que sea posible y dominar la galaxia
+Mas tarde, como calentamiento hacer un exportador robusto y luego los demas
+componentes. De camino integrarlo en algunos cms, darle soporte en nuestros
+editores favoritos, al tiempo de otorgarle facilidas de autocompletado y
+resaltado, establecer una estructura capaz de mantenerse por cuenta propia y/o
+por la coperacion desinteresado de empresas y gobiernos, y solamente despues de
+ello absorver todo el contenido que sea posible y dominar la galaxia
 
 ## como puedo ayudar
 
-Pagameeeee un salario, enserio! (que medio te es ma sencillo?, contactame por
-correo)
+Pagameeeee un salario, (enserio, [mi correo](mailto:nasciiboy@gmail.com))
 
-Contrata a un grupo de programadores motivados, que compartan este sueño, y
-pagame un salario!
+Contrata a un grupo de programadores motivados, que compartan este sueño (y
+pagame un salario!)
 
-Programa, traduce, discute y comenta
-
-Estas en una organizacion afin a este ideal, ocupas un cargo de gobierno?
-comenta y difunde
+traduce, difunde, discute y comenta
 
 ## TODO
 
@@ -1312,11 +1269,9 @@ comenta y difunde
 Quiero terminar, aclarando lo siguiente: difundo estas ideas y codigo bajo la
 licencia GNU AGPL v3, si tienes las habilidades para hacer lo planteado
 programando todo por cuenta propia, te pido que lo hagas (aunque no estas
-obligado) bajo esta licencia.
+obligado) bajo esta misma licencia.
 
-Incluso sin financiacion, programare lo que pueda, cuando pueda, simplemente por
-ser un reto emocionante, empesando por incorporar el formato a hugo (en unos
-meses o mas)
-
+Mientras tanto programare lo que pueda, cuando pueda, simplemente por
+ser un reto emocionante
 
 Happy Hacking!
