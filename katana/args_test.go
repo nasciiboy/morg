@@ -76,7 +76,7 @@ func TestStr2Arg( t *testing.T ){
   }
 
   for _, d := range data {
-    w, _ := new(Scanner).NewSrc( d.in ).QuietSplash().Init().GetArgType()
+    w, _ := NewScanner( d.in ).QuietSplash().Init().GetArgType()
     if w == nil {
       if d.in != "" { t.Errorf( "TestStr2Arg( %q ) == nil", d.in ) }
       continue
@@ -172,7 +172,7 @@ func TestGetArgs( t *testing.T ){
   }
 
   for _, d := range data {
-    args := new(Scanner).NewSrc( d.in ).QuietSplash().Init().GetArgs()
+    args := NewScanner( d.in ).QuietSplash().Init().GetArgs()
 
     e := new( bytes.Buffer )
     if commArgsHasDifferent( args, d.args ) {

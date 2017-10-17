@@ -86,10 +86,11 @@ const catchNewLineInScan = 1<<'\t' | 1<<'\r' | 1<<' '
 func quietSplash( s *Scanner, msg string ) {}
 
 type Scanner struct {
-  Src    string
-  SrcPos int
-
-  Name   string
+  Name         string
+  Src          string
+  SrcPos       int
+  Mode         uint
+  Whitespace   uint64
 
   line         int
   column       int
@@ -100,22 +101,18 @@ type Scanner struct {
   ninja        bool
 
   Rune         rune
-  RunePos      int
   PrevRune     rune
+  RunePos      int
   PrevRunePos  int
 
   LastToken    Token
 
-  CustomError func(s *Scanner, msg string)
-
-  ErrorCount int
-
-  Mode uint
-
-  Whitespace uint64
+  CustomError  func(s *Scanner, msg string)
+  ErrorCount   int
 }
 
-func (s *Scanner) NewSrc( src string ) *Scanner {
+func NewScanner( src string ) *Scanner {
+  s := new(Scanner)
   s.Src    = src
   s.SrcPos = 0
 
@@ -378,7 +375,7 @@ func (s *Scanner) isIdentRune(ch rune, i int) bool {
   return ch == '_' || unicode.IsLetter(ch) || unicode.IsDigit(ch) && i > 0
 }
 
-func (s *Scanner) scanIdentifier() rune {
+func (s *Scanner) ScanIdentifier() rune {
   // we know the zero'th rune is OK; start scanning at the next one
   ch := s.next()
   for i := 1; s.isIdentRune(ch, i); i++ {
@@ -513,7 +510,7 @@ func (s *Scanner) scanEscape(quote rune) rune {
   return ch
 }
 
-func (s *Scanner) scanString(quote rune) (n int) {
+func (s *Scanner) ScanString(quote rune) (n int) {
   ch := s.next() // read character after quote
   for ch != quote {
     if ch == '\n' || ch < 0 {
@@ -530,7 +527,7 @@ func (s *Scanner) scanString(quote rune) (n int) {
   return
 }
 
-func (s *Scanner) scanRawString() {
+func (s *Scanner) ScanRawString() {
   ch := s.next() // read character after '`'
   for ch != '`' {
     if ch < 0 {
@@ -541,13 +538,13 @@ func (s *Scanner) scanRawString() {
   }
 }
 
-func (s *Scanner) scanChar() {
-  if s.scanString('\'') != 1 {
+func (s *Scanner) ScanChar() {
+  if s.ScanString('\'') != 1 {
     s.Error("illegal char literal")
   }
 }
 
-func (s *Scanner) scanComment(ch rune) rune {
+func (s *Scanner) ScanComment(ch rune) rune {
   // ch == '/' || ch == '*'
   if ch == '/' {
     // line comment
@@ -593,7 +590,7 @@ redo:
   case s.isIdentRune(s.Rune, 0):
     if s.Mode&(ScanIdents|ScanBools) != 0 {
       s.LastToken.Type = ScanIdent
-      s.scanIdentifier()
+      s.ScanIdentifier()
 
       if s.Mode&ScanBools != 0 && (s.Src[tokPos] == 't' || s.Src[tokPos] == 'f') {
         switch s.Src[tokPos:s.RunePos] {
@@ -614,13 +611,13 @@ redo:
     case EOF:
     case '"':
       if s.Mode&ScanStrings != 0 {
-        s.scanString('"')
+        s.ScanString('"')
         s.LastToken.Type = ScanString
       }
       s.next()
     case '\'':
       if s.Mode&ScanChars != 0 {
-        s.scanChar()
+        s.ScanChar()
         s.LastToken.Type = ScanChar
       }
       s.next()
@@ -640,15 +637,15 @@ redo:
       s.next()
       if (s.Rune == '/' || s.Rune == '*') && s.Mode&ScanComments != 0 {
         if s.Mode&SkipComments != 0 {
-          s.Rune = s.scanComment(s.Rune)
+          s.Rune = s.ScanComment(s.Rune)
           goto redo
         }
         s.LastToken.Type = ScanComment
-        s.scanComment(s.Rune)
+        s.ScanComment(s.Rune)
       }
     case '`':
       if s.Mode&ScanRawStrings != 0 {
-        s.scanRawString()
+        s.ScanRawString()
         s.LastToken.Type = ScanRawString
       }
       s.next()

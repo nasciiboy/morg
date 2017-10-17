@@ -269,7 +269,7 @@ hola que hace
   }
 
   for _, d := range data {
-    skan := new(Scanner).NewSrc( d.in ).QuietSplash().Init()
+    skan := NewScanner( d.in ).QuietSplash().Init()
     block := skan.GetBlock()
 
     if block == nil && d.w == 0 { continue }

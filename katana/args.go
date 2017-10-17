@@ -32,7 +32,7 @@ var typeArgToString = map[ byte ]string{
 	Comment     : "Comment",
 }
 
-func TypeToString( at byte  ) string {
+func ArgTypeToString( at byte  ) string {
   if s, found := typeArgToString[ at ]; found { return s }
 
   return "unknow type"
@@ -50,9 +50,9 @@ type ArgType struct {
 
 type ArgMap map[string][]Arg
 
-func (scan *Scanner) GetArgs() (args []ArgType) {
-  for scan.Rune != EOF {
-    if arg, _ := scan.GetArgType(); arg != nil {
+func (s *Scanner) GetArgs() (args []ArgType) {
+  for s.Rune != EOF {
+    if arg, _ := s.GetArgType(); arg != nil {
       args = append( args, *arg )
     }
   }
@@ -118,7 +118,7 @@ func (s *Scanner) getFarg( name, opening string, closing rune ) (farg []Arg, err
   }
 }
 
-func (d *Scanner) syncOpt( opt ArgType, m map[string][]Arg ) (r ArgType, cannon bool) {
+func (d *Scanner) syncOpt( opt ArgType, m map[string][]Arg ) (sync ArgType, cannon bool) {
   def, ok := m[ opt.Name ]
   if !ok { return opt, false }
 
@@ -134,7 +134,7 @@ func (d *Scanner) syncOpt( opt ArgType, m map[string][]Arg ) (r ArgType, cannon 
   for i, arg := range opt.Args {
     if arg.Type != def[i].Type {
       if arg.Type != Empty {
-        d.Error( fmt.Sprintf( "syncOpt(): Arg \"%s.Args[%d]\" type %q, expected %q", opt.Name, i, TypeToString( arg.Type ), TypeToString( def[i].Type ) ) )
+        d.Error( fmt.Sprintf( "syncOpt(): Arg \"%s.Args[%d]\" type %q, expected %q", opt.Name, i, ArgTypeToString( arg.Type ), ArgTypeToString( def[i].Type ) ) )
       }
 
       opt.Args[i] = def[i]

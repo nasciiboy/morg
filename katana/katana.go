@@ -39,7 +39,7 @@ type doc struct {
 
 func Parse( name, src string ) (d *Doc, errs string) {
   doc, buff   := new(doc), new(bytes.Buffer)
-  doc.Scanner  = new(Scanner).NewSrc( src )
+  doc.Scanner  = NewScanner( src )
   doc.Scanner.CustomError = func (s *Scanner, msg string){
     fmt.Fprintf( buff, "katana:%s: %s\n", s.Pos(), msg )
   }

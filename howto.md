@@ -1,11 +1,8 @@
-la aleatoriadad llevo a programar morg en golang (aunque creo que ya se como
-portarlo a c) de momento a instalar go
-
 ## instalar go (version GNU)
 
 primero ve a la direccion https://golang.org/dl/ y clica el enlace de descarga
 donde diga algo como (al dia de escribir esto)
-<em>go1.8.linux-amd64.tar.gz</em> (Cambia el <em>amd64</em> por la arquitectura
+<em>go1.9.1.linux-amd64.tar.gz</em> (Cambia el <em>amd64</em> por la arquitectura
 de tu equipo)
 
 Si todo va bien tendras el comprimido en `$HOME/Downloads`, abrimos un terminal
@@ -41,7 +38,7 @@ establece en la variable de entorno `GOPATH`, en mi caso
 export GOPATH=/home/nasciiboy/go
 ```
 
-ahora cuando le pida a `go`, que me instale algo, lo colacara dentro de la
+ahora cuando le pida a `go` que me instale algo, lo colacara dentro de la
 carpeta <span class="file" >go</span> en mi
 home... peero para ejecutar los binarios que se creen en dicha direccion tambien
 debe agregarse esta direccion a `$PATH`. Vamos con ello
@@ -114,11 +111,9 @@ go get -u -v github.com/nasciiboy/morg
 (nota: no se para que sea la `v`, asi lo vi en un proyecto... y asi lo dejo)
 
 para quien no lo sepa, morg es un lenguaje de marcas ligeras que pretende
-dominar el mundo, terminar con el empleo, y otras cosas (probablemente demasiado
-ambisiosas)
-
-el sistema de documentacion aun esta en fase inicial y no es mi proposito ni
-intencion definir o programar todos los aspectos, pero vamos a lo basico
+dominar el mundo, el sistema de documentacion aun esta en fase inicial y no es
+mi proposito ni intencion definir o programar todos los aspectos, pero vamos a
+lo basico
 
 ### primer paso
 
@@ -176,9 +171,8 @@ comando. Este <q>bloque de configuracion</q> terminara en cuanto aparesca el
 primer parrafo o encabezado
 
 el comando `style` sirve para establecer la ruta a una hoja de estilos, para el
-caso un css. De momento [este](../worg-data.zip) es el que utilizo, puedes
-encontrar la version *de desarrollo* dentro del codigo fuente, si vas a
-`~/go/src/github.com/nasciiboy/morg/biskana/testdata/worg-data/worg.css`
+caso un css. De momento [este](../testdata/worg-data) es el que utilizo, copia
+el contenido de dicha carpeta, lo interesante esta en el [css](../testdata/worg-data/worg.css)
 
 si no se incluye un titulo (`..title > titulo`) en el documento, se asigna el
 nombre del fichero como el titulo.
@@ -187,31 +181,19 @@ de momento el comando `options` permite tres cosas:
 
 - Si colocamos `toc` se creara una tabla de contenido (indice)
 
-- Con `highlight` se incluira el enlace a un script para resaltar el codigo
-  fuente, este apunta a una carpeta de nombre `highlight` que debe encontrarse
-  en la misma ruta que el fichero resultado
+- Con `fancyCode` se activa el resaltado del codigo fuente.
 
-  Para optener tu carpeta `highlight` ve
-  a [esta](https://highlightjs.org/download/) pagina y especifica que lenguajes
-  deseas, descarga, descomprime y coloca en la misma carpeta del resultado, o en
-  `~/go/src/github.com/nasciiboy/morg/biskana/testdata/` encortraras la carpeta
-  `highlight` con todos los lenguajes disponibles, copia y mueve a tu directorio
-  de trabajo
+  es posible especificar un tema para la exportacion html, pero de momento, no
+  es una opcion que recomiende, aun asi, si deseas experimentar puedes consultar
+  los temas disponibles del proyecto
+  [chroma](https://github.com/alecthomas/chroma), que es la base del codigo
+  encargado del resaltado
 
-  Coloque un estilo por defecto en el codigo fuente, la forma mas sencilla de
-  modificarlo es hacelo el fichero resultado (a mano), los estilos de resaltado
-  disponibles estan dentro de `highlight/styles`
+  La forma apropiada de resaltar el codigo fuente, es utilizar algun tema
+  compatible con pygments. Por ejemplo ver [este repo](https://github.com/jwarby/jekyll-pygments-themes/).
 
-- Si por el contrario si (tienes instalado y) quieres que el resaltado se
-  incluya con etiquetas utilizando `pygments`, debes utilazar esta opcion en
-  options `..options > pygments`
-
-  encontraras tambien dentro del [css](../worg-data.zip), etiquetas para
-  establecer el estilo del resaltado.
-
-  Puedes opteren mas estilos css para
-  pygments [aqui](https://github.com/jwarby/jekyll-pygments-themes/), descarga
-  el estilo, y agrega un comando `..style > direccion/a/mi/pygments.css`
+  Por motivos "internos" morg no coloca prefijos en la exportacion
+  (`.highlight`), asi que tendran que removerse estos de los temas css
 
 ### estructura
 
@@ -600,16 +582,11 @@ ya vimos al inicio)
 ..title    > titulo del documento
   puede abarcar varias lineas, siempre con indentacion y sin lineas
   en blanco
-
-  esto queda fuera del comando titulo, (de hecho termina el bloque de
-  comandos de configuracion)
-
 ..author   > nasciiboy
 ..mail     > nasciiboy@gmail.com
 ..style    > worg/worg.css
-..options  > highlight
+..options  > fancyCode
 ```
-
 
 para los comandos que solo tienen `cuerpo`
 
@@ -650,22 +627,22 @@ tipo de contenido, su sintaxis es
 ..cols >
   primer columna
 
-  ::
+<>
 
   segunda columna
 
   ..src > codigo-fuente
     algo
 
-  ::
+<>
 
   tercer columna
 
   ..img > ruta/a/imagen
 ```
 
-donde el delimitador de las columnas es la secuencia `::`. Debe estar en
-solitario en su propia linea, con dos espacios de indentacion.
+donde el delimitador de las columnas es la secuencia `<>`. Debe estar en
+solitario en su propia linea
 
 Por su parte los comandos con *argumento* y *cuerpo*, se utilizan para bloques
 de tipo <q>codigo fuente</q>

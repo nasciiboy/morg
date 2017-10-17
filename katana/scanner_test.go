@@ -269,7 +269,7 @@ func countNewlines(s string) int {
 }
 
 func testScan(t *testing.T, mode uint) {
-  s := new(Scanner).NewSrc(makeSource(" \t%s\n")).Init()
+  s := NewScanner(makeSource(" \t%s\n")).Init()
   s.Mode = mode
   s.Scan()
   line := 1
@@ -291,7 +291,7 @@ func TestScan(t *testing.T) {
 
 func TestPosition(t *testing.T) {
   src := makeSource("\t\t\t\t%s\n")
-  s := new(Scanner).NewSrc(src).Init()
+  s := NewScanner(src).Init()
   s.Mode = GoTokens &^ SkipComments
   s.Scan()
   pos := Position{"", 4, 1, 5}
@@ -318,7 +318,7 @@ func TestPosition(t *testing.T) {
 func TestScanZeroMode(t *testing.T) {
   src := makeSource("%s\n")
   str := src
-  s := new(Scanner).NewSrc(src).Init()
+  s := NewScanner(src).Init()
   s.Mode = 0       // don't recognize any token classes
   s.Whitespace = 0 // don't skip any whitespace
   s.Scan()
@@ -338,7 +338,7 @@ func TestScanZeroMode(t *testing.T) {
 
 func testScanSelectedMode(t *testing.T, mode uint, class rune) {
   src := makeSource("%s\n")
-  s := new(Scanner).NewSrc(src).Init()
+  s := NewScanner(src).Init()
   s.Mode = mode
   s.Scan()
   for s.LastToken.Type != EOF {
@@ -367,7 +367,7 @@ func TestScanSelectedMask(t *testing.T) {
 func TestScanNext(t *testing.T) {
   const BOM = '\uFEFF'
   BOMs := string(BOM)
-  s := new(Scanner).NewSrc( "if a == bcd /* com" + BOMs + "ment */ {\n\ta += c\n}" + BOMs + "// line comment ending in eof" ).Init()
+  s := NewScanner( "if a == bcd /* com" + BOMs + "ment */ {\n\ta += c\n}" + BOMs + "// line comment ending in eof" ).Init()
   s.Scan(); checkTok(t, s, s.LastToken, 1, s.LastToken.Type, ScanIdent, "if") // the first BOM is ignored
   s.Scan(); checkTok(t, s, s.LastToken, 1, s.LastToken.Type, ScanIdent, "a")
   s.Scan(); checkTok(t, s, s.LastToken, 1, s.LastToken.Type, '=', "=")
@@ -399,7 +399,7 @@ func TestScanWhitespace(t *testing.T) {
   const orig = 'x'
   buf.WriteByte(orig)
 
-  s := new(Scanner).NewSrc( buf.String() ).Init()
+  s := NewScanner( buf.String() ).Init()
   s.Mode = 0
   s.Whitespace = ws
   s.Scan()
@@ -409,7 +409,7 @@ func TestScanWhitespace(t *testing.T) {
 }
 
 func testError(t *testing.T, src, pos, msg string, tok rune) {
-  s := new(Scanner).NewSrc( src )
+  s := NewScanner( src )
   errorCalled := false
   s.CustomError = func(s *Scanner, m string) {
     if !errorCalled {
@@ -497,12 +497,12 @@ func checkScanPos(t *testing.T, s *Scanner, offset, line, column int, char rune)
 
 func TestPos(t *testing.T) {
   // corner case: empty source
-  s := new(Scanner).NewSrc("").Init()
+  s := NewScanner("").Init()
   checkPos(t, s.Pos(), Position{Offset: 0, Line: 1, Column: 1})
   checkPos(t, s.Pos(), Position{Offset: 0, Line: 1, Column: 1})
 
   // corner case: source with only a newline
-  s = new(Scanner).NewSrc("\n").Init()
+  s = NewScanner("\n").Init()
   checkPos(t, s.Pos(), Position{Offset: 0, Line: 1, Column: 1})
   checkNextPos(t, s, 1, 2, 1, '\n')
   // after EOF position doesn't change
@@ -514,7 +514,7 @@ func TestPos(t *testing.T) {
   }
 
   // corner case: source with only a single character
-  s = new(Scanner).NewSrc("本").Init()
+  s = NewScanner("本").Init()
   checkPos(t, s.Pos(), Position{Offset: 0, Line: 1, Column: 1})
   checkNextPos(t, s, 3, 1, 2, '本')
   // after EOF position doesn't change
@@ -526,7 +526,7 @@ func TestPos(t *testing.T) {
   }
 
   // positions after calling Next
-  s = new(Scanner).NewSrc("  foo६४  \n\n本語\n").Init()
+  s = NewScanner("  foo६४  \n\n本語\n").Init()
   checkNextPos(t, s, 1, 1, 2, ' ')
   checkNextPos(t, s, 2, 1, 3, ' ')
   checkNextPos(t, s, 3, 1, 4, 'f')
@@ -550,7 +550,7 @@ func TestPos(t *testing.T) {
   }
 
   // positions after calling Scan
-  s = new(Scanner).NewSrc("abc\n本語\n\nx").Init()
+  s = NewScanner("abc\n本語\n\nx").Init()
   s.Mode = 0
   s.Whitespace = 0
   checkScanPos(t, s, 0, 1, 1, 'a')
@@ -589,7 +589,7 @@ func TestGetLine(t *testing.T){
   }
 
   for _, d := range data {
-    scan := new(Scanner).NewSrc( d.input ).Init()
+    scan := NewScanner( d.input ).Init()
 
     if scan.Line != d.output {
       t.Errorf( "TestGetLine( %q ) \nreturn   %q\nexpected %q", d.input, scan.Line, d.output )
@@ -613,7 +613,7 @@ func TestGetLine(t *testing.T){
   }
 
   for i, d := range data2 {
-    scan := new(Scanner).NewSrc( d.input ).Init()
+    scan := NewScanner( d.input ).Init()
 
     for x := 0; x < i; x++ { scan.Next() }
 
@@ -640,9 +640,8 @@ func TestGetLine(t *testing.T){
     { "", "" },
   }
 
-  scan := new(Scanner)
   for _, d := range data3 {
-    scan.NewSrc( d.input ).Init()
+    scan := NewScanner( d.input ).Init()
 
     for x := 0; x < 2; x++ { scan.Next() }
 
@@ -670,9 +669,8 @@ func TestNextLine(t *testing.T){
     { "1\n2\n3\n4\n5\n", []string{ "1\n", "2\n", "3\n", "4\n", "5\n" } },
   }
 
-  scan := new(Scanner)
   for _, d := range data {
-    scan.NewSrc( d.input ).Init()
+    scan := NewScanner( d.input ).Init()
 
     for i, line := range d.output {
       if scan.Line !=  line {
@@ -685,8 +683,7 @@ func TestNextLine(t *testing.T){
 }
 
 func TestScanAndNextLine(t *testing.T){
-  scan := new(Scanner)
-  scan.NewSrc( "\nhey line\nnext liner\n\nbig opai\nexit" ).Init()
+  scan := NewScanner( "\nhey line\nnext liner\n\nbig opai\nexit" ).Init()
 
   scan.Scan()
   expected := "hey"
@@ -763,8 +760,7 @@ func TestScanAndNextLine(t *testing.T){
 }
 
 func TestNinja(t *testing.T){
-  scan := new(Scanner)
-  scan.NewSrc( "\n--y \"text\" line\nnext liner\nuooo\nbig opai\nexit" ).Init()
+  scan := NewScanner( "\n--y \"text\" line\nnext liner\nuooo\nbig opai\nexit" ).Init()
 
   // scan.NinjaLenMoves( 2 )
 
@@ -827,8 +823,7 @@ func TestNinja(t *testing.T){
 }
 
 func TestSet2TokenPos(t *testing.T){
-  scan := new(Scanner)
-  scan.NewSrc( "\nhey line\nnext liner\nuooo\nbig opai\nexit" ).Init()
+  scan := NewScanner( "\nhey line\nnext liner\nuooo\nbig opai\nexit" ).Init()
 
   scan.NinjaLenMoves( 2 )
 
@@ -975,7 +970,7 @@ func checkScanners( t *testing.T, a, b *Scanner ){
 }
 
 func TestLimits( t *testing.T ){
-  s := new( Scanner ).NewSrc( "hey\nlisten!" ).Init()
+  s := NewScanner( "hey\nlisten!" ).Init()
   s.NextLine()
 
   expected := "listen!"

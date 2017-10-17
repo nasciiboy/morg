@@ -233,7 +233,7 @@ func makeTableRow( doc *DocNode, str string ){
 
   for _, line := range( s ) {
     var re regexp4.RE
-    re.Match( line, ":|:b<:b:|>+#!" )
+    re.Match( line, ":|:b<[^|]+>" )
 
     for i := 1; i <= re.TotCatch(); i++ {
       if i <= len( cells ) {
@@ -245,7 +245,7 @@ func makeTableRow( doc *DocNode, str string ){
   }
 
   for _, c := range( cells ) {
-    m := new(Scanner).NewSrc( txt.Linelize( txt.SpaceSwap( c, " " ) ) ).QuietSplash().Init().GetMarkup()
+    m := NewScanner( txt.Linelize( txt.SpaceSwap( c, " " ) ) ).QuietSplash().Init().GetMarkup()
 
     doc.AddNode( TableCell{ Mark: m } )
   }
@@ -407,7 +407,7 @@ func (d *doc) makeSrci( b *Block ) (node DocNode) {
 
   srci.Body = make( []BinariString, 0, 4 )
   body := txt.RmIndent( b.Body.Text(), b.Indent )
-  scann := new(Scanner).NewSrc( body ).QuietSplash().Init()
+  scann := NewScanner( body ).QuietSplash().Init()
   for scann.Rune != EOF  {
     if len( scann.Line ) >= 2 && scann.Line[:2] == "> " {
       srci.Body = append( srci.Body, BinariString{  true, srciGetCode( scann ) } )

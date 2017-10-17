@@ -22,7 +22,7 @@ type Markup struct {
 }
 
 func (s *Scanner) GetFancyMarkup() (m Markup) {
-  fancy := new(Scanner).NewSrc( txt.Linelize( s.Text() ) ).QuietSplash().Init()
+  fancy := NewScanner( txt.Linelize( s.Text() ) ).QuietSplash().Init()
   m = fancy.GetMarkup()
 
   if fancy.ErrorCount > 0 { s.GetMarkup() }
@@ -38,7 +38,7 @@ func (s *Scanner) GetFancyCustomMarkup( label, brace byte ) (m Markup) {
     str = re.RplCatch( "<>", 1 )
   }
 
-  fancy := new(Scanner).NewSrc( txt.Linelize( str ) ).QuietSplash().Init()
+  fancy := NewScanner( txt.Linelize( str ) ).QuietSplash().Init()
   m = fancy.MarkupParser( label, brace )
 
   if fancy.ErrorCount > 0 { s.MarkupParser( label, brace ) }

@@ -45,7 +45,7 @@ func TestMarkup( t *testing.T ){
   }
 
   for _, d := range data {
-    x := new(Scanner).NewSrc( d.in ).Init()
+    x := NewScanner( d.in ).Init()
     eCount := 0
     x.CustomError = func( s *Scanner, msg string ){ eCount++ }
     m := x.GetMarkup()
@@ -85,7 +85,7 @@ func TestRebuild( t *testing.T ){
   }
 
   for i, d := range data {
-    x := new(Scanner).NewSrc( d ).Init()
+    x := NewScanner( d ).Init()
     x.CustomError = quietSplash
     m := x.GetMarkup()
 
@@ -109,7 +109,7 @@ func TestMultiMarkupRebuild( t *testing.T ){
   }
 
   for i, d := range data {
-    x := new(Scanner).NewSrc( d.in ).Init()
+    x := NewScanner( d.in ).Init()
     x.CustomError = quietSplash
     m := x.GetMarkup()
 
