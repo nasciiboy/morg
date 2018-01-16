@@ -3,6 +3,8 @@ package katana
 import (
   "testing"
   "fmt"
+  "bytes"
+  "github.com/nasciiboy/txt"
 )
 
 func TestGridify( t *testing.T ){
@@ -584,4 +586,33 @@ func (s *quad) diffPoints( points [4]point ) bool {
 
 
   return false
+}
+
+func TextTable2HtmlTable( data string ) (string, error) {
+  t, e := txt2rTable( data )
+  if e != nil { return "", fmt.Errorf( "Text2Table: %v", e ) }
+
+  buf := new( bytes.Buffer )
+  fmt.Fprintf( buf,  "<table border=\"1\">\n" )
+
+  for i, sec := range [3][][]TableCell{ t.Head, t.Body, t.Foot } {
+    if sec == nil { continue }
+
+    fmt.Fprintf( buf,  "<%s>\n", zs[i] )
+      for _, row := range sec {
+        buf.WriteString( "  <tr>" )
+        for _, cell := range row {
+          fmt.Fprintf( buf, "<%s", ys[ i ] )
+          if cell.ColSpan != 1 { fmt.Fprintf( buf, " colspan=\"%d\"", cell.ColSpan ) }
+          if cell.RowSpan != 1 { fmt.Fprintf( buf, " rowspan=\"%d\"", cell.RowSpan ) }
+          fmt.Fprintf( buf, "><p>%s</p></%s>", txt.SpaceSwap( cell.RawData, " " ), ys[ i ] )
+        }
+        buf.WriteString( "</tr>\n" )
+      }
+    fmt.Fprintf( buf,  "</%s>\n", zs[i] )
+  }
+
+  fmt.Fprintf( buf, "</table>\n" )
+
+  return buf.String(), nil
 }
