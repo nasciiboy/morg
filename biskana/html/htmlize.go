@@ -145,7 +145,10 @@ func AtCommand( left, right string, label byte ) string {
   case 'j' : return right
   case 'k' : return "<kbd>" + right + "</kbd>"
   case 'l' :
-    if left != "" && left[0] == '#' && right != "" && right[0] == '#' { right = right[1:] }
+    if left != "" && left[0] == '#' && right != "" && right[0] == '#' {
+      right = right[1:]
+      left  = strings.ToLower( left )
+    }
     return `<a href="` + ToLink( left ) + `" >` + right + "</a>"
   case 'm' : return `<span class="math" >` + right + "</span>"
   case 'n' : return `<span class="note" ><sup><a href="#` + ToLink(left) + `" >` + right + "</a></sup></span>"

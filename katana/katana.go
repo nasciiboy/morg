@@ -89,7 +89,7 @@ func (d *doc) swapScanner( s *Scanner ) *doc {
 
 var reComment   = regexp4.Compile( "#^$:b*:@(:b+.+|:s*)"               )
 var reHeadline  = regexp4.Compile( "#^:*+:b"                           )
-var reTable     = regexp4.Compile( "#^$:b*:|([^|]+:|)+:s*"             )
+var reTable     = regexp4.Compile( "#^$:b*:+(-+:+)+:s*"                )
 var reList      = regexp4.Compile( "#^:b*(-|:+|:>|(:d+|:a+)[.)]):b+:S" )
 var reAbout     = regexp4.Compile( "#^:b*::{2}:b+:S"                   )
 var reCommand   = regexp4.Compile( "#^:b*:.:.:b*[:w:-:_:&]+[^:>\n]*:>" )

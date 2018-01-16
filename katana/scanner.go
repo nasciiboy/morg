@@ -572,6 +572,10 @@ func (s *Scanner) ScanComment(ch rune) rune {
   return ch
 }
 
+func (s *Scanner) SkipBlancs() {
+  for catchNewLineInScan & (1 << uint(s.Rune) ) != 0 { s.next() }
+}
+
 func (s *Scanner) Scan() Token {
 redo:
   if s.Rune == EOF {

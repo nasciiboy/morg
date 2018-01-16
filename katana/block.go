@@ -59,6 +59,8 @@ var BlockHat = map[string]BlockType {
 
   "ignore"      : BlockDefault,
   "center"      : BlockDefault,
+  "right"       : BlockDefault,
+  "left"        : BlockDefault,
   "bold"        : BlockDefault,
   "emph"        : BlockDefault,
   "verse"       : BlockDefault,

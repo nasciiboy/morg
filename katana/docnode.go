@@ -147,9 +147,9 @@ type TableRow struct {
 }
 
 type TableCell struct {
-  Mark   Markup
-  Wide   int
-  Length int
+  RawData string
+  ColSpan int
+  RowSpan int
 }
 
 type Columns struct {

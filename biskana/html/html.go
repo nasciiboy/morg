@@ -4,6 +4,7 @@ import (
   "bytes"
   "fmt"
   "strconv"
+  "strings"
 
   "github.com/nasciiboy/morg/katana"
   "github.com/nasciiboy/txt"
@@ -102,7 +103,7 @@ func writeToc( w *bytes.Buffer, doc *katana.Doc ){
 
       if index++; index >= len( doc.Toc ) { run = false }
       fmt.Fprintf( w,  "%s<li><a class=\"h%d\" href=\"#%s\" >%s</a></li>\n",
-        spcs, h.Level + doc.HShift, ToLink( ToSafeHtml( h.Mark.MakeLeft() )), Fontify( h.Mark ) )
+        spcs, h.Level + doc.HShift, strings.ToLower( ToLink( ToSafeHtml( h.Mark.MakeLeft() )) ), Fontify( h.Mark ) )
     }
 
     fmt.Fprintf( w, "%s</ul>\n", spcs )
@@ -127,7 +128,7 @@ func makeHtmlBody( w *bytes.Buffer, doc *katana.Doc ){
     if headline.Level == 0 {
     } else {
       fmt.Fprintf( w, "<h%d id=\"%s\" >%s</h%[1]d>\n",
-        headline.Level + doc.HShift, ToLink( ToSafeHtml( headline.Mark.MakeLeft() )), Fontify( headline.Mark ) )
+        headline.Level + doc.HShift, strings.ToLower( ToLink( ToSafeHtml( headline.Mark.MakeLeft() )) ), Fontify( headline.Mark ) )
     }
 
     if len( docNode.Cont ) > 0 {
@@ -253,46 +254,47 @@ func makeDlListNodes( w *bytes.Buffer, cont []katana.DocNode, doc *katana.Doc ){
 }
 
 func makeTable( w *bytes.Buffer, table katana.Table, cont []katana.DocNode, doc *katana.Doc ) {
-  w.WriteString( "<table>\n" )
-  i := 0
-  for ;i < len( cont ); i++ {
+  w.WriteString( "<table border=\"1\">\n" )
+  secLabel, currentLabel := "", ""
+  for i := range cont {
     d := cont[i].Node.(katana.TableRow)
 
-    if i == 0  {
-      if d.Type == katana.TableHead {
-        w.WriteString( "<thead>\n" )
-      } else { break }
+    switch d.Type {
+    case katana.TableHead: currentLabel = "thead"
+    case katana.TableBody: currentLabel = "tbody"
+    case katana.TableFoot: currentLabel = "tfoot"
     }
 
-    if d.Type != katana.TableHead {
-      w.WriteString( "</thead>\n" )
-      break
+    if currentLabel != secLabel {
+      if secLabel != "" {
+        fmt.Fprintf( w, "</%s>\n", secLabel )
+      }
+      secLabel = currentLabel
+      fmt.Fprintf( w, "<%s>\n", secLabel )
     }
-
     makeTableRow( w, d.Type, cont[i].Cont, doc )
   }
 
-  if i < len( cont ) {
-    w.WriteString( "<tbody>\n" )
-    for _, row := range cont[i:] {
-      d := row.Node.(katana.TableRow)
-      makeTableRow( w, d.Type, row.Cont, doc )
-    }
-    w.WriteString( "</tbody>\n" )
-  }
+  if secLabel != "" { fmt.Fprintf( w, "</%s>\n", secLabel ) }
 
   w.WriteString( "</table>\n" )
 }
 
 func makeTableRow( w *bytes.Buffer, Type int, cells []katana.DocNode, doc *katana.Doc ){
   w.WriteString( "<tr>" )
+  label := "th"
+  if Type != katana.TableHead { label = "td" }
+
   for _, cell := range cells {
-    switch Type {
-    case katana.TableHead: fmt.Fprintf( w, "<th>%s</th>", Fontify( cell.Node.(katana.TableCell).Mark ) )
-    case katana.TableBody: fmt.Fprintf( w, "<td>%s</td>", Fontify( cell.Node.(katana.TableCell).Mark ) )
-    case katana.TableFoot: fmt.Fprintf( w, "<td>%s</td>", Fontify( cell.Node.(katana.TableCell).Mark ) )
-    }
+    c := cell.Node.(katana.TableCell)
+    fmt.Fprintf( w, "<%s", label )
+    if c.ColSpan != 1 { fmt.Fprintf( w, " colspan=\"%d\"", c.ColSpan ) }
+    if c.RowSpan != 1 { fmt.Fprintf( w, " rowspan=\"%d\"", c.RowSpan ) }
+    w.WriteByte( '>' )
+    walkContent( w, cell.Cont, doc )
+    fmt.Fprintf( w, "</%s>", label )
   }
+
   w.WriteString( "</tr>\n" )
 }
 

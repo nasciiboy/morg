@@ -694,26 +694,32 @@ donde el *contenido* empieza luego de la primer linea en blanco.
 #### Tablas
 
 ```
-| encabezado    | otro e  |
-|===============|=========|
-| elemento uno  | algo x  |
-|---------------|---------|
-| elemento dos  | algo    |
-|               | mas...  |
-|---------------|---------|
-| elemento tres | otra    |
-|               | cosa    |
-|               | @b(mas) |
++----------------------+
+|   mi tabla compleja  |
++=======+====+=========+
+|  a    | b  |    c    |
++---+---+----+----+----+
+| d | e | f  |  g |  h |
+|   |   +----+----+----+
+|   |   | i  |    j    |
+|   +---+----+---------+
+|   | k | l  |         |
++---+   +----+|||m||||||
+|   |   | o  |         |
+| n |   +----+---------+
+|   |   | p  |    q    |
++---+---+----+---------+
 ```
 
-el encabezado se coloca a la cima, delimitado con `|===|==|`
+el estilo (con esquinas `+` y contornos `|` o `-`) de tablas que utiliza
+reStructuredText... con el adicional de poder dividir el encabezado
+con un divisor que abarque toda la linea, substituyendo `-` por `=`.
 
-cada fila se separa con `|----|---|`
+Tambien se brindan "pies" de tabla con un divisor que abarque toda la linea,
+substituyendo `-` por `~`.
 
-una tabla puede tener (o no) cuerpo o encabezado, pero las filas deben tener
-siempre el mismo numero de columnas, en el futuro se hara una tabla super
-dopada, de momento esto es lo que hay, por cierto, las tablas tienes soporte
-completo de comandos `@`
+las tablas tienen soporte completo para toda la sintaxis, evite colocar
+"encabezados"
 
 ## Exportar y visualizar
 

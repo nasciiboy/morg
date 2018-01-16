@@ -1029,24 +1029,29 @@ Sin duda un tema complejo, podria tenerse una tabla totalmente funcional con
 formulas y demas, pero para inciar:
 
 ```
-| encabezado    | otro e  |
-|===============|=========|
-| elemento uno  | algo x  |
-|---------------|---------|
-| elemento dos  | algo a  |
-|               |---------|
-|               | algo b  |
-|---------------|---------|
-| d o s  c e l d a s      |
++----------------------+
+|   mi tabla compleja  |
++=======+====+=========+
+|  a    | b  |    c    |
++---+---+----+----+----+
+| d | e | f  |  g |  h |
+|   |   +----+----+----+
+|   |   | i  |    j    |
+|   +---+----+---------+
+|   | k | l  |         |
++---+   +----+|||m||||||
+|   |   | o  |         |
+| n |   +----+---------+
+|   |   | p  |    q    |
++---+---+----+---------+
 ```
 
-el encabezado se coloca a la cima, delimitado con `|===|==|`
+el estilo (con esquinas `+` y contornos `|` o `-`) de tablas que utiliza
+reStructuredText... con el adicional de poder dividir el encabezado
+con un divisor que abarque toda la linea, substituyendo `-` por `=`.
 
-cada elemento se separa con `|----|---|`
-
-unir celdas es complicado podria tomarse en consideracion el numero exacto de
-caracteres para obtener esta informacion, o colocar un signo <q>invisible</q> de
-alineacion dentro la la tabla como `^`
+Tambien se brindan "pies" de tabla con un divisor que abarque toda la linea,
+substituyendo `-` por `~`.
 
 #### porg
 
@@ -1129,6 +1134,7 @@ De forma simplificada, para optener el programa
 ``` sh
 go get github.com/nasciiboy/morg
 ```
+
 si ya tenemos instalado morg, para actualizar
 
 ``` sh

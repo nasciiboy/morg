@@ -44,6 +44,7 @@ func TestBiskana( t *testing.T ) {
     "38_list_complex",
     "44_table_basic",
     "45_table_multiline-cels",
+    "46_complex-table",
     "70_all_basic",
   }
 

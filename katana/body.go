@@ -163,91 +163,50 @@ func (d *doc) getHeadline() (node DocNode) {
 }
 
 func (d *doc) getTable( doc *DocNode ){
-  init, indentLevel := d.RunePos, txt.CountIndentSpaces( d.Line )
-
-  for d.NextLine(); whoIsThere( d.Line ) == NodeTable && indentLevel == txt.CountIndentSpaces( d.Line ); d.NextLine() {
-  }
+  init := d.RunePos
+  indentLevel := txt.CountIndentSpaces( d.Line )
+  _, wBody := txt.DragTextByIndent( d.Src[d.RunePos:], indentLevel )
+  d.NinjaLenMoves( wBody )
 
   strTable := txt.RmSpacesAtEnd( txt.RmIndent( d.Src[init:d.RunePos], indentLevel ) )
 
+  rt, err := txt2rTable( strTable )
+  if err != nil {
+    d.Error( fmt.Sprintf( "Text2Table: %v", err ) )
+    doc.Add( DocNode{ Node: Brick{
+      Type  : "ERROR",
+      Head  : "TableError",
+      Body  : strTable,
+    } } )
+    return
+  }
+
   table := DocNode{ Node: Table{} }
-  makeTable( &table, strTable )
+  d.makeTable( &table, &rt )
   doc.Add( table )
 }
 
-func makeTable( table *DocNode, str string ){
-  headerTable, width := getTableHeader( str )
+// var rero = regexp4.Compile( "#?\n<:b*:|(-+:|)+:b*\n*>" )
+// var rehe = regexp4.Compile( "#?\n<:b*:|(=+:|)+:b*\n*>" )
 
-  if width > 0 {
-    tableRow := DocNode{ Node: TableRow{ Type: TableHead } }
-    makeTableRow( &tableRow, headerTable )
-    table.Add( tableRow )
-  }
+func (d *doc) makeTable( table *DocNode, t *rTable ){
+  for i, sec := range [3][][]TableCell{ t.Head, t.Body, t.Foot } {
+    if sec == nil { continue }
 
-  bodyTable := str[width:]
-
-  if len(bodyTable) > 0 {
-    makeTableBody( table, bodyTable )
-  }
-}
-
-var rehe = regexp4.Compile( "#?\n<:b*:|(=+:|)+:b*\n*>" )
-
-func getTableHeader( str string ) (string, int) {
-  if re := rehe.Copy(); re.FindString( str ) {
-    return str[:re.GpsCatch( 1 )], re.GpsCatch( 1 ) + re.LenCatch( 1 )
-  }
-
-  return "", 0
-}
-
-var rero = regexp4.Compile( "#?\n<:b*:|(-+:|)+:b*\n*>" )
-
-func getTableRow( str string ) (string, int) {
-  if re := rero.Copy(); re.FindString( str ) {
-    return str[:re.GpsCatch( 1 )], re.GpsCatch( 1 ) + re.LenCatch( 1 )
-  }
-
-  return str, len(str)
-}
-
-func makeTableBody( table *DocNode, str string ){
-  row, init := getTableRow( str )
-  for init < len(str) {
-    tableRow := DocNode{ Node: TableRow{ Type: TableBody } }
-    makeTableRow( &tableRow, row )
-    table.Add( tableRow )
-
-    irow, width := getTableRow( str[init:] )
-    row,  init   = irow, init + width
-  }
-
-  tableRow := DocNode{ Node: TableRow{ Type: TableBody } }
-  makeTableRow( &tableRow, row )
-  table.Add( tableRow )
-}
-
-func makeTableRow( doc *DocNode, str string ){
-  s := txt.GetLines( str )
-  var cells []string
-
-  for _, line := range( s ) {
-    var re regexp4.RE
-    re.Match( line, ":|:b<[^|]+>" )
-
-    for i := 1; i <= re.TotCatch(); i++ {
-      if i <= len( cells ) {
-        cells[i-1] += " " + re.GetCatch( i )
-      } else {
-        cells = append( cells, re.GetCatch( i ) )
-      }
+    for _, row := range sec {
+      tableRow := DocNode{ Node: TableRow{ Type: i } }
+      d.makeTableRow( &tableRow, row )
+      table.Add( tableRow )
     }
   }
+}
 
-  for _, c := range( cells ) {
-    m := NewScanner( txt.Linelize( txt.SpaceSwap( c, " " ) ) ).QuietSplash().Init().GetMarkup()
-
-    doc.AddNode( TableCell{ Mark: m } )
+func (d *doc) makeTableRow( doc *DocNode, row []TableCell ){
+  for _, cell := range row {
+    node := DocNode{ Node: cell }
+    s := NewScanner( cell.RawData ).Init()
+    d.cloneStats().swapScanner( s ).walkMorg( &node )
+    doc.Add( node )
   }
 }
 
@@ -282,7 +241,7 @@ func (d *doc) parseBlock( pNode *DocNode, b *Block ) {
       Body  : txt.RmIndent( b.Body.Text(), b.Indent ),
       Args  : b.Args,
     }
-  case "center", "bold", "verse", "emph", "tab", "italic":
+  case "center", "bold", "verse", "emph", "tab", "italic", "right", "left":
     node.Node = Wrap{ Type: b.Comm.Text, Head: txt.RmSpacesToTheSides( b.Head.Text() ), Args: b.Args }
 
     if b.Body.Text() != "" {
