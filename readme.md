@@ -322,6 +322,71 @@ mantener la indentacion
   Dolore magna aliqua. Ut enim ad minim veniam.
 ```
 
+#### Notas
+
+al igual que el resto de elementos estas deben estar claramente delimitadas,
+para en primer lugar identificar al elemento y en segundo, poder realizar
+manipulacion de estilos sin necesidad de modificar el documento
+
+en primer lugar se creo que bastaria con colocar un marcador/enlace (como se haria en
+con la tabla de contenidos y el encabezado de la seccion) a la nota, esto
+utilizando el comando `@`. `@n(id)` como enlace a la nota y `@N(id)` como marca
+para iniciar el contenido de la nota. A continuacion un ejemplo
+
+```
+  Algunos programas GNU se desarrollaron para enfrentarse a amenazas específicas
+  sobre nuestra libertad. Por eso desarrollamos el gzip, para sustituir al
+  programa Compress cuando éste dejó de estar a disposición de la comunidad
+  gracias a las patentes sobre LZW.@n(5)
+
+  :: @N(5) ::
+
+     El algoritmo Lempel-Ziv-Welch se emplea para la compresión de datos.
+```
+
+aqui se pone un marcador en el texto y luego su enlace es el titulo de un
+"about". Esto deja a cosideracion del usuario la presentacion pues podria
+colocarse el enlace a un simple parrafo, el elemento de una lista, o lo que sea
+que pasara por la mente del usuario.
+
+ahora es evidente que las anotaciones y en general cualquier elemento requiere
+poder identificar con claridad el alcance de su contenido ya sea visualmente o
+aplicando unas pocas reglas, este principio ha de regir en cualquier sintaxis
+para elementos especificos
+
+Luego entonces y al contar con una anotacion flexible para crear elementos
+aprovecharnos de ella
+
+```
+  Algunos programas GNU se desarrollaron para enfrentarse a amenazas específicas
+  sobre nuestra libertad. Por eso desarrollamos el gzip, para sustituir al
+  programa Compress cuando éste dejó de estar a disposición de la comunidad
+  gracias a las patentes sobre LZW.@n(5)
+
+  ..n > 5
+    El algoritmo Lempel-Ziv-Welch se emplea para la compresión de datos.
+  < n..
+```
+
+o en su defecto emplear una sintaxis especifica, reutilizando `:: @N(id) ::`
+o con una nueva presentacion
+
+
+```
+  Algunos programas GNU se desarrollaron para enfrentarse a amenazas específicas
+  sobre nuestra libertad. Por eso desarrollamos el gzip, para sustituir al
+  programa Compress cuando éste dejó de estar a disposición de la comunidad
+  gracias a las patentes sobre LZW.@n(5)
+
+  :@ 5 @:
+
+     El algoritmo Lempel-Ziv-Welch se emplea para la compresión de datos.
+```
+
+bueno, debe ser revisada a profundidad esta sugerencia, asi como tambien
+realizar una busqueda para un formato mejor integrado, armonico y entendido
+mediante logica e intuicion
+
 #### y si tengo una novela
 ##### Dialogos
 
@@ -459,7 +524,7 @@ Algunas propuestas:
 - P ::              - p ::                - + ::
 - Q ::              - q :: quote (label)  - - :: —exp—
 - R :: result       - r :: ref            - . ::
-- S ::              - s :: strike         - / ::
+- S :: signature    - s :: strike         - / ::
 - T :: radiotarget  - t :: target         - % :: (parentesis)
 - U ::              - u :: underline      - & :: symbol
 - V :: var          - v :: verbatim       - $ :: command

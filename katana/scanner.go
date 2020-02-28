@@ -573,7 +573,7 @@ func (s *Scanner) ScanComment(ch rune) rune {
 }
 
 func (s *Scanner) SkipBlancs() {
-  for catchNewLineInScan & (1 << uint(s.Rune) ) != 0 { s.next() }
+  for catchNewLineInScan & (1 << uint64(s.Rune) ) != uint64(0) { s.next() }
 }
 
 func (s *Scanner) Scan() Token {

@@ -254,6 +254,7 @@ func makeDlListNodes( w *bytes.Buffer, cont []katana.DocNode, doc *katana.Doc ){
 }
 
 func makeTable( w *bytes.Buffer, table katana.Table, cont []katana.DocNode, doc *katana.Doc ) {
+
   w.WriteString( "<table border=\"1\">\n" )
   secLabel, currentLabel := "", ""
   for i := range cont {
@@ -278,6 +279,7 @@ func makeTable( w *bytes.Buffer, table katana.Table, cont []katana.DocNode, doc 
   if secLabel != "" { fmt.Fprintf( w, "</%s>\n", secLabel ) }
 
   w.WriteString( "</table>\n" )
+
 }
 
 func makeTableRow( w *bytes.Buffer, Type int, cells []katana.DocNode, doc *katana.Doc ){

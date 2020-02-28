@@ -82,7 +82,7 @@ func AtCommand( left, right string, label byte ) string {
   case '$' : return `<code class="command" >` + right + "</code>"
   case '%' : return "(" + right + ")"
   case '&' : return atCommandSymbol( right ) // "simbol"
-  case '\'': return "<samp>" + right + "</samp>"
+  case '\'': return "‘" + right + "’"
   case '*' : return right
   case '+' : return right
   case ',' : return right
@@ -145,10 +145,16 @@ func AtCommand( left, right string, label byte ) string {
   case 'j' : return right
   case 'k' : return "<kbd>" + right + "</kbd>"
   case 'l' :
-    if left != "" && left[0] == '#' && right != "" && right[0] == '#' {
-      right = right[1:]
-      left  = strings.ToLower( left )
+    // necesario realizar test
+    if left != "" && left[0] == '#' && right != "" {
+      if right[0] == '#' {
+        right = right[1:]
+        left  = strings.ToLower( left )
+      } else {
+        left  = strings.ToLower( left )
+      }
     }
+
     return `<a href="` + ToLink( left ) + `" >` + right + "</a>"
   case 'm' : return `<span class="math" >` + right + "</span>"
   case 'n' : return `<span class="note" ><sup><a href="#` + ToLink(left) + `" >` + right + "</a></sup></span>"
@@ -157,7 +163,7 @@ func AtCommand( left, right string, label byte ) string {
   case 'q' : return "<q>" + right + "</q>"
   case 'r' : return right // ref
   case 's' : return "<s>" + right + "</s>"
-  case 't' : return `<span id="` + ToLink( ToSafeHtml( left ) ) + `" >` + right + "</span>"
+  case 't' : return `<span id="` + strings.ToLower( ToLink( ToSafeHtml( left ) ) ) + `" >` + right + "</span>"
   case 'u' : return "<u>" + right + "</u>"
   case 'v' : return `<code class="verbatim" >` + right + "</code>"
   case 'w' : return right

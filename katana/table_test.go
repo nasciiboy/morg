@@ -526,6 +526,50 @@ func TestTextTable2HtmlTable( t *testing.T ){
 </tfoot>
 </table>
 `, "" },
+    { `+----------------------------------------------------------------------------------------------------+
+|                                           Proposito                                                |
++-----------------+-----------------------+---------------------------+------------------------------+
+|                 | De Creacion           | Estructurales             | De Comportamiento            |
++========+========+=======================+===========================+==============================+
+| Ambito | Clase  | @l(#Factory Method)   | @l(#Adapter) (de clases)  | @l(#Interpreter)             |
+|        |        +-----------------------+---------------------------+------------------------------+
+|        |        |                       |                           | @l(#Template Method)         |
+|        +--------+-----------------------+---------------------------+------------------------------+
+|        | Objeto | @l(#Abstract Factory) | @l(#Adapter) (de objetos) | @l(#Chain of Responsibility) |
+|        |        +-----------------------+---------------------------+------------------------------+
+|        |        | @l(#Builder)          | @l(#Bridge)               | @l(#Command)                 |
+|        |        +-----------------------+---------------------------+------------------------------+
+|        |        | @l(#Prototype)        | @l(#Compositive)          | @l(#Iterator)                |
+|        |        +-----------------------+---------------------------+------------------------------+
+|        |        | @l(#Singleton)        | @l(#Decorator)            | @l(#Mediator)                |
+|        |        +-----------------------+---------------------------+------------------------------+
+|        |        |                       | @l(#Facade)               | @l(#Memento)                 |
+|        |        +-----------------------+---------------------------+------------------------------+
+|        |        |                       | @l(#Flyweight)            | @l(#Observer)                |
+|        |        +-----------------------+---------------------------+------------------------------+
+|        |        |                       | @l(#Proxy)                | @l(#State)                   |
+|        |        +-----------------------+---------------------------+------------------------------+
+|        |        |                       |                           | @l(#Visitor)                 |
++--------+--------+-----------------------+---------------------------+------------------------------+`,
+      `<table border="1">
+<thead>
+  <tr><th colspan="5"><p> Proposito </p></th></tr>
+  <tr><th colspan="2"><p> </p></th><th><p> De Creacion </p></th><th><p> Estructurales </p></th><th><p> De Comportamiento </p></th></tr>
+</thead>
+<tbody>
+  <tr><td rowspan="10"><p> Ambito </p></td><td rowspan="2"><p> Clase </p></td><td><p> @l(#Factory Method) </p></td><td><p> @l(#Adapter) (de clases) </p></td><td><p> @l(#Interpreter) </p></td></tr>
+  <tr><td><p> </p></td><td><p> </p></td><td><p> @l(#Template Method) </p></td></tr>
+  <tr><td rowspan="8"><p> Objeto </p></td><td><p> @l(#Abstract Factory) </p></td><td><p> @l(#Adapter) (de objetos) </p></td><td><p> @l(#Chain of Responsibility) </p></td></tr>
+  <tr><td><p> @l(#Builder) </p></td><td><p> @l(#Bridge) </p></td><td><p> @l(#Command) </p></td></tr>
+  <tr><td><p> @l(#Prototype) </p></td><td><p> @l(#Compositive) </p></td><td><p> @l(#Iterator) </p></td></tr>
+  <tr><td><p> @l(#Singleton) </p></td><td><p> @l(#Decorator) </p></td><td><p> @l(#Mediator) </p></td></tr>
+  <tr><td><p> </p></td><td><p> @l(#Facade) </p></td><td><p> @l(#Memento) </p></td></tr>
+  <tr><td><p> </p></td><td><p> @l(#Flyweight) </p></td><td><p> @l(#Observer) </p></td></tr>
+  <tr><td><p> </p></td><td><p> @l(#Proxy) </p></td><td><p> @l(#State) </p></td></tr>
+  <tr><td><p> </p></td><td><p> </p></td><td><p> @l(#Visitor) </p></td></tr>
+</tbody>
+</table>
+`, "" },
   }
 
   for _, d := range data {

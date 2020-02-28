@@ -87,13 +87,13 @@ func (d *doc) swapScanner( s *Scanner ) *doc {
   return d
 }
 
-var reComment   = regexp4.Compile( "#^$:b*:@(:b+.+|:s*)"               )
-var reHeadline  = regexp4.Compile( "#^:*+:b"                           )
-var reTable     = regexp4.Compile( "#^$:b*:+(-+:+)+:s*"                )
-var reList      = regexp4.Compile( "#^:b*(-|:+|:>|(:d+|:a+)[.)]):b+:S" )
-var reAbout     = regexp4.Compile( "#^:b*::{2}:b+:S"                   )
-var reCommand   = regexp4.Compile( "#^:b*:.:.:b*[:w:-:_:&]+[^:>\n]*:>" )
-var reSeparator = regexp4.Compile( "#^$:b*:.{4}:s*"                    )
+var reComment   = regexp4.Compile( "#^$:b*:@(:b+.+|:s*)"                 )
+var reHeadline  = regexp4.Compile( "#^:*+:b"                             )
+var reTable     = regexp4.Compile( "#^$:b*:+(-+:+)+:s*"                  )
+var reList      = regexp4.Compile( "#^:b*(-|:+|:>|(:d+|:a{1})[.)]):b+:S" )
+var reAbout     = regexp4.Compile( "#^:b*::{2}:b+:S"                     )
+var reCommand   = regexp4.Compile( "#^:b*:.:.:b*[:w:-:_:&]+[^:>\n]*:>"   )
+var reSeparator = regexp4.Compile( "#^$:b*:.{4}:s*"                      )
 
 func whoIsThere( line string ) int {
   if len( line ) == 0 || txt.HasOnlySpaces( line ) { return NodeEmpty

@@ -77,6 +77,7 @@ func TestRebuild( t *testing.T ){
     "@a(hola)",
     "@ab(hola)",
     "@abcd(hola)",
+    "@l(#Mi Enlace<>un Enlace)",
     "hola @abcd(hola)",
     "hola @abcd(hola) bye",
     "hola @abcd(hey) [byte 0<>byte 1<>byte 2]",
