@@ -4,96 +4,99 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <style type="text/css">
-/* Background */ { color: #f8f8f2; background-color: #272822 }
-/* Error */ .err { color: #960050; background-color: #1e0010 }
-/* LineHighlight */ .hl { ; display: block; width: 100% }
-/* LineNumbers */ .ln { ; margin-right: 0.4em; padding: 0 0.4em 0 0.4em; }
-/* Keyword */ .k { color: #66d9ef }
-/* KeywordConstant */ .kc { color: #66d9ef }
-/* KeywordDeclaration */ .kd { color: #66d9ef }
-/* KeywordNamespace */ .kn { color: #f92672 }
-/* KeywordPseudo */ .kp { color: #66d9ef }
-/* KeywordReserved */ .kr { color: #66d9ef }
-/* KeywordType */ .kt { color: #66d9ef }
-/* NameAttribute */ .na { color: #a6e22e }
-/* NameClass */ .nc { color: #a6e22e }
-/* NameConstant */ .no { color: #66d9ef }
-/* NameDecorator */ .nd { color: #a6e22e }
-/* NameException */ .ne { color: #a6e22e }
-/* NameFunction */ .nf { color: #a6e22e }
-/* NameOther */ .nx { color: #a6e22e }
-/* NameTag */ .nt { color: #f92672 }
-/* Literal */ .l { color: #ae81ff }
-/* LiteralDate */ .ld { color: #e6db74 }
-/* LiteralString */ .s { color: #e6db74 }
-/* LiteralStringAffix */ .sa { color: #e6db74 }
-/* LiteralStringBacktick */ .sb { color: #e6db74 }
-/* LiteralStringChar */ .sc { color: #e6db74 }
-/* LiteralStringDelimiter */ .dl { color: #e6db74 }
-/* LiteralStringDoc */ .sd { color: #e6db74 }
-/* LiteralStringDouble */ .s2 { color: #e6db74 }
-/* LiteralStringEscape */ .se { color: #ae81ff }
-/* LiteralStringHeredoc */ .sh { color: #e6db74 }
-/* LiteralStringInterpol */ .si { color: #e6db74 }
-/* LiteralStringOther */ .sx { color: #e6db74 }
-/* LiteralStringRegex */ .sr { color: #e6db74 }
-/* LiteralStringSingle */ .s1 { color: #e6db74 }
-/* LiteralStringSymbol */ .ss { color: #e6db74 }
-/* LiteralNumber */ .m { color: #ae81ff }
-/* LiteralNumberBin */ .mb { color: #ae81ff }
-/* LiteralNumberFloat */ .mf { color: #ae81ff }
-/* LiteralNumberHex */ .mh { color: #ae81ff }
-/* LiteralNumberInteger */ .mi { color: #ae81ff }
-/* LiteralNumberIntegerLong */ .il { color: #ae81ff }
-/* LiteralNumberOct */ .mo { color: #ae81ff }
-/* Operator */ .o { color: #f92672 }
-/* OperatorWord */ .ow { color: #f92672 }
-/* Comment */ .c { color: #75715e }
-/* CommentHashbang */ .ch { color: #75715e }
-/* CommentMultiline */ .cm { color: #75715e }
-/* CommentSingle */ .c1 { color: #75715e }
-/* CommentSpecial */ .cs { color: #75715e }
-/* CommentPreproc */ .cp { color: #75715e }
-/* CommentPreprocFile */ .cpf { color: #75715e }
-/* GenericDeleted */ .gd { color: #f92672 }
-/* GenericEmph */ .ge { font-style: italic }
-/* GenericInserted */ .gi { color: #a6e22e }
-/* GenericStrong */ .gs { font-weight: bold }
-/* GenericSubheading */ .gu { color: #75715e }
+/* Background */ .chroma { color: #f8f8f2; background-color: #272822 }
+/* Error */ .chroma .err { color: #960050; background-color: #1e0010 }
+/* LineTableTD */ .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
+/* LineTable */ .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; width: auto; overflow: auto; display: block; }
+/* LineHighlight */ .chroma .hl { display: block; width: 100%;background-color: #3c3d38 }
+/* LineNumbersTable */ .chroma .lnt { margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }
+/* LineNumbers */ .chroma .ln { margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }
+/* Keyword */ .chroma .k { color: #66d9ef }
+/* KeywordConstant */ .chroma .kc { color: #66d9ef }
+/* KeywordDeclaration */ .chroma .kd { color: #66d9ef }
+/* KeywordNamespace */ .chroma .kn { color: #f92672 }
+/* KeywordPseudo */ .chroma .kp { color: #66d9ef }
+/* KeywordReserved */ .chroma .kr { color: #66d9ef }
+/* KeywordType */ .chroma .kt { color: #66d9ef }
+/* NameAttribute */ .chroma .na { color: #a6e22e }
+/* NameClass */ .chroma .nc { color: #a6e22e }
+/* NameConstant */ .chroma .no { color: #66d9ef }
+/* NameDecorator */ .chroma .nd { color: #a6e22e }
+/* NameException */ .chroma .ne { color: #a6e22e }
+/* NameFunction */ .chroma .nf { color: #a6e22e }
+/* NameOther */ .chroma .nx { color: #a6e22e }
+/* NameTag */ .chroma .nt { color: #f92672 }
+/* Literal */ .chroma .l { color: #ae81ff }
+/* LiteralDate */ .chroma .ld { color: #e6db74 }
+/* LiteralString */ .chroma .s { color: #e6db74 }
+/* LiteralStringAffix */ .chroma .sa { color: #e6db74 }
+/* LiteralStringBacktick */ .chroma .sb { color: #e6db74 }
+/* LiteralStringChar */ .chroma .sc { color: #e6db74 }
+/* LiteralStringDelimiter */ .chroma .dl { color: #e6db74 }
+/* LiteralStringDoc */ .chroma .sd { color: #e6db74 }
+/* LiteralStringDouble */ .chroma .s2 { color: #e6db74 }
+/* LiteralStringEscape */ .chroma .se { color: #ae81ff }
+/* LiteralStringHeredoc */ .chroma .sh { color: #e6db74 }
+/* LiteralStringInterpol */ .chroma .si { color: #e6db74 }
+/* LiteralStringOther */ .chroma .sx { color: #e6db74 }
+/* LiteralStringRegex */ .chroma .sr { color: #e6db74 }
+/* LiteralStringSingle */ .chroma .s1 { color: #e6db74 }
+/* LiteralStringSymbol */ .chroma .ss { color: #e6db74 }
+/* LiteralNumber */ .chroma .m { color: #ae81ff }
+/* LiteralNumberBin */ .chroma .mb { color: #ae81ff }
+/* LiteralNumberFloat */ .chroma .mf { color: #ae81ff }
+/* LiteralNumberHex */ .chroma .mh { color: #ae81ff }
+/* LiteralNumberInteger */ .chroma .mi { color: #ae81ff }
+/* LiteralNumberIntegerLong */ .chroma .il { color: #ae81ff }
+/* LiteralNumberOct */ .chroma .mo { color: #ae81ff }
+/* Operator */ .chroma .o { color: #f92672 }
+/* OperatorWord */ .chroma .ow { color: #f92672 }
+/* Comment */ .chroma .c { color: #75715e }
+/* CommentHashbang */ .chroma .ch { color: #75715e }
+/* CommentMultiline */ .chroma .cm { color: #75715e }
+/* CommentSingle */ .chroma .c1 { color: #75715e }
+/* CommentSpecial */ .chroma .cs { color: #75715e }
+/* CommentPreproc */ .chroma .cp { color: #75715e }
+/* CommentPreprocFile */ .chroma .cpf { color: #75715e }
+/* GenericDeleted */ .chroma .gd { color: #f92672 }
+/* GenericEmph */ .chroma .ge { font-style: italic }
+/* GenericInserted */ .chroma .gi { color: #a6e22e }
+/* GenericStrong */ .chroma .gs { font-weight: bold }
+/* GenericSubheading */ .chroma .gu { color: #75715e }
 </style>
 </head>
 
 <body>
 <div class="hBody-1" >
-<pre class="srci" ><code class="sh" ><span class="in" ><span class="prompt" >&gt; </span><span class="nb">echo</span> <span class="s2">&#34;hello morg&#34;</span>
-</span><span class="out" >hello morg
-</span><span class="in" ><span class="prompt" >&gt; </span>ls -F --color<span class="o">=</span>auto ~
-</span><span class="out" >Downloads/   morg.jpg     p/                     VG/
+<pre class="srci" ><code class="sh" ><span class="in" ><span class="prompt" >&gt; </span><pre class="chroma"><span class="nb">echo</span> <span class="s2">&#34;hello morg&#34;</span>
+</pre></span><span class="out" >hello morg
+</span><span class="in" ><span class="prompt" >&gt; </span><pre class="chroma">ls -F --color<span class="o">=</span>auto ~
+</pre></span><span class="out" >Downloads/   morg.jpg     p/                     VG/
 apt/         fonos@       nasciiboy.github.io/   PrOg/
 4k@          a.txt        go/                    nconf/
 </span></code></pre>
-<pre class="srci" ><code class="sh" ><span class="in" ><span class="prompt" >&gt; </span><span class="nb">echo</span> <span class="s2">&#34;hello morg
+<pre class="srci" ><code class="sh" ><span class="in" ><span class="prompt" >&gt; </span><pre class="chroma"><span class="nb">echo</span> <span class="s2">&#34;hello morg
 </span><span class="s2">morge
 </span><span class="s2">mirgo&#34;</span>
-</span><span class="out" >whoamy
-</span><span class="in" ><span class="prompt" >&gt; </span><span class="nb">echo</span> <span class="s2">&#34;hello morg
+</pre></span><span class="out" >whoamy
+</span><span class="in" ><span class="prompt" >&gt; </span><pre class="chroma"><span class="nb">echo</span> <span class="s2">&#34;hello morg
 </span><span class="s2">morge
 </span><span class="s2">mirgo&#34;</span>
-</span><span class="out" >whoareyou
+</pre></span><span class="out" >whoareyou
 </span></code></pre>
 <pre class="srci" ><code class="c" ><span class="out" >
 
 </span></code></pre>
-<pre class="srci" ><code class="c" ><span class="in" ><span class="prompt" >&gt; </span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;              /* incluye información acerca de la biblioteca estándar */</span><span class="cp">
+<pre class="srci" ><code class="c" ><span class="in" ><span class="prompt" >&gt; </span><pre class="chroma"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;              /* incluye información acerca de la biblioteca estándar */</span><span class="cp">
 </span><span class="cp"></span>
 <span class="n">main</span><span class="p">(){</span>                         <span class="cm">/* define una función llamada main
 </span><span class="cm">                                   que no recibe valores de argumentos */</span>
                                 <span class="cm">/* las proposiciones de main están encerradas entre llaves */</span>
-  <span class="n">printf</span><span class="p">(</span> <span class="sa"></span><span class="s">&#34;hola, mundo</span><span class="se">\n</span><span class="s">&#34;</span> <span class="p">);</span>    <span class="cm">/* main llama a la función printf de biblioteca estándar
+  <span class="n">printf</span><span class="p">(</span> <span class="s">&#34;hola, mundo</span><span class="se">\n</span><span class="s">&#34;</span> <span class="p">);</span>    <span class="cm">/* main llama a la función printf de biblioteca estándar
 </span><span class="cm">                                   para escribir esta secuencia de caracteres;
 </span><span class="cm">                                   \n representa el carácter nueva línea */</span>
 <span class="p">}</span>
-</span><span class="out" >hola, code
+</pre></span><span class="out" >hola, code
 hola, srci
 hola, kana
 
@@ -106,12 +109,12 @@ func main() {
   fmt.Println(&#34;Hello, 世界&#34;)
 }
 </span></code></pre>
-<pre class="srci" ><code class="lisp" ><span class="in" ><span class="prompt" >&gt; </span><span class="p">(</span><span class="nv">defun</span> <span class="nv">our-copy-tree</span> <span class="p">(</span><span class="nv">tr</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">if</span> <span class="p">(</span><span class="nv">atom</span> <span class="nv">tr</span><span class="p">)</span>
+<pre class="srci" ><code class="lisp" ><span class="in" ><span class="prompt" >&gt; </span><pre class="chroma"><span class="p">(</span><span class="nb">defun</span> <span class="nv">our-copy-tree</span> <span class="p">(</span><span class="nv">tr</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="kt">atom</span> <span class="nv">tr</span><span class="p">)</span>
       <span class="nv">tr</span>
-    <span class="p">(</span><span class="nv">cons</span> <span class="p">(</span><span class="nv">our-copy-tree</span> <span class="p">(</span><span class="nv">car</span> <span class="nv">tr</span><span class="p">))</span>
-          <span class="p">(</span><span class="nv">our-copy-tree</span> <span class="p">(</span><span class="nv">cdr</span> <span class="nv">tr</span><span class="p">)))))</span>
-</span><span class="out" >(const (our-copy-tree) )
+    <span class="p">(</span><span class="nc">cons</span> <span class="p">(</span><span class="nv">our-copy-tree</span> <span class="p">(</span><span class="nf">car</span> <span class="nv">tr</span><span class="p">))</span>
+          <span class="p">(</span><span class="nv">our-copy-tree</span> <span class="p">(</span><span class="nf">cdr</span> <span class="nv">tr</span><span class="p">)))))</span>
+</pre></span><span class="out" >(const (our-copy-tree) )
 
 </span></code></pre>
 </div>

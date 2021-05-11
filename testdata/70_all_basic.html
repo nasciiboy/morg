@@ -56,10 +56,10 @@
 <p>a simple multi line warning</p>
 </div>
 </div>
-<pre class="srci" ><code class="sh" ><span class="in" ><span class="prompt" >&gt; </span><span class="nb">export</span> <span class="nv">GOPATH</span><span class="o">=</span><span class="nv">$HOME</span>/gobook        <span class="c1"># choose workspace directory
-</span><span class="c1"></span></span><span class="in" ><span class="prompt" >&gt; </span>go get gopl.io/ch1/helloworld     <span class="c1"># fetch, build, install
-</span><span class="c1"></span></span><span class="in" ><span class="prompt" >&gt; </span><span class="nv">$GOPATH</span>/bin/helloworld            <span class="c1"># run
-</span><span class="c1"></span></span><span class="out" >Hello, 世界
+<pre class="srci" ><code class="sh" ><span class="in" ><span class="prompt" >&gt; </span><pre class="chroma"><span class="nb">export</span> <span class="nv">GOPATH</span><span class="o">=</span><span class="nv">$HOME</span>/gobook        <span class="c1"># choose workspace directory</span>
+</pre></span><span class="in" ><span class="prompt" >&gt; </span><pre class="chroma">go get gopl.io/ch1/helloworld     <span class="c1"># fetch, build, install</span>
+</pre></span><span class="in" ><span class="prompt" >&gt; </span><pre class="chroma"><span class="nv">$GOPATH</span>/bin/helloworld            <span class="c1"># run</span>
+</pre></span><span class="out" >Hello, 世界
 </span></code></pre>
 <div class="pre-block" >
 <pre class="pre" >hey listen
@@ -76,9 +76,8 @@
     hey listen
 </pre>
 </div>
-<pre class="code" ><code class="chroma" ><span class="n">printf</span><span class="p">(</span> <span class="sa"></span><span class="s">&#34;hello morg&#34;</span> <span class="p">)</span>
-</code></pre>
-<p>simple text</p>
+<pre class="chroma"><span class="n">printf</span><span class="p">(</span> <span class="s">&#34;hello morg&#34;</span> <span class="p">)</span>
+</pre><p>simple text</p>
 <table border="1">
 <thead>
 <tr><th><p>table headline</p>
@@ -125,19 +124,17 @@
 <p>other inner about list</p>
 </li>
 </ul>
-<pre class="code" ><code class="chroma" ><span class="kn">package</span> <span class="nx">main</span>
+<pre class="chroma"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 
-<span class="kd">func</span> <span class="nx">main</span><span class="p">(){</span>
-  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span> <span class="s">&#34;hello inner about src block&#34;</span> <span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">(){</span>
+  <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span> <span class="s">&#34;hello inner about src block&#34;</span> <span class="p">)</span>
 <span class="p">}</span>
-</code></pre>
+</pre></div>
 </div>
-</div>
-<pre class="code" ><code class="chroma" ><span class="nb">echo</span> <span class="s2">&#34;hello morg
-</span><span class="s2"></span></code></pre>
-</li>
+<pre class="chroma"><span class="nb">echo</span> <span class="s2">&#34;hello morg
+</span></pre></li>
 <li>
 <p>list 3st</p>
 </li>
@@ -160,7 +157,7 @@
 <div class="about-dd" >
 <div class="figure" >
 <h1 class="figure">Code</h1>
-<pre class="code" ><code class="chroma" ><span class="cp">#include</span> <span class="cpf">&#34;regexp3.h&#34;</span><span class="cp">
+<pre class="chroma"><span class="cp">#include</span> <span class="cpf">&#34;regexp3.h&#34;</span><span class="cp">
 </span><span class="cp">#include</span> <span class="cpf">&#34;charUtils.h&#34;</span><span class="cp">
 </span><span class="cp"></span>
 <span class="cp">#define TRUE                 1
@@ -178,14 +175,14 @@
   <span class="k">if</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">len</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="k">return</span> <span class="n">FALSE</span><span class="p">;</span>
 
   <span class="k">switch</span><span class="p">(</span> <span class="o">*</span><span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="p">){</span>
-  <span class="k">case</span> <span class="sa"></span><span class="sc">&#39;:&#39;</span><span class="o">:</span> <span class="n">cutByLen</span> <span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">META</span>  <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
-  <span class="k">case</span> <span class="sa"></span><span class="sc">&#39;.&#39;</span><span class="o">:</span> <span class="n">cutByLen</span> <span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">POINT</span> <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
-  <span class="k">case</span> <span class="sa"></span><span class="sc">&#39;@&#39;</span><span class="o">:</span> <span class="n">cutByLen</span> <span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span>
+  <span class="k">case</span> <span class="sc">&#39;:&#39;</span><span class="o">:</span> <span class="n">cutByLen</span> <span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">META</span>  <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="k">case</span> <span class="sc">&#39;.&#39;</span><span class="o">:</span> <span class="n">cutByLen</span> <span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">POINT</span> <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="k">case</span> <span class="sc">&#39;@&#39;</span><span class="o">:</span> <span class="n">cutByLen</span> <span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span>
                       <span class="n">countCharDigits</span><span class="p">(</span> <span class="n">rexp</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">),</span>
                                      <span class="n">BACKREF</span> <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
-  <span class="k">case</span> <span class="sa"></span><span class="sc">&#39;(&#39;</span><span class="o">:</span> <span class="n">cutByType</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span>  <span class="n">GROUP</span>   <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
-  <span class="k">case</span> <span class="sa"></span><span class="sc">&#39;&lt;&#39;</span><span class="o">:</span> <span class="n">cutByType</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span>  <span class="n">HOOK</span>    <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
-  <span class="k">case</span> <span class="sa"></span><span class="sc">&#39;[&#39;</span><span class="o">:</span> <span class="n">cutByType</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span>  <span class="n">SET</span>     <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="k">case</span> <span class="sc">&#39;(&#39;</span><span class="o">:</span> <span class="n">cutByType</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span>  <span class="n">GROUP</span>   <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="k">case</span> <span class="sc">&#39;&lt;&#39;</span><span class="o">:</span> <span class="n">cutByType</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span>  <span class="n">HOOK</span>    <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+  <span class="k">case</span> <span class="sc">&#39;[&#39;</span><span class="o">:</span> <span class="n">cutByType</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span><span class="p">,</span>  <span class="n">SET</span>     <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
   <span class="k">default</span> <span class="o">:</span> <span class="n">cutSimple</span><span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span>           <span class="p">);</span> <span class="k">break</span><span class="p">;</span>
   <span class="p">}</span>
 
@@ -193,12 +190,11 @@
   <span class="n">getMods</span> <span class="p">(</span> <span class="n">rexp</span><span class="p">,</span> <span class="n">track</span> <span class="p">);</span>
   <span class="k">return</span> <span class="n">TRUE</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre>
+</pre></div>
 </div>
 </div>
-</div>
-<pre class="srci" ><code class="sh" ><span class="in" ><span class="prompt" >$ </span><span class="nb">echo</span> <span class="s2">&#34;hola mundo&#34;</span>
-</span><span class="out" >hola mundo
+<pre class="srci" ><code class="sh" ><span class="in" ><span class="prompt" >$ </span><pre class="chroma"><span class="nb">echo</span> <span class="s2">&#34;hola mundo&#34;</span>
+</pre></span><span class="out" >hola mundo
 </span></code></pre>
 <p>last text</p>
 </div>

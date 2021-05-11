@@ -5,11 +5,11 @@ import (
 
 	"github.com/nasciiboy/morg/katana"
 
-	"github.com/nasciiboy/chroma"
-	"github.com/nasciiboy/chroma/formatters"
-	"github.com/nasciiboy/chroma/formatters/html"
-	"github.com/nasciiboy/chroma/lexers"
-	"github.com/nasciiboy/chroma/styles"
+	"github.com/alecthomas/chroma"
+	"github.com/alecthomas/chroma/formatters"
+	"github.com/alecthomas/chroma/formatters/html"
+	"github.com/alecthomas/chroma/lexers"
+	"github.com/alecthomas/chroma/styles"
 )
 
 func FancyCode( w *bytes.Buffer, c katana.Code ) {
@@ -22,7 +22,7 @@ func FancyCode( w *bytes.Buffer, c katana.Code ) {
   var options []html.Option
 
   if c.Indexed {
-    options = append(options, html.WithLineNumbers())
+    options = append( options, html.WithLineNumbers(true))
     options = append( options, html.BaseLineNumber( c.IndexNum ))
   } else {
     options = append( options, html.BaseLineNumber( 1 ))
@@ -30,7 +30,7 @@ func FancyCode( w *bytes.Buffer, c katana.Code ) {
 
   options = append( options, html.TabWidth( 4 ))
 
-  if c.Style == "" { options = append( options, html.WithClasses() ) }// inlinestyle
+  if c.Style == "" { options = append( options, html.WithClasses(true) ) }// inlinestyle
   // options = append( options, html.Standalone() )  // htmlOnly
 
   formatters.Register("html", html.New(options...))
@@ -47,8 +47,7 @@ func FancySrci( w *bytes.Buffer, body, lang, sstyle string ) {
   var options []html.Option
 
   options = append( options, html.TabWidth( 4 ))
-  if sstyle == "" { options = append( options, html.WithClasses() ) }// inlinestyle
-  options = append( options, html.LonelyWolf() )
+  if sstyle == "" { options = append( options, html.WithClasses(true) ) }// inlinestyle
 
   formatters.Register("html", html.New(options...))
   format(w, style, lex( lang, body ))
@@ -60,7 +59,7 @@ func WriteStyle( w *bytes.Buffer, sstyle string ){
 	builder := styles.Get( sstyle ).Builder()
 	style, _ := builder.Build()
 
-  formatter := html.New(html.WithClasses())
+  formatter := html.New(html.WithClasses(true))
   formatter.WriteCSS(w, style)
   w.WriteString( "</style>\n" )
 }
