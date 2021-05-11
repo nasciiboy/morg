@@ -7,41 +7,35 @@
 
 <body>
 <div class="hBody-1" >
-<pre class="code" ><code class="chroma" ><span class="nb">echo</span> hello morg
-</code></pre>
-<pre class="code" ><code style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4" ><span style="color:#8be9fd;font-style:italic">echo</span> hello morg
+<pre class="chroma"><span class="nb">echo</span> hello morg
+</pre><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><span style="color:#8be9fd;font-style:italic">echo</span> hello morg
 
 whoamy
-</code></pre>
-<pre class="code" ><code class="chroma" >
+</pre><pre class="chroma">
 
-</code></pre>
-<pre class="code" ><code class="chroma" ><span class="index" class="ln"> 0  </span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;              /* incluye información acerca de la biblioteca estándar */</span><span class="cp">
-</span><span class="index" class="ln"> 1  </span><span class="cp"></span>
-<span class="index" class="ln"> 2  </span><span class="n">main</span><span class="p">(){</span>                         <span class="cm">/* define una función llamada main
-</span><span class="index" class="ln"> 3  </span><span class="cm">                                   que no recibe valores de argumentos */</span>
-<span class="index" class="ln"> 4  </span>                                <span class="cm">/* las proposiciones de main están encerradas entre llaves */</span>
-<span class="index" class="ln"> 5  </span>  <span class="n">printf</span><span class="p">(</span> <span class="sa"></span><span class="s">&#34;hola, mundo</span><span class="se">\n</span><span class="s">&#34;</span> <span class="p">);</span>    <span class="cm">/* main llama a la función printf de biblioteca estándar
-</span><span class="index" class="ln"> 6  </span><span class="cm">                                   para escribir esta secuencia de caracteres;
-</span><span class="index" class="ln"> 7  </span><span class="cm">                                   \n representa el carácter nueva línea */</span>
-<span class="index" class="ln"> 8  </span><span class="p">}</span>
-<span class="index" class="ln"> 9  </span></code></pre>
-<pre class="code" ><code style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4" ><span class="index" style="color:#7f7f7f;margin-right:0.4em;padding:00.4em00.4em;">-5  </span><span style="color:#a2f;font-weight:bold">package</span> main
-<span class="index" style="color:#7f7f7f;margin-right:0.4em;padding:00.4em00.4em;">-4  </span>
-<span class="index" style="color:#7f7f7f;margin-right:0.4em;padding:00.4em00.4em;">-3  </span><span style="color:#a2f;font-weight:bold">import</span> <span style="color:#b44">&#34;fmt&#34;</span>
-<span class="index" style="color:#7f7f7f;margin-right:0.4em;padding:00.4em00.4em;">-2  </span>
-<span class="index" style="color:#7f7f7f;margin-right:0.4em;padding:00.4em00.4em;">-1  </span><span style="color:#a2f;font-weight:bold">func</span> main() {
-<span class="index" style="color:#7f7f7f;margin-right:0.4em;padding:00.4em00.4em;"> 0  </span>  fmt.Println(<span style="color:#b44">&#34;Hello, 世界&#34;</span>)
-<span class="index" style="color:#7f7f7f;margin-right:0.4em;padding:00.4em00.4em;"> 1  </span>}
-<span class="index" style="color:#7f7f7f;margin-right:0.4em;padding:00.4em00.4em;"> 2  </span></code></pre>
-<pre class="code" ><code style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4" ><span class="index" style="color:#7f7f7f;margin-right:0.4em;padding:00.4em00.4em;">55  </span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">defun</span> <span style="color:#000">our-copy-tree</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">tr</span><span style="color:#000;font-weight:bold">)</span>
-<span class="index" style="color:#7f7f7f;margin-right:0.4em;padding:00.4em00.4em;">56  </span>  <span style="color:#000;font-weight:bold">(</span><span style="color:#000">if</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">atom</span> <span style="color:#000">tr</span><span style="color:#000;font-weight:bold">)</span>
-<span class="index" style="color:#7f7f7f;margin-right:0.4em;padding:00.4em00.4em;">57  </span>      <span style="color:#000">tr</span>
-<span class="index" style="color:#7f7f7f;margin-right:0.4em;padding:00.4em00.4em;">58  </span>    <span style="color:#000;font-weight:bold">(</span><span style="color:#000">cons</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">our-copy-tree</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">car</span> <span style="color:#000">tr</span><span style="color:#000;font-weight:bold">))</span>
-<span class="index" style="color:#7f7f7f;margin-right:0.4em;padding:00.4em00.4em;">59  </span>          <span style="color:#000;font-weight:bold">(</span><span style="color:#000">our-copy-tree</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">cdr</span> <span style="color:#000">tr</span><span style="color:#000;font-weight:bold">)))))</span>
-<span class="index" style="color:#7f7f7f;margin-right:0.4em;padding:00.4em00.4em;">60  </span>
-<span class="index" style="color:#7f7f7f;margin-right:0.4em;padding:00.4em00.4em;">61  </span>
-<span class="index" style="color:#7f7f7f;margin-right:0.4em;padding:00.4em00.4em;">62  </span></code></pre>
-</div>
+</pre><pre class="chroma"><span class="ln">0</span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;              /* incluye información acerca de la biblioteca estándar */</span><span class="cp">
+</span><span class="ln">1</span><span class="cp"></span>
+<span class="ln">2</span><span class="n">main</span><span class="p">(){</span>                         <span class="cm">/* define una función llamada main
+</span><span class="ln">3</span><span class="cm">                                   que no recibe valores de argumentos */</span>
+<span class="ln">4</span>                                <span class="cm">/* las proposiciones de main están encerradas entre llaves */</span>
+<span class="ln">5</span>  <span class="n">printf</span><span class="p">(</span> <span class="s">&#34;hola, mundo</span><span class="se">\n</span><span class="s">&#34;</span> <span class="p">);</span>    <span class="cm">/* main llama a la función printf de biblioteca estándar
+</span><span class="ln">6</span><span class="cm">                                   para escribir esta secuencia de caracteres;
+</span><span class="ln">7</span><span class="cm">                                   \n representa el carácter nueva línea */</span>
+<span class="ln">8</span><span class="p">}</span>
+</pre><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">-5</span><span style="color:#a2f;font-weight:bold">package</span> main
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">-4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">-3</span><span style="color:#a2f;font-weight:bold">import</span> <span style="color:#b44">&#34;fmt&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">-2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">-1</span><span style="color:#a2f;font-weight:bold">func</span> <span style="color:#00a000">main</span>() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">0</span>  fmt.<span style="color:#00a000">Println</span>(<span style="color:#b44">&#34;Hello, 世界&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>}
+</pre><pre style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span><span style="color:#000;font-weight:bold">(</span><span style="color:#204a87">defun</span> <span style="color:#000">our-copy-tree</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">tr</span><span style="color:#000;font-weight:bold">)</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span>  <span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">atom</span> <span style="color:#000">tr</span><span style="color:#000;font-weight:bold">)</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span>      <span style="color:#000">tr</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span>    <span style="color:#000;font-weight:bold">(</span><span style="color:#000">cons</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">our-copy-tree</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">car</span> <span style="color:#000">tr</span><span style="color:#000;font-weight:bold">))</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span>          <span style="color:#000;font-weight:bold">(</span><span style="color:#000">our-copy-tree</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">cdr</span> <span style="color:#000">tr</span><span style="color:#000;font-weight:bold">)))))</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span>
+</pre></div>
 </body>
 </html>

@@ -7,35 +7,35 @@
 
 <body>
 <div class="hBody-1" >
-<pre class="srci" ><code class="sh" ><span class="in" ><span class="prompt" >&gt; </span><span class="nb">echo</span> <span class="s2">&#34;hello morg&#34;</span>
-</span><span class="out" >hello morg
-</span><span class="in" ><span class="prompt" >&gt; </span>ls -F --color<span class="o">=</span>auto ~
-</span><span class="out" >Downloads/   morg.jpg     p/                     VG/
+<pre class="srci" ><code class="sh" ><span class="in" ><span class="prompt" >&gt; </span><pre class="chroma"><span class="nb">echo</span> <span class="s2">&#34;hello morg&#34;</span>
+</pre></span><span class="out" >hello morg
+</span><span class="in" ><span class="prompt" >&gt; </span><pre class="chroma">ls -F --color<span class="o">=</span>auto ~
+</pre></span><span class="out" >Downloads/   morg.jpg     p/                     VG/
 apt/         fonos@       nasciiboy.github.io/   PrOg/
 4k@          a.txt        go/                    nconf/
 </span></code></pre>
-<pre class="srci" ><code class="sh" ><span class="in" ><span class="prompt" >&gt; </span><span class="nb">echo</span> <span class="s2">&#34;hello morg
+<pre class="srci" ><code class="sh" ><span class="in" ><span class="prompt" >&gt; </span><pre class="chroma"><span class="nb">echo</span> <span class="s2">&#34;hello morg
 </span><span class="s2">morge
 </span><span class="s2">mirgo&#34;</span>
-</span><span class="out" >whoamy
-</span><span class="in" ><span class="prompt" >&gt; </span><span class="nb">echo</span> <span class="s2">&#34;hello morg
+</pre></span><span class="out" >whoamy
+</span><span class="in" ><span class="prompt" >&gt; </span><pre class="chroma"><span class="nb">echo</span> <span class="s2">&#34;hello morg
 </span><span class="s2">morge
 </span><span class="s2">mirgo&#34;</span>
-</span><span class="out" >whoareyou
+</pre></span><span class="out" >whoareyou
 </span></code></pre>
 <pre class="srci" ><code class="c" ><span class="out" >
 
 </span></code></pre>
-<pre class="srci" ><code class="c" ><span class="in" ><span class="prompt" >&gt; </span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;              /* incluye información acerca de la biblioteca estándar */</span><span class="cp">
+<pre class="srci" ><code class="c" ><span class="in" ><span class="prompt" >&gt; </span><pre class="chroma"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;              /* incluye información acerca de la biblioteca estándar */</span><span class="cp">
 </span><span class="cp"></span>
 <span class="n">main</span><span class="p">(){</span>                         <span class="cm">/* define una función llamada main
 </span><span class="cm">                                   que no recibe valores de argumentos */</span>
                                 <span class="cm">/* las proposiciones de main están encerradas entre llaves */</span>
-  <span class="n">printf</span><span class="p">(</span> <span class="sa"></span><span class="s">&#34;hola, mundo</span><span class="se">\n</span><span class="s">&#34;</span> <span class="p">);</span>    <span class="cm">/* main llama a la función printf de biblioteca estándar
+  <span class="n">printf</span><span class="p">(</span> <span class="s">&#34;hola, mundo</span><span class="se">\n</span><span class="s">&#34;</span> <span class="p">);</span>    <span class="cm">/* main llama a la función printf de biblioteca estándar
 </span><span class="cm">                                   para escribir esta secuencia de caracteres;
 </span><span class="cm">                                   \n representa el carácter nueva línea */</span>
 <span class="p">}</span>
-</span><span class="out" >hola, code
+</pre></span><span class="out" >hola, code
 hola, srci
 hola, kana
 
@@ -48,12 +48,12 @@ func main() {
   fmt.Println(&#34;Hello, 世界&#34;)
 }
 </span></code></pre>
-<pre class="srci" ><code class="lisp" ><span class="in" ><span class="prompt" >&gt; </span><span class="p">(</span><span class="nv">defun</span> <span class="nv">our-copy-tree</span> <span class="p">(</span><span class="nv">tr</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">if</span> <span class="p">(</span><span class="nv">atom</span> <span class="nv">tr</span><span class="p">)</span>
+<pre class="srci" ><code class="lisp" ><span class="in" ><span class="prompt" >&gt; </span><pre class="chroma"><span class="p">(</span><span class="nb">defun</span> <span class="nv">our-copy-tree</span> <span class="p">(</span><span class="nv">tr</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="kt">atom</span> <span class="nv">tr</span><span class="p">)</span>
       <span class="nv">tr</span>
-    <span class="p">(</span><span class="nv">cons</span> <span class="p">(</span><span class="nv">our-copy-tree</span> <span class="p">(</span><span class="nv">car</span> <span class="nv">tr</span><span class="p">))</span>
-          <span class="p">(</span><span class="nv">our-copy-tree</span> <span class="p">(</span><span class="nv">cdr</span> <span class="nv">tr</span><span class="p">)))))</span>
-</span><span class="out" >(const (our-copy-tree) )
+    <span class="p">(</span><span class="nc">cons</span> <span class="p">(</span><span class="nv">our-copy-tree</span> <span class="p">(</span><span class="nf">car</span> <span class="nv">tr</span><span class="p">))</span>
+          <span class="p">(</span><span class="nv">our-copy-tree</span> <span class="p">(</span><span class="nf">cdr</span> <span class="nv">tr</span><span class="p">)))))</span>
+</pre></span><span class="out" >(const (our-copy-tree) )
 
 </span></code></pre>
 </div>
